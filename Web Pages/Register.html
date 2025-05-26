@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đăng ký tài khoản - SchoMed</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/login.css" />
+</head>
+
+<body class="min-h-screen bg-cover bg-center flex items-center justify-center"
+  style="background-image: url('image/backgroundyte.jpg');">
+
+  <div class="w-full max-w-md bg-white bg-opacity-90 backdrop-blur-md p-8 rounded-3xl shadow-lg text-center">
+    <!-- Logo -->   
+    <div class="mb-6">
+      <img src="image/14 1.png" alt="Logo thuốc" class="mx-auto w-16 h-16" />
+      <h2 class="text-2xl font-semibold mb-6">Đăng kí - Welcome to SchoMed</h2>
+    </div> 
+
+    <!-- Form Đăng ký -->
+    <form class="space-y-4">
+
+      <!-- Email -->
+      <div class="text-left">
+        <label class="block text-sm font-medium">Email</label>
+        <input type="email" placeholder="Email" class="input-custom" 
+        required />
+      </div>
+
+      <!-- Name -->
+      <div class="text-left">
+        <label class="block text-sm font-medium">Name</label>
+        <input type="text" placeholder="Name" class="input-custom" 
+        required />
+      </div>
+
+      <!-- Password -->
+      <div class="text-left">
+        <label class="block text-sm font-medium">Password</label>
+        <input type="password" placeholder="Password" class="input-custom" 
+        required />
+      </div>
+
+      <!-- Repeat Password -->
+      <div class="text-left">
+        <label class="block text-sm font-medium">Repeat Password</label>
+        <input type="password" placeholder="Repeat Password" class="input-custom" 
+        required />
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="btn-submit">
+        Continue
+      </button>
+
+      <!-- OR -->
+      <div class="flex items-center my-2">
+        <hr class="flex-grow border-gray-300" />
+        <span class="mx-2 text-sm text-gray-500">OR</span>
+        <hr class="flex-grow border-gray-300" />
+      </div>
+
+      <!-- Google Login -->
+      <button type="button" class="btn-google">
+        <img src="image/logo google.png" alt="Google" class="google-icon" />
+        <span>Continue with Google</span>
+      </button>
+
+      <!-- Already have an account? -->
+      <div class="login-footer">
+        <a href="#">Already have an account? <span>Log in</span></a>
+      </div>
+
+    </form>
+  </div>
