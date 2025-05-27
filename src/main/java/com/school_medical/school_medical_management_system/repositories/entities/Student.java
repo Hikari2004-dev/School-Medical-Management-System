@@ -1,5 +1,6 @@
 package com.school_medical.school_medical_management_system.repositories.entities;
 import jakarta.persistence.Id;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -8,14 +9,22 @@ import java.util.List;
 
 
 
+
 @Entity
 public class Student {
     @Id
     private String studentID;
 
+    @Column(name = "name", nullable = false)
     private String name;
+    
+    @Column(name = "gender", nullable = false)
     private String gender;
+    
+    @Column(name = "grade", nullable = false)
     private String grade;
+
+    @Column(name = "dateOfBirth", nullable = false)
     private String dateOfBirth;
 
     @ManyToOne

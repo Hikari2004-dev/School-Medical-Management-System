@@ -17,12 +17,14 @@ public class Report {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reportID;
-
+    
+    @Column(name = "type", nullable = false)
     private String type;
 
     @Column(name = "createDate")
     private LocalDateTime createDate;
 
+    @Column(name = "content", nullable = false)
     private String content;
 
     @ManyToOne

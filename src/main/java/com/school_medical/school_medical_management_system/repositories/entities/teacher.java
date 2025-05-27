@@ -1,5 +1,6 @@
 package com.school_medical.school_medical_management_system.repositories.entities;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -17,6 +18,7 @@ public class teacher {
     @JoinColumn(name = "userID",  nullable= false)
     private User user;
 
+    @Column(name = "className", nullable = false)
     private String className;
 
 

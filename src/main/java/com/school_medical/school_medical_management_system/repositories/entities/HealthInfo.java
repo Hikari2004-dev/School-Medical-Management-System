@@ -1,4 +1,5 @@
 package com.school_medical.school_medical_management_system.repositories.entities;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
@@ -9,10 +10,19 @@ public class HealthInfo {
     @Id
     private String healthInfoID;
 
+    @Column(name = "MedicalHistory", nullable = false)
     private String medicalHistory;
+
+    @Column(name = "Allergy", nullable = false)
     private String allergy;
+
+    @Column(name = "Hearing", nullable = false)
     private String hearing;
+
+    @Column(name = "Vision", nullable = false)
     private String vision;
+    
+    @Column(name = "ChronicDisease", nullable = false)
     private String chronicDisease;
 
     public HealthInfo() {

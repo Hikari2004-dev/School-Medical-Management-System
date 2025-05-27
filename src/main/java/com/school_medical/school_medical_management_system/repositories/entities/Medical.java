@@ -1,4 +1,5 @@
 package com.school_medical.school_medical_management_system.repositories.entities;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -11,10 +12,19 @@ public class Medical {
     @Id
     private String medicalID;
 
+    @Column(name = "name", nullable = false)
     private String name;
+
+    @Column(name = "usage", nullable = false)
     private String usage;
+
+    @Column(name = "dosage", nullable = false)
     private String dosage;
+
+    @Column(name = "sentByParent", nullable = false)
     private boolean sentByParent;
+    
+    @Column(name = "status", nullable = false)
     private String status;
 
     @ManyToOne

@@ -1,10 +1,9 @@
 package com.school_medical.school_medical_management_system.repositories.entities;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.EmbeddedId;
 import java.util.Date;
 
 @Entity
@@ -12,16 +11,25 @@ public class DetailVaccination {
     @Id
     private String vaccinationID;
 
+    @Column(name = "vaccineName", nullable = false)
     private String vaccineName;
+
+    @Column(name = "date", nullable = false)
     private Date date;
+
+    @Column(name = "confirmedByParent", nullable = false)   
     private boolean confirmedByParent;
+
+    @Column(name = "status", nullable = false)
     private String status;
 
     @ManyToOne
     @JoinColumn(name = "studentID")
     private Student student;
+
     public DetailVaccination() {
     }
+    
     public DetailVaccination(String vaccinationID, String vaccineName, Date date, boolean confirmedByParent, String status, Student student) {
         this.vaccinationID = vaccinationID;
         this.vaccineName = vaccineName;
