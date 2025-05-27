@@ -1,0 +1,65 @@
+package com.school_medical.school_medical_management_system.repositories.entities;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
+
+
+@Entity
+public class HealthInfo {
+    @Id
+    private String healthInfoID;
+
+    private String medicalHistory;
+    private String allergy;
+    private String hearing;
+    private String vision;
+    private String chronicDisease;
+
+    public HealthInfo() {
+    }
+    public HealthInfo(String healthInfoID, String medicalHistory, String allergy, String hearing, String vision, String chronicDisease) {
+        this.healthInfoID = healthInfoID;
+        this.medicalHistory = medicalHistory;
+        this.allergy = allergy;
+        this.hearing = hearing;
+        this.vision = vision;
+        this.chronicDisease = chronicDisease;
+    }
+    public String getHealthInfoID() {
+        return healthInfoID;
+    }
+    public void setHealthInfoID(String healthInfoID) {
+        this.healthInfoID = healthInfoID;
+    }
+    public String getMedicalHistory() {
+        return medicalHistory;
+    }
+    public void setMedicalHistory(String medicalHistory) {
+        this.medicalHistory = medicalHistory;
+    }
+    public String getAllergy() {
+        return allergy;
+    }
+    public void setAllergy(String allergy) {
+        this.allergy = allergy;
+    }
+    public String getHearing() {
+        return hearing;
+    }
+    public void setHearing(String hearing) {
+        this.hearing = hearing;
+    }
+    public String getVision() {
+        return vision;
+    }
+    public void setVision(String vision) {
+        this.vision = vision;
+    }
+    public String getChronicDisease() {
+        return chronicDisease;
+    }
+    public void setChronicDisease(String chronicDisease) {
+        this.chronicDisease = chronicDisease;
+    }
+    
+}
