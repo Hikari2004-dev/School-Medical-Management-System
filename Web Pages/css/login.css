@@ -1,0 +1,99 @@
+/* css viền khung đăng nhập */
+.input-custom {
+  width: 100%;
+  margin-top: 0.25rem;            /* mt-1 */
+  padding: 0.5rem 1rem;           /* py-2 px-4 */
+  border-radius: 9999px;          /* rounded-full */
+  border: 1px solid #D1D5DB;      /* border-gray-300 */
+  outline: none;                  /* focus:outline-none */
+  background-color: #F6F9FF;      /* custom bg color */
+  box-shadow: 0 0 0 1px black;    /* custom stroke */
+}
+
+.input-custom:focus {
+  box-shadow: 0 0 0 1px black, 0 0 0 3px #3B82F6; /* thêm hiệu ứng focus */
+}
+
+/* css logo-continue */
+.btn-submit {
+  width: 100%;
+  background-color: #4f46e5; /* màu indigo-600 */
+  color: white;
+  padding: 0.5rem 0;
+  border-radius: 9999px; /* full rounded */
+  transition: background-color 0.3s ease;
+  font-weight: 500;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-submit:hover {
+  background-color: #4338ca; /* màu indigo-700 */
+}
+
+/* css logo-google */
+.btn-google {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 1px solid #d1d5db; /* border-gray-300 */
+  padding: 0.5rem 0;
+  border-radius: 9999px;
+  background-color: white;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.btn-google:hover {
+  background-color: #f3f4f6; /* tương đương hover:bg-gray-100 */
+}
+
+.google-icon {
+  width: 1.25rem; /* w-5 */
+  height: 1.25rem; /* h-5 */
+}
+
+/* css Already have an account? */
+.login-footer {
+  background-color: #4f46e5; /* Màu xanh dương (indigo-600) */
+  padding: 1rem;
+  text-align: center;
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+}
+
+.login-footer a {
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  font-family: 'Georgia', serif;
+  text-decoration: none;
+}
+
+.login-footer a span {
+  text-decoration: underline;
+}
+
+/* css quen mat khau */
+.link-group {
+  text-align: right;
+  font-size: 0.875rem; /* tương đương text-sm */
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem; /* giống space-y-2 */
+}
+
+.link-group a {
+  color: #9333ea; /* tương đương text-purple-600 */
+  text-decoration: none;
+  display: block;
+  transition: text-decoration 0.2s;
+}
+
+.link-group a:hover {
+  text-decoration: underline;
+}
