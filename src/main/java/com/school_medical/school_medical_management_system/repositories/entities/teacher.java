@@ -1,35 +1,34 @@
 package com.school_medical.school_medical_management_system.repositories.entities;
 
-import jakarta.persistence.*;
-import java.util.List;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+
 
 @Entity
 @Table(name = "teachers")
 public class teacher {
-
     @Id
     private Long teacherID;
 
     @OneToOne
-    @JoinColumn(name = "userID", nullable = false)
+    @JoinColumn(name = "userID",  nullable= false)
     private User user;
 
     private String className;
 
-    @OneToMany(mappedBy = "teacher")
-    private List<StudentList> studentLists;
+
 
     public teacher() {
     }
 
-    public teacher(Long teacherID, User user, String className, List<StudentList> studentLists) {
+    public teacher(Long teacherID, User user, String className) {
         this.teacherID = teacherID;
         this.user = user;
         this.className = className;
-        this.studentLists = studentLists;
     }
-
-    // Getters and Setters
 
     public Long getTeacherID() {
         return teacherID;
@@ -55,11 +54,5 @@ public class teacher {
         this.className = className;
     }
 
-    public List<StudentList> getStudentLists() {
-        return studentLists;
-    }
-
-    public void setStudentLists(List<StudentList> studentLists) {
-        this.studentLists = studentLists;
-    }
+    
 }

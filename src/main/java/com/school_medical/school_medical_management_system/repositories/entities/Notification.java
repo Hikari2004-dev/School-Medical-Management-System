@@ -18,12 +18,15 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long notificationID;
 
+    @Column(name = "type", nullable = false)
     private String type;
+    @Column(name = "content", nullable = false)
     private String content;
 
     @Column(name = "dateSent")
     private LocalDateTime dateSent;
-
+    
+    @Column(name = "confirmed", nullable = false)
     private boolean confirmed;
 
     @ManyToOne
