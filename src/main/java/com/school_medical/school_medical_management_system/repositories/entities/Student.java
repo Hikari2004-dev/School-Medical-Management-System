@@ -1,15 +1,11 @@
 package com.school_medical.school_medical_management_system.repositories.entities;
-import jakarta.persistence.Id;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+
+import jakarta.persistence.*;
 import java.util.List;
-
-
 
 @Entity
 public class Student {
+
     @Id
     private String studentID;
 
@@ -23,8 +19,11 @@ public class Student {
     private HealthInfo healthInfo;
 
     @ManyToOne
-    @JoinColumn(name = "class")
+    @JoinColumn(name = "ClassID")  // Tránh dùng từ khóa class
     private ClassEntity classEntity;
+
+    @OneToMany(mappedBy = "student")
+    private List<StudentList> studentLists;
 
     @OneToMany(mappedBy = "student")
     private List<StudentParent> studentParents;
@@ -35,12 +34,15 @@ public class Student {
     @OneToMany(mappedBy = "student")
     private List<Medical> medicals;
 
+    // Constructor không tham số
     public Student() {
     }
 
+    // Constructor đầy đủ tham số (đã thêm studentLists)
     public Student(String studentID, String name, String gender, String grade, String dateOfBirth,
-            HealthInfo healthInfo, ClassEntity classEntity, List<StudentParent> studentParents,
-            List<DetailVaccination> vaccinations, List<Medical> medicals) {
+                   HealthInfo healthInfo, ClassEntity classEntity, List<StudentList> studentLists,
+                   List<StudentParent> studentParents, List<DetailVaccination> vaccinations,
+                   List<Medical> medicals) {
         this.studentID = studentID;
         this.name = name;
         this.gender = gender;
@@ -48,10 +50,13 @@ public class Student {
         this.dateOfBirth = dateOfBirth;
         this.healthInfo = healthInfo;
         this.classEntity = classEntity;
+        this.studentLists = studentLists;
         this.studentParents = studentParents;
         this.vaccinations = vaccinations;
         this.medicals = medicals;
     }
+
+    // Getters and Setters
 
     public String getStudentID() {
         return studentID;
@@ -109,6 +114,14 @@ public class Student {
         this.classEntity = classEntity;
     }
 
+    public List<StudentList> getStudentLists() {
+        return studentLists;
+    }
+
+    public void setStudentLists(List<StudentList> studentLists) {
+        this.studentLists = studentLists;
+    }
+
     public List<StudentParent> getStudentParents() {
         return studentParents;
     }
@@ -132,8 +145,4 @@ public class Student {
     public void setMedicals(List<Medical> medicals) {
         this.medicals = medicals;
     }
-
-    
-    
 }
-
