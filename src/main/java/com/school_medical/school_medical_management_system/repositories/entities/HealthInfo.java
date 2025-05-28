@@ -2,6 +2,8 @@ package com.school_medical.school_medical_management_system.repositories.entitie
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 
 
 
@@ -24,6 +26,11 @@ public class HealthInfo {
     
     @Column(name = "ChronicDisease", nullable = false)
     private String chronicDisease;
+
+    @OneToOne
+    @JoinColumn(name = "StudentId", nullable = false)
+    private Student student;
+
 
     public HealthInfo() {
     }

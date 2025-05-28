@@ -27,6 +27,7 @@ public class DetailVaccination {
     @JoinColumn(name = "studentID")
     private Student student;
 
+
     public DetailVaccination() {
     }
     

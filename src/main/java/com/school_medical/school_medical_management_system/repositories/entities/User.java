@@ -5,7 +5,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "users")
@@ -36,6 +41,28 @@ public class User {
     @JoinColumn(name = "RoleID", referencedColumnName = "RoleID")
     private Role role;
 
+    @OneToOne(mappedBy = "user")
+    private Parent parent;
+
+    @OneToOne(mappedBy = "user")
+    private Headmaster headmaster;
+
+    @OneToOne(mappedBy = "user")
+    @JsonBackReference
+    private Teacher teacher;
+
+    @OneToOne(mappedBy = "user")
+    private Student student;
+
+    @OneToOne(mappedBy = "user")
+    private SchoolNurse nurse;
+
+    @OneToOne(mappedBy = "user")
+    private Report report;
+
+    @OneToMany(mappedBy = "user")
+    private List<Notification> notifications;
+
     public User() {}
 
     public User(Long userID, String firstName, String lastName, String email, String address,
@@ -50,7 +77,7 @@ public class User {
         this.role = role;
     }
 
-    // --- Getters and Setters ---
+    
     public Long getUserID() {
         return userID;
     }

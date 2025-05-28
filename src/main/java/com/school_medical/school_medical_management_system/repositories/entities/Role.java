@@ -3,8 +3,9 @@ package com.school_medical.school_medical_management_system.repositories.entitie
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-
+import java.util.List;
 
 @Entity
 @Table(name = "Roles")
@@ -15,6 +16,9 @@ public class Role {
 
     @Column(name = "RoleName", nullable = false)
     private String roleName;
+
+    @OneToMany(mappedBy = "role")
+    private List<User> users;
 
     public Role() {
     }
