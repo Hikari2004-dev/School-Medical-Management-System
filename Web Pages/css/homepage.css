@@ -1,0 +1,417 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #fff;
+}
+
+.ads-bar {
+    text-align: center;
+    font-size: 15px;
+    padding: 2px 0;
+    background: #fff;
+    color: #222;
+}
+
+/* Header info căn đều các mục */
+.header-info {
+    background: #5b7cf2;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 40px;
+    font-size: 16px;
+}
+
+.header-info > span:not(.header-icons) {
+    flex: 1;
+    text-align: center;
+}
+
+.header-info .header-icons {
+    display: flex;
+    gap: 18px;
+    font-size: 20px;
+    justify-content: flex-end;
+    min-width: 120px;
+}
+
+.header-info i {
+    margin-right: 6px;
+}
+
+/* Header main */
+.header-main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #fff;
+    padding: 12px 40px;
+    border-bottom: 2px solid #5b7cf2;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #2d3990;
+    letter-spacing: 1px;
+}
+
+.logo-sub {
+    font-size: 1rem;
+    color: #5b7cf2;
+    margin-top: -4px;
+}
+
+.search-bar {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    max-width: 420px;
+    margin: 0 32px;
+    background: #f5f5f5;
+    border-radius: 24px;
+    border: 1px solid #ccc;
+    padding: 4px 16px;
+}
+
+.search-bar input {
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 1rem;
+    flex: 1;
+    padding: 8px 0;
+}
+
+.search-bar i {
+    color: #888;
+    font-size: 18px;
+    margin-left: 8px;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.header-actions i {
+    font-size: 20px;
+    color: #222;
+    cursor: pointer;
+}
+
+.login-btn {
+    background: #fff;
+    border: 2px solid #222;
+    border-radius: 24px;
+    padding: 6px 18px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #222;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s, color 0.2s;
+}
+
+.login-btn:hover {
+    background: #5b7cf2;
+    color: #fff;
+    border-color: #5b7cf2;
+}
+
+/* Navbar đều nhau */
+.main-nav {
+    background: #5b7cf2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    height: 40px;
+}
+
+.main-nav a {
+    flex: 1;
+    text-align: center;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 100%;
+    padding: 0 12px;
+    border-radius: 4px 4px 0 0;
+    transition: background 0.2s;
+}
+
+.main-nav a:hover {
+    background: #2d3990;
+}
+
+/* Banner full width */
+.banner {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    background: #e0e7ff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 220px;
+    border-bottom: 2px solid #5b7cf2;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    transform: translateX(-50%);
+    overflow: hidden;
+}
+
+.banner-img {
+    width: 100vw;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 0 0 12px 12px;
+    display: block;
+    max-width: none;
+    min-width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    transform: translateX(-50%);
+}
+
+/* Thanh màu 3 cột */
+.color-bars {
+    display: flex;
+    gap: 24px;
+    background: #eee;
+    padding: 16px 40px 8px 40px;
+}
+
+.bar {
+    flex: 1;
+    height: 8px;
+    border-radius: 4px;
+}
+
+.bar-green { background: #22d3ee; }
+.bar-blue { background: #2563eb; }
+.bar-pink { background: #f472b6; }
+
+/* Tin tức */
+.news-section {
+    background: #fff;
+    padding: 24px 24px 32px 24px;
+}
+
+.news-title {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0 0 8px 0;
+    font-family: 'Times New Roman', serif;
+}
+
+.news-hr {
+    border: none;
+    border-top: 1px solid #aaa;
+    margin-bottom: 18px;
+    width: 98%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.news-layout {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.news-main {
+    flex: 2;
+    height: 120px;
+    background: #ddd;
+    border-radius: 10px;
+}
+
+.news-side {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.news-side-top {
+    height: 55px;
+    background: #e5e7eb;
+    border-radius: 8px;
+}
+
+.news-bottom {
+    display: flex;
+    gap: 16px;
+    margin-top: 10px;
+}
+
+.news-bottom-left,
+.news-bottom-right {
+    flex: 1;
+    height: 60px;
+    background: #e5e7eb;
+    border-radius: 8px;
+}
+
+/* Sự kiện */
+.event-section {
+    background: #24195a;
+    color: #fff;
+    padding: 32px 0 40px 0;
+    text-align: center;
+}
+
+.event-title {
+    font-size: 1.6rem;
+    margin-bottom: 24px;
+    font-family: 'Times New Roman', serif;
+}
+
+.event-list {
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+}
+
+.event {
+    width: 220px;
+    height: 80px;
+    border-radius: 10px;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    padding-bottom: 12px;
+    padding-left: 12px;
+}
+
+.event-red { background: #8b2323; }
+.event-blue { background: #23238b; }
+.event-green { background: #236b4a; }
+
+.event-time {
+    background: #b91c1c;
+    color: #fff;
+    padding: 6px 18px;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    position: absolute;
+    top: -18px;
+    left: 12px;
+}
+
+.event.event-blue .event-time {
+    background: #1d4ed8;
+}
+
+.event.event-green .event-time {
+    background: #15803d;
+}
+
+/* Why choose SchoMed */
+.why-section {
+    background: #fff;
+    padding: 32px 0 16px 0;
+    text-align: center;
+}
+.why-title {
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin-bottom: 18px;
+}
+.why-list {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin-bottom: 32px;
+}
+.why-item {
+    width: 250px;
+    height: 260px;
+    background: #ddd;
+    border-radius: 8px;
+    display: inline-block;
+}
+
+/* Call to action */
+.cta-section {
+    background: #1e32d6;
+    padding: 32px 0;
+    display: flex;
+    justify-content: center;
+}
+.cta-content {
+    display: flex;
+    align-items: center;
+    max-width: 950px;
+    width: 95%;
+    background: #1e32d6;
+    border-radius: 6px;
+    color: #fff;
+    padding: 24px 24px 24px 24px;
+    gap: 32px;
+}
+.cta-left {
+    flex: 1.2;
+}
+.cta-big {
+    font-size: 2.2rem;
+    font-weight: 400;
+    line-height: 1.2;
+    display: block;
+}
+.cta-right {
+    flex: 1.8;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 18px;
+}
+.cta-desc {
+    font-size: 1rem;
+    margin-bottom: 8px;
+}
+.cta-btn {
+    background: #f59e1a;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 38px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.cta-btn:hover {
+    background: #d97706;
+}
+
+/* Footer */
+.footer {
+    background: #4966e6;
+    color: #fff;
+    text-align: center;
+    padding: 18px 0;
+    font-size: 1rem;
+    margin-top: 0;
+}
