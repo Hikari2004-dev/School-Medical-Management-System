@@ -1,135 +1,455 @@
 <!DOCTYPE html>
 <html lang="vi">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>SchoMed - School Medical</title>
-    <link rel="stylesheet" href="css/homepage.css">
     <!-- Font Awesome CDN for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-</head>
-<body>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-50 font-sans">
     <!-- Quảng cáo -->
-    <div class="ads-bar">quảng cáo</div>
+    <div
+      class="bg-gradient-to-r from-green-400 to-blue-500 text-white text-center py-1 font-semibold"
+    >
+      🩺 Khám sức khỏe định kỳ cho học sinh – Bảo vệ sức khỏe từ hôm nay!
+    </div>
     <!-- Header top info -->
-    <div class="header-info">
-        <span><i class="fa fa-map-marker-alt"></i> Địa chỉ</span>
-        <span><i class="fa fa-phone"></i> Phone number</span>
-        <span><i class="fa fa-envelope"></i> Gmail</span>
-        <span class="header-icons">
-            <i class="fa-brands fa-facebook"></i>
-            <i class="fa-brands fa-instagram"></i>
-            <i class="fa-brands fa-youtube"></i>
+    <div
+      class="flex justify-between items-center px-6 py-2 bg-white shadow text-gray-700 text-sm"
+    >
+      <div class="flex gap-6">
+        <span
+          ><i class="fa fa-map-marker-alt mr-1 text-green-600"></i> Địa chỉ: FPT
+          University</span
+        >
+        <span
+          ><i class="fa fa-phone mr-1 text-blue-600"></i> Hot line: +84
+          9127657989</span
+        >
+        <span
+          ><i class="fa fa-envelope mr-1 text-pink-600"></i> Gmail:
+          FPTMedical@fpt.edu.vn
         </span>
+      </div>
+      <span class="flex gap-3 text-xl">
+        <i
+          class="fa-brands fa-facebook text-blue-700 hover:text-blue-500 cursor-pointer"
+        ></i>
+        <i
+          class="fa-brands fa-instagram text-pink-500 hover:text-pink-400 cursor-pointer"
+        ></i>
+        <i
+          class="fa-brands fa-youtube text-red-600 hover:text-red-400 cursor-pointer"
+        ></i>
+      </span>
     </div>
     <!-- Header main -->
-    <header class="header-main">
-        <div class="logo">
-            <img src="image/14 1.png" alt="SchoMed Logo" height="48">
-            <div>
-                <span class="logo-title">SchoMed</span><br>
-                <span class="logo-sub">School Medical</span>
-            </div>
+    <header
+      class="flex justify-between items-center px-8 py-4 bg-white shadow-md"
+    >
+      <div class="flex items-center gap-3">
+        <img
+          src="image/14 1.png"
+          alt="SchoMed Logo"
+          height="48"
+          class="h-12 w-12 object-contain"
+        />
+        <div>
+          <span class="text-2xl font-bold text-green-600">SchoMed</span><br />
+          <span class="text-xs text-gray-500">School Medical</span>
         </div>
-        <div class="search-bar">
-            <input type="text" placeholder="search">
-            <i class="fa fa-search"></i>
+      </div>
+      <!-- Thanh search mới -->
+      <form class="relative w-60 md:w-80">
+        <input
+          type="text"
+          placeholder="Tìm kiếm tin tức, dịch vụ..."
+          class="w-full py-2 pl-4 pr-12 rounded-full border-2 border-green-200 focus:border-green-500 outline-none shadow-sm transition placeholder-gray-400"
+        />
+        <button
+          type="submit"
+          class="absolute right-2 top-1/2 -translate-y-1/2 text-green-600 hover:bg-green-100 p-2 rounded-full transition"
+          aria-label="Tìm kiếm"
+        >
+          <i class="fa fa-search text-lg"></i>
+        </button>
+      </form>
+      <div class="flex items-center gap-4">
+        <i
+          class="fa fa-bell text-xl text-gray-500 hover:text-green-600 cursor-pointer"
+        ></i>
+        <i
+          class="fa fa-paper-plane text-xl text-gray-500 hover:text-blue-600 cursor-pointer"
+        ></i>
+        <div class="flex items-center gap-1">
+          <a
+            href="login.html"
+            class="flex items-center gap-1 text-green-700 hover:underline"
+            ><i class="fa fa-user"></i> Log in</a
+          >
+          <span class="mx-1 text-gray-400 font-bold">/</span>
+          <a
+            href="Register.html"
+            class="flex items-center gap-1 text-blue-700 hover:underline"
+            ><i class="fa fa-user"></i> Sign up</a
+          >
         </div>
-        <div class="header-actions">
-            <i class="fa fa-bell"></i>
-            <i class="fa fa-paper-plane"></i>
-            <div class="login-signup-group">
-                <a href="login.html" class="login-btn"><i class="fa fa-user"></i> Log in</a>
-                <span style="margin: 0 4px; color: #222; font-weight: 600;">/</span>
-                <a href="Register.html" class="login-btn"><i class="fa fa-user-plus"></i> Sign up</a>
-            </div>
-        </div>
+      </div>
     </header>
     <!-- Navigation -->
-    <nav class="main-nav">
-        <a href="#"><i class="fa fa-home"></i> Trang chủ</a>
-        <a href="#"><i class="fa fa-newspaper"></i> Tin tức</a>
-        <a href="#"><i class="fa fa-stethoscope"></i> Thiết bị y tế</a>
-        <a href="#"><i class="fa fa-concierge-bell"></i> Dịch vụ</a>
-        <a href="#"><i class="fa fa-address-book"></i> Tra cứu bệnh nhân</a>
+    <nav
+      class="flex justify-center gap-8 bg-green-600 py-3 text-white font-semibold shadow"
+    >
+      <a
+        href="#"
+        class="hover:text-yellow-200 flex items-center gap-1 transition"
+        ><i class="fa fa-home"></i> Trang chủ</a
+      >
+      <a
+        href="news.html"
+        class="hover:text-yellow-200 flex items-center gap-1 transition"
+        ><i class="fa fa-newspaper"></i> Tin tức</a
+      >
+      <a
+        href="#"
+        class="hover:text-yellow-200 flex items-center gap-1 transition"
+        ><i class="fa fa-stethoscope"></i> Thiết bị y tế</a
+      >
+      <a
+        href="#"
+        class="hover:text-yellow-200 flex items-center gap-1 transition"
+        ><i class="fa fa-concierge-bell"></i> Dịch vụ</a
+      >
+      <a
+        href="#"
+        class="hover:text-yellow-200 flex items-center gap-1 transition"
+        ><i class="fa fa-address-book"></i> Tra cứu bệnh nhân</a
+      >
     </nav>
     <!-- Banner -->
-    <div class="banner">
-        <img src="image/Banner-new-scaled.png" alt="Banner" class="banner-img">
-    </div>
-
-    <!-- Thanh màu 3 cột -->
-    <div class="color-bars">
-        <div class="bar bar-green"></div>
-        <div class="bar bar-blue"></div>
-        <div class="bar bar-pink"></div>
+    <div
+      class="w-full bg-gradient-to-r from-green-100 to-blue-100 py-6 flex justify-center"
+    >
+      <div
+        class="relative w-full max-w-7xl h-64 md:h-96 rounded-xl overflow-hidden shadow-lg"
+      >
+        <img
+          src="image/Banner-new-scaled.png"
+          alt="Banner"
+          class="w-full h-full object-cover"
+        />
+        <div
+          class="absolute inset-0 bg-gradient-to-r from-white/90 via-white/60 to-transparent flex items-center"
+        >
+          <div class="pl-8 md:pl-16 max-w-2xl">
+            <h3
+              class="text-3xl md:text-5xl font-extrabold text-green-700 mb-4 drop-shadow"
+            >
+              SchoMed - Nền Tảng Cho Tương Lai Khỏe Mạnh!
+            </h3>
+            <p
+              class="text-gray-700 text-lg md:text-2xl font-medium drop-shadow"
+            >
+              SchoMed đồng hành cùng nhà trường và phụ huynh trong việc chăm sóc
+              sức khỏe toàn diện cho học sinh.<br />
+              Chủ động phòng ngừa, phát hiện sớm và hỗ trợ y tế kịp thời, giúp
+              các em phát triển an toàn, tự tin mỗi ngày đến lớp.
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Tin tức -->
-    <section class="news-section">
-        <h2 class="news-title">Tin Tức</h2>
-        <hr class="news-hr">
-        <div class="news-layout">
-            <div class="news-main"></div>
-            <div class="news-side">
-                <div class="news-side-top"></div>
-                <div class="news-side-top"></div>
-            </div>
-            <div class="news-side">
-                <div class="news-side-top"></div>
-                <div class="news-side-top"></div>
-            </div>
+    <section class="max-w-6xl mx-auto mt-12">
+      <h2 class="text-3xl font-extrabold text-green-700 mb-4 tracking-tight">
+        Tin Tức
+      </h2>
+      <hr class="border-green-400 mb-8" />
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Tin chính -->
+        <div
+          class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-shadow duration-300 border border-gray-100 p-6 flex flex-col justify-between"
+        >
+          <img
+            src="https://i1-kinhdoanh.vnecdn.net/2024/05/21/image119441523extractword0out-9771-4127-1716260242.png?w=500&h=300&q=100&dpr=2&fit=crop&s=-U45OVrxIuFc6Ag2gq6OWw"
+            alt="Main News"
+            class="rounded-xl mb-4 object-cover h-40 w-full"
+          />
+          <h3 class="text-xl font-bold mb-2 text-gray-800">
+            Tiêu đề tin chính
+          </h3>
+          <p class="text-gray-600 mb-4">
+            Chuỗi chương trình "Bé khỏe cùng Mây – Đón Travicol ghé trường" nhằm
+            nâng cao kiến thức về sức khỏe trẻ em và hỗ trợ y tế học đường.
+          </p>
+          <a
+            href="#"
+            class="text-green-600 font-semibold hover:underline mt-auto"
+            >Xem chi tiết &rarr;</a
+          >
         </div>
-        <div class="news-bottom">
-            <div class="news-bottom-left"></div>
-            <div class="news-bottom-right"></div>
+        <!-- Tin phụ -->
+        <div class="flex flex-col gap-6">
+          <div
+            class="bg-white rounded-2xl shadow hover:shadow-lg transition-shadow duration-300 border border-gray-100 p-4 flex flex-col"
+          >
+            <img
+              src="https://i1-vnexpress.vnecdn.net/2021/10/05/hoc-sinh-ha-noi-0-1588560806-1-1386-5292-1633407931.jpg?w=500&h=300&q=100&dpr=2&fit=crop&s=5W9tdtYr7CiSjjDFRmS42A"
+              alt="News 1"
+              class="rounded-lg mb-2 object-cover h-24 w-full"
+            />
+            <h4 class="font-semibold text-gray-800 mb-1">
+              SchoMed xây dựng nhiều tiêu chí phòng Covid-19 trong trường học
+            </h4>
+            <p class="text-gray-500 text-sm">
+              Trong kế hoạch y tế học đường năm học 2021-2022, Hà Nội yêu cầu
+              kiểm soát và xử lý kịp thời, không để Covid-19 bùng phát trong
+              trường học.
+            </p>
+          </div>
+          <div
+            class="bg-white rounded-2xl shadow hover:shadow-lg transition-shadow duration-300 border border-gray-100 p-4 flex flex-col"
+          >
+            <img
+              src="https://i1-vnexpress.vnecdn.net/2021/10/04/gv-1633331613-1633331625-9453-1633331713.jpg?w=500&h=300&q=100&dpr=2&fit=crop&s=VGHuOSWLyzuIE-e3LatZJw"
+              alt="News 2"
+              class="rounded-lg mb-2 object-cover h-24 w-full"
+            />
+            <h4 class="font-semibold text-gray-800 mb-1">
+              Phấn đấu 100% trường học có giáo viên thể dục
+            </h4>
+            <p class="text-gray-500 text-sm">
+              Chương trình Sức khỏe học đường giai đoạn 2021-2025 đặt mục tiêu
+              100% trường học có đủ giáo viên thể dục, có tổ chức bữa ăn học
+              đường và căng tin trường học.
+            </p>
+          </div>
         </div>
+        <div class="flex flex-col gap-6">
+          <div
+            class="bg-white rounded-2xl shadow hover:shadow-lg transition-shadow duration-300 border border-gray-100 p-4 flex flex-col"
+          >
+            <img
+              src="https://suckhoedoisong.qltns.mediacdn.vn/zoom/485_290/324455921873985536/2025/4/15/y-te-truong-hoc-bo-giao-duc-2-166495507787277472629-0-0-426-682-crop-1744725291137100477345.jpg"
+              alt="News 3"
+              class="rounded-lg mb-2 object-cover h-24 w-full"
+            />
+            <h4 class="font-semibold text-gray-800 mb-1">
+              Một số bệnh, tật thường gặp ở lứa tuổi học đường có tỷ lệ mắc cao,
+              chiều hướng gia tăng
+            </h4>
+            <p class="text-gray-500 text-sm">
+              Theo Bộ Y tế, trong thời gian qua, các Bộ, ngành, địa phương không
+              ngừng cố gắng để triển khai các nhiệm vụ về y tế trường học và đã
+              đạt được những kết quả nhất định trong công tác kiện toàn, phát
+              triển hệ thống, từng bước nâng cao chất lượng chăm sóc sức khoẻ
+              cho học sinh, sinh viên.
+            </p>
+          </div>
+          <div
+            class="bg-white rounded-2xl shadow hover:shadow-lg transition-shadow duration-300 border border-gray-100 p-4 flex flex-col"
+          >
+            <img
+              src="https://suckhoedoisong.qltns.mediacdn.vn/thumb_w/640/324455921873985536/2024/1/1/nhan-vien-y-te-hoc-duong-4-1704124911653228973071.jpg"
+              alt="News 4"
+              class="rounded-lg mb-2 object-cover h-24 w-full"
+            />
+            <h4 class="font-semibold text-gray-800 mb-1">
+              Nhân viên y tế học đường được xếp vào vị trí việc làm chuyên môn
+              dùng chung
+            </h4>
+            <p class="text-gray-500 text-sm">
+              SKĐS - Để giải quyết những băn khoăn và tâm tư của lực lượng y tế
+              học đường tại các trường học hiện nay, mới đây, Bộ Nội vụ đã chấp
+              thuận đưa vị trí nhân viên y tế học đường về nhóm chuyên môn dùng
+              chung.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-col md:flex-row gap-6 mt-8">
+        <div
+          class="bg-white rounded-2xl shadow hover:shadow-lg transition-shadow duration-300 border border-gray-100 p-6 flex-1 flex flex-col"
+        >
+          <h5 class="font-bold text-gray-800 mb-2">Tin nhanh 1</h5>
+          <p class="text-gray-500 text-sm">
+            Thông tin nhanh về y tế học đường...
+          </p>
+        </div>
+        <div
+          class="bg-white rounded-2xl shadow hover:shadow-lg transition-shadow duration-300 border border-gray-100 p-6 flex-1 flex flex-col"
+        >
+          <h5 class="font-bold text-gray-800 mb-2">Tin nhanh 2</h5>
+          <p class="text-gray-500 text-sm">
+            Thông tin nhanh về dịch vụ SchoMed...
+          </p>
+        </div>
+      </div>
     </section>
 
     <!-- Sự kiện -->
-    <section class="event-section">
-        <h2 class="event-title">Sự Kiện SchoMed</h2>
-        <div class="event-list">
-            <div class="event event-red">
-                <div class="event-time">thời gian</div>
-            </div>
-            <div class="event event-blue">
-                <div class="event-time">thời gian</div>
-            </div>
-            <div class="event event-green">
-                <div class="event-time">thời gian</div>
-            </div>
+    <section class="max-w-6xl mx-auto mt-16">
+      <h2 class="text-3xl font-extrabold text-blue-700 mb-6 tracking-tight">
+        Sự Kiện SchoMed
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div
+          class="bg-red-400 rounded-2xl shadow-lg flex flex-col items-center justify-center h-40 hover:scale-105 transition-transform duration-300"
+        >
+          <div class="text-white font-bold text-lg mb-2">
+            <i class="fa fa-calendar-alt mr-2"></i> 12/06/2025
+          </div>
+          <div class="text-white text-center">
+            Khám sức khỏe định kỳ cho học sinh toàn trường
+          </div>
         </div>
+        <div
+          class="bg-blue-400 rounded-2xl shadow-lg flex flex-col items-center justify-center h-40 hover:scale-105 transition-transform duration-300"
+        >
+          <div class="text-white font-bold text-lg mb-2">
+            <i class="fa fa-calendar-alt mr-2"></i> 20/06/2025
+          </div>
+          <div class="text-white text-center">
+            Tư vấn sức khỏe học đường cho phụ huynh
+          </div>
+        </div>
+        <div
+          class="bg-green-400 rounded-2xl shadow-lg flex flex-col items-center justify-center h-40 hover:scale-105 transition-transform duration-300"
+        >
+          <div class="text-white font-bold text-lg mb-2">
+            <i class="fa fa-calendar-alt mr-2"></i> 28/06/2025
+          </div>
+          <div class="text-white text-center">
+            Hội thảo phòng chống dịch bệnh
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- Why choose SchoMed -->
-    <section class="why-section">
-        <h2 class="why-title">Why choose SchoMed</h2>
-        <div class="why-list">
-            <div class="why-item"></div>
-            <div class="why-item"></div>
-            <div class="why-item"></div>
+    <section class="max-w-6xl mx-auto mt-16">
+      <h2 class="text-3xl font-extrabold text-pink-700 mb-6 tracking-tight">
+        Why choose SchoMed
+      </h2>
+      <div class="flex flex-col md:flex-row gap-8">
+        <div
+          class="bg-white rounded-2xl shadow-lg flex-1 p-8 flex flex-col items-center hover:shadow-2xl transition-shadow duration-300"
+        >
+          <i class="fa fa-user-md text-4xl text-green-500 mb-4"></i>
+          <h3 class="font-bold text-lg mb-2 text-gray-800">
+            Đội ngũ chuyên môn
+          </h3>
+          <p class="text-gray-500 text-center">
+            Các bác sĩ, y tá giàu kinh nghiệm, tận tâm với học sinh.
+          </p>
         </div>
+        <div
+          class="bg-white rounded-2xl shadow-lg flex-1 p-8 flex flex-col items-center hover:shadow-2xl transition-shadow duration-300"
+        >
+          <i class="fa fa-shield-alt text-4xl text-blue-500 mb-4"></i>
+          <h3 class="font-bold text-lg mb-2 text-gray-800">
+            An toàn & Bảo mật
+          </h3>
+          <p class="text-gray-500 text-center">
+            Thông tin sức khỏe học sinh được bảo mật tuyệt đối.
+          </p>
+        </div>
+        <div
+          class="bg-white rounded-2xl shadow-lg flex-1 p-8 flex flex-col items-center hover:shadow-2xl transition-shadow duration-300"
+        >
+          <i class="fa fa-heartbeat text-4xl text-pink-500 mb-4"></i>
+          <h3 class="font-bold text-lg mb-2 text-gray-800">
+            Dịch vụ toàn diện
+          </h3>
+          <p class="text-gray-500 text-center">
+            Chăm sóc sức khỏe học đường từ A-Z, hỗ trợ 24/7.
+          </p>
+        </div>
+      </div>
     </section>
 
     <!-- Call to action -->
-    <section class="cta-section">
-        <div class="cta-content">
-            <div class="cta-left">
-                <span class="cta-big">See SchoMed<br>in action...!</span>
-            </div>
-            <div class="cta-right">
-                <div class="cta-desc">
-                    Schedule a demo to see how you can make a difference to student health outcomes.
-                </div>
-                <button class="cta-btn">Schedule a demo</button>
-            </div>
+    <section class="max-w-6xl mx-auto mt-16 mb-12">
+      <div
+        class="flex flex-col md:flex-row bg-gradient-to-r from-green-400 to-blue-400 rounded-2xl shadow-lg p-10 items-center justify-between gap-8"
+      >
+        <div>
+          <span class="text-4xl font-extrabold text-white leading-tight"
+            >See SchoMed<br />in action...!</span
+          >
         </div>
+        <div>
+          <div class="text-white mb-4 text-lg">
+            Schedule a demo to see how you can make a difference to student
+            health outcomes.
+          </div>
+          <button
+            class="bg-white text-green-700 font-bold px-8 py-3 rounded shadow hover:bg-green-100 transition text-lg"
+          >
+            Schedule a demo
+          </button>
+        </div>
+      </div>
     </section>
 
-     <!-- Footer -->
-    <footer class="footer bg-primary text-white text-center py-3">
-        © 2025 SchoolMed. Bảo vệ sức khỏe học sinh - Yên tâm cho phụ huynh<br>
-        Liên hệ: info@schoolmed.vn | Hotline: 1900-xxxx
+    <!-- Footer -->
+    <footer class="bg-green-700 text-white py-10 mt-12 text-base md:text-lg">
+      <div
+        class="max-w-5xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-8 text-left"
+      >
+        <!-- Cột trái -->
+        <div>
+          <div class="font-bold text-2xl mb-3">
+            © 2025 SchoolMed – Bảo vệ sức khỏe học sinh, yên tâm cho phụ huynh
+          </div>
+          <div class="mb-2">
+            <span class="font-semibold">Địa chỉ:</span> Tầng 5, Tòa nhà ABC,
+            Q.1, TP. HCM
+          </div>
+          <div class="mb-2">
+            <span class="font-semibold">Email:</span>
+            <a
+              href="mailto:info@schoolmed.vn"
+              class="underline hover:text-yellow-200"
+              >info@schoolmed.vn</a
+            >
+          </div>
+          <div class="mb-2">
+            <span class="font-semibold">Hotline:</span> 1900-xxxx
+          </div>
+        </div>
+        <!-- Cột phải -->
+        <div class="flex flex-col justify-between">
+          <div class="mb-2">
+            <span class="font-semibold">Website:</span>
+            <a
+              href="https://www.schoolmed.vn"
+              class="underline hover:text-yellow-200"
+              target="_blank"
+              >www.schoolmed.vn</a
+            >
+          </div>
+          <div class="mb-2">
+            <span class="font-semibold">Facebook:</span>
+            <a
+              href="https://fb.com/schoolmedvn"
+              class="underline hover:text-yellow-200"
+              target="_blank"
+              >fb.com/schoolmedvn</a
+            >
+          </div>
+          <div class="mb-2">
+            <span class="font-semibold">MST:</span> 0123456789 – Cấp bởi Sở KHĐT
+            TP. HCM
+          </div>
+        </div>
+      </div>
     </footer>
-</body>
+  </body>
 </html>
