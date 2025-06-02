@@ -3,31 +3,42 @@ package com.school_medical.school_medical_management_system.repositories.entitie
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Column;
 import jakarta.persistence.Table;
+import java.util.List;
 
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import jakarta.persistence.CascadeType;
 
 @Entity
 @Table(name = "teachers")
-public class teacher {
+public class Teacher {
     @Id
     private Long teacherID;
 
-    @OneToOne
-    @JoinColumn(name = "userID",  nullable= false)
-    private User user;
-
+    @Column(name = "className", nullable = false)
     private String className;
 
+    @ManyToOne
+    @JoinColumn(name = "userID", nullable = false)
+    @JsonManagedReference
+    private User user;
 
+    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
+    private List<StudentList> classes;
 
-    public teacher() {
+    public Teacher() {
     }
 
-    public teacher(Long teacherID, User user, String className) {
+    public Teacher(Long teacherID, String className, User user, List<StudentList> classes) {
         this.teacherID = teacherID;
-        this.user = user;
         this.className = className;
+        this.user = user;
+        this.classes = classes;
     }
 
     public Long getTeacherID() {
@@ -38,14 +49,6 @@ public class teacher {
         this.teacherID = teacherID;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     public String getClassName() {
         return className;
     }
@@ -54,5 +57,20 @@ public class teacher {
         this.className = className;
     }
 
-    
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public List<StudentList> getClasses() {
+        return classes;
+    }
+
+    public void setClasses(List<StudentList> classes) {
+        this.classes = classes;
+    }
+
 }

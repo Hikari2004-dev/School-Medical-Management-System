@@ -1,17 +1,18 @@
 package com.school_medical.school_medical_management_system.repositories.entities;
 
+import java.util.ArrayList;
+import java.util.List; 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
-
-
-
+import jakarta.persistence.CascadeType; 
 
 @Entity
-@Table(name = "parent")
+@Table(name = "Parent")
 public class Parent {
     @Id
     private Long parentID;
@@ -22,6 +23,9 @@ public class Parent {
 
     @Column(name = "studentID", nullable = false)
     private Long studentID;
+
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Student> students = new ArrayList<>();
 
     public Parent() {
     }
@@ -56,5 +60,12 @@ public class Parent {
         this.studentID = studentID;
     }
 
+    // Getter and Setter for students (optional but recommended)
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
+    }
 }
-    

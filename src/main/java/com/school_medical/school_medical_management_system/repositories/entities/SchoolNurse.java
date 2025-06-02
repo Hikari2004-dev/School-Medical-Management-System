@@ -6,17 +6,49 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(name = "SchoolNurses")
 public class SchoolNurse {
     @Id
     private String NurseID;
 
-    @Column(name = "UserID" , nullable = false)
-    private String userID;
+    @ManyToOne
+    @JoinColumn(name = "userID", nullable = false)
+    private User user;
 
-    @Column(name = "MedicalID" , nullable = false)
-    private String medicalID;
+    @OneToMany(mappedBy = "schoolNurse", cascade = CascadeType.ALL)
+    private List<MedicalEvent> medicalEvents;
 
-    @Column(name = "EventID", nullable = false)
-    private String eventID;
+    @ManyToOne
+    @JoinColumn(name = "event_id")
+    private MedicalEvent medicalEvent;
 
+    @OneToMany(mappedBy = "schoolNurse", cascade = CascadeType.ALL)
+    private List<IncidentReport> incidentReports;
+
+    public SchoolNurse() {
+    }
+    public SchoolNurse(String nurseID, User user) {
+        this.NurseID = nurseID;
+        this.user = user;
+    }
+
+    public String getNurseID() {
+        return NurseID;
+    }
+    public void setNurseID(String nurseID) {
+        this.NurseID = nurseID;
+    }
+    public User getUser() {
+        return user;
+    }
+    public void setUser(User user) {
+        this.user = user;
+    }
+    public List<MedicalEvent> getMedicalEvents() {
+        return medicalEvents;
+    }
+    public void setMedicalEvents(List<MedicalEvent> medicalEvents) {
+        this.medicalEvents = medicalEvents;
+    }
+    
 }
