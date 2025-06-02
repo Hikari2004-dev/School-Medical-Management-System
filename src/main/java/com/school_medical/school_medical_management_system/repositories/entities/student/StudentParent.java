@@ -1,4 +1,6 @@
-package com.school_medical.school_medical_management_system.repositories.entities;
+package com.school_medical.school_medical_management_system.repositories.entities.student;
+import com.school_medical.school_medical_management_system.repositories.entities.User.Parent;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

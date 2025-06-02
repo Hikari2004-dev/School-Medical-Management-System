@@ -1,4 +1,4 @@
-package com.school_medical.school_medical_management_system.repositories.entities;
+package com.school_medical.school_medical_management_system.repositories.entities.User;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,6 +11,8 @@ import jakarta.persistence.Table;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.school_medical.school_medical_management_system.repositories.entities.report.Notification;
+import com.school_medical.school_medical_management_system.repositories.entities.student.Student;
 
 @Entity
 @Table(name = "users")

@@ -1,7 +1,10 @@
-package com.school_medical.school_medical_management_system.repositories.entities;
+package com.school_medical.school_medical_management_system.repositories.entities.User;
 
 import java.util.ArrayList;
-import java.util.List; 
+import java.util.List;
+
+import com.school_medical.school_medical_management_system.repositories.entities.student.Student;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

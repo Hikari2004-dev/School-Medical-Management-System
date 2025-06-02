@@ -1,9 +1,12 @@
-package com.school_medical.school_medical_management_system.repositories.entities;
+package com.school_medical.school_medical_management_system.repositories.entities.User;
 
 
 import jakarta.persistence.*;
 
 import java.util.List;
+
+import com.school_medical.school_medical_management_system.repositories.entities.medical.MedicalEvent;
+import com.school_medical.school_medical_management_system.repositories.entities.report.IncidentReport;
 
 @Entity
 @Table(name = "SchoolNurses")

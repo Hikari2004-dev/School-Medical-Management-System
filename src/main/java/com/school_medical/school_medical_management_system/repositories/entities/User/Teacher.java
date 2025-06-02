@@ -1,4 +1,4 @@
-package com.school_medical.school_medical_management_system.repositories.entities;
+package com.school_medical.school_medical_management_system.repositories.entities.User;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -11,6 +11,7 @@ import java.util.List;
 
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.school_medical.school_medical_management_system.repositories.entities.student.StudentList;
 
 import jakarta.persistence.CascadeType;
 

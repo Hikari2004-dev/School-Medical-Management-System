@@ -1,4 +1,4 @@
-package com.school_medical.school_medical_management_system.repositories.entities;
+package com.school_medical.school_medical_management_system.repositories.entities.student;
 
 import jakarta.persistence.Id;
 import jakarta.persistence.Entity;
@@ -12,6 +12,9 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 
 import java.util.List;
+
+import com.school_medical.school_medical_management_system.repositories.entities.medical.Medical;
+import com.school_medical.school_medical_management_system.repositories.entities.medical.MedicalEvent;
 
 @Entity
 @Table(name = "Students")

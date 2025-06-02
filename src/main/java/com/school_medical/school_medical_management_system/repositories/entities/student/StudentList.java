@@ -1,6 +1,8 @@
-package com.school_medical.school_medical_management_system.repositories.entities;
+package com.school_medical.school_medical_management_system.repositories.entities.student;
 
 import java.util.List;
+
+import com.school_medical.school_medical_management_system.repositories.entities.User.Teacher;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;

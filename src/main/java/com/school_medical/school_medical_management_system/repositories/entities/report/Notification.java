@@ -1,4 +1,4 @@
-package com.school_medical.school_medical_management_system.repositories.entities;
+package com.school_medical.school_medical_management_system.repositories.entities.report;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -9,6 +9,10 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Column;
 import java.time.LocalDateTime;
+
+import com.school_medical.school_medical_management_system.repositories.entities.User.Parent;
+import com.school_medical.school_medical_management_system.repositories.entities.User.User;
+import com.school_medical.school_medical_management_system.repositories.entities.student.Student;
 
 @Entity
 @Table(name = "Notification")

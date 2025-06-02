@@ -1,4 +1,4 @@
-package com.school_medical.school_medical_management_system.repositories.entities;
+package com.school_medical.school_medical_management_system.repositories.entities.report;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -6,6 +6,10 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+
+import com.school_medical.school_medical_management_system.repositories.entities.User.SchoolNurse;
+import com.school_medical.school_medical_management_system.repositories.entities.student.Student;
+
 import jakarta.persistence.Column;
 
 @Entity
