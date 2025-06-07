@@ -97,3 +97,17 @@
 .link-group a:hover {
   text-decoration: underline;
 }
+
+.already-have-account {
+  color:#9333ea;
+}
+
+a {
+  color:#9333ea; /* Giữ nguyên màu sắc của liên kết */
+  text-decoration: none; /* Không gạch chân */
+}
+
+a:hover {
+  color: #1e40af; /* Giữ nguyên màu sắc khi hover */
+  text-decoration: underline; /* Gạch chân khi hover */
+}

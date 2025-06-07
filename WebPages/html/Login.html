@@ -4,9 +4,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Đăng kí</title>
+  <title>Đăng nhập</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="/Web Pages/css/Login.css" />
+  <link rel="stylesheet" href="/WebPages/css/Login.css" />
 </head>
 
 <body class="min-h-screen bg-cover bg-center flex items-center justify-center"
@@ -16,39 +16,37 @@
     <!-- Logo -->
     <div class="text-center mb-6">
       <img src="../image/14 1.png" alt="Logo thuốc" class="mx-auto w-16 h-16" />
-      <h2 class="text-2xl font-semibold mt-2">Đăng kí - Register</h2>
+      <h2 class="text-2xl font-semibold mt-2">Đăng nhập</h2>
     </div>
 
+    <!-- Form -->
     <form class="space-y-4">
       <!-- Email -->
       <div>
         <label class="block text-sm font-medium">Email</label>
-        <input type="email" placeholder="Email" class="input-custom" required />
-      </div>
-
-      <!-- Name -->
-      <div>
-        <label class="block text-sm font-medium">Name</label>
-        <input type="text" placeholder="Tên đăng nhập" class="input-custom" required />
+        <input type="email" placeholder="Email" class="input-custom" 
+        required />
       </div>
 
       <!-- Password -->
       <div>
         <label class="block text-sm font-medium">Mật khẩu</label>
-        <input type="password" placeholder="Mật khẩu" class="input-custom" required />
+        <input type="password" placeholder="Mật khẩu" class="input-custom" 
+        required />
       </div>
 
-      <!-- Repeat Password -->
-      <div>
-        <label class="block text-sm font-medium">Nhập lại mật khẩu</label>
-        <input type="password" placeholder="Nhập lại mật khẩu" class="input-custom" required />
+      <!-- Checkbox + Links -->
+      <div class="flex justify-between items-center text-sm">
+        <label class="flex items-center gap-2">
+          <input type="checkbox" class="accent-blue-500" />
+          Ghi nhớ đăng nhập
+        </label>
+
+      <div class="link-group">
+        <a href="Register.html">Tạo tài khoản mới</a>
+        <a href="./forgetpassword.html">Quên mật khẩu</a>
       </div>
 
-      <!-- Quên mật khẩu -->
-      <div class="forget-password">
-        <a href="./forgetpassword.html" class="forget-password-link">
-          Quên mật khẩu?
-        </a>
       </div>
 
       <!-- Submit Button -->
@@ -63,18 +61,11 @@
         <hr class="flex-grow border-gray-300" />
       </div>
 
-      <!-- Google Login -->
+      <!-- Logo google -->
       <button type="button" class="btn-google">
         <img src="../image/logo google.png" alt="Google" class="google-icon" />
         <span>Continue with Google</span>
       </button>
-
-      <!-- Already have an account -->
-      <div class="text-center text-sm">
-        <a href="Login.html" class="forget-password-link">
-          Already have an account? <span>Log in</span>
-        </a>
-      </div>
 
     </form>
   </div>
