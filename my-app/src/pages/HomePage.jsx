@@ -7,7 +7,9 @@ import ClickSpark from "../hooks/ClickSpark";
 import SplitText from "../hooks/SplitText";
 import GooeyNav from "../hooks/GooeyNav";
 import "../hooks/GooeyNav.css";
+
 import "./HomePage.css";
+
 
 import LogoImg from "../image/14 1.png";
 import Img1 from "../image/1.png";
@@ -97,9 +99,13 @@ function HomePage() {
             <i className="fa fa-bell"></i>
             <i className="fa fa-paper-plane"></i>
             <div className="auth-buttons">
-              <a href="checkaccount.html" className="login-link">
+              <button 
+                className="login-link"
+                style={{ background: "none", border: "none", cursor: "pointer" }}
+                onClick={() => navigate("/login")}
+              >
                 <i className="fa fa-user"></i> Log in
-              </a>
+              </button>
               <span className="divider">/</span>
               <a href="checkaccount.html" className="signup-link">
                 <i className="fa fa-user"></i> Sign up
@@ -128,9 +134,8 @@ function HomePage() {
                 key={index}
                 src={img}
                 alt={`Slide ${index + 1}`}
-                className={`slideshow-img ${
-                  currentSlide === index ? "opacity-100" : "opacity-0"
-                }`}
+                className={`slideshow-img ${currentSlide === index ? "opacity-100" : "opacity-0"
+                  }`}
               />
             ))}
           </div>
