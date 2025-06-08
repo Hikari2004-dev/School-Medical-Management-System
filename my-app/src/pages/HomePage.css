@@ -1,0 +1,584 @@
+/* === Tổng thể trang === */
+body, .page-container {
+  font-family: "Inter", Arial, sans-serif;
+  background-color: #f7fafc;
+  color: #1f2937;
+  margin: 0;
+  padding: 0;
+}
+
+/* === Quảng cáo banner === */
+.notice-banner {
+  background: linear-gradient(to right, #bfdbfe, #c7d2fe, #bbf7d0);
+  padding: 0.75rem 0;
+  text-align: center;
+  font-weight: 800;
+  font-size: 1.25rem;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+}
+.notice-text {
+  color: #2563eb;
+  animation: bounce-slow 2s infinite;
+}
+.highlight {
+  text-decoration: underline wavy #93c5fd;
+}
+@keyframes bounce-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* === Header === */
+.header-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: white;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.05);
+  flex-wrap: wrap;
+}
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.logo-img {
+  height: 48px;
+  width: 48px;
+  object-fit: contain;
+}
+.logo-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #1e40af;
+}
+.logo-sub {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+.search-bar {
+  display: flex;
+  align-items: center;
+  background-color: #f9fafb;
+  border: 1px solid #cbd5e1;
+  border-radius: 9999px;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  max-width: 350px;
+  transition: border 0.2s ease;
+}
+
+.search-bar:focus-within {
+  border-color: #1e40af;
+  box-shadow: 0 0 0 1px #1e40af;
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 1rem;
+  color: #334155;
+  outline: none;
+}
+
+.search-input::placeholder {
+  color: #94a3b8;
+}
+
+.search-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1e40af;
+  font-size: 1.1rem;
+}
+
+.header-icons {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.auth-buttons a {
+  text-decoration: none;
+  font-weight: bold;
+  color: #1e40af;
+}
+.divider {
+  margin: 0 0.25rem;
+  color: #d1d5db;
+}
+
+/* === Navigation === */
+.navigation-bar {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  background-color: #1e40af;
+  color: white;
+  padding: 0.75rem 0;
+  font-weight: 600;
+}
+.nav-item {
+  text-decoration: none;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* === Slideshow === */
+.slideshow-container {
+  width: 100%;
+  padding: 1.5rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.slideshow-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 960px;
+  aspect-ratio: 16 / 9;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+  margin: 0 auto;
+  padding: 0 1rem;
+  box-sizing: border-box;
+}
+
+.slideshow-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 1rem;
+  transition: opacity 1s ease-in-out;
+  opacity: 0;
+  z-index: 0;
+}
+
+.opacity-100 {
+  opacity: 1 !important;
+  z-index: 1;
+}
+
+.opacity-0 {
+  opacity: 0 !important;
+  z-index: 0;
+}
+
+.slideshow-indicators {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+  gap: 10px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  background-color: #d1d5db;
+  border-radius: 9999px;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+.dot.active {
+  background-color: #0ea5e9;
+}
+
+@media (max-width: 768px) {
+  .slideshow-wrapper {
+    max-width: 100%;
+    aspect-ratio: 16 / 9;
+    padding: 0;
+  }
+}
+
+/* === Thong ke === */
+.stats-section {
+  background: #e0f2fe;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 30px;
+  max-width: 1100px;
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: 1.5rem;
+  padding: 40px 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #1f2937;
+}
+
+.stat-item img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  margin-bottom: 10px;
+  filter: brightness(0) saturate(100%) invert(44%) sepia(97%) saturate(3368%) hue-rotate(180deg) brightness(100%) contrast(96%);
+}
+
+.stat-item h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+
+.stat-item p {
+  font-size: 0.9rem;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+/* === News Section === */
+.news-section {
+  padding: 60px 20px;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+.section-title {
+  font-size: 32px;
+  color: #1e40af;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 10px;
+}
+.section-divider {
+  border: 1px solid #1e40af;
+  width: 60px;
+  margin: 0 auto 30px;
+}
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+}
+.news-main, .news-sub {
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.news-image-wrapper {
+  height: 200px;
+  overflow: hidden;
+}
+.news-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.news-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.news-title, .news-sub-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #1e40af;
+  margin-bottom: 10px;
+}
+.news-description {
+  color: #4b5563;
+  font-size: 14px;
+  flex: 1;
+}
+.news-link {
+  color: #1e40af;
+  font-weight: bold;
+  margin-top: auto;
+  text-decoration: none;
+}
+.news-link:hover {
+  text-decoration: underline;
+}
+
+/* === Đối tác đồng hành === */
+.partner-section {
+  padding: 60px 20px;
+  text-align: center;
+  background-color: #ffffff;
+}
+
+.partner-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: #1e40af;
+  margin-bottom: 40px;
+}
+
+.partner-logos {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 40px;
+}
+
+.partner-item {
+  width: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.partner-item img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  border-radius: 50%;
+  background-color: #f1f5f9;
+  padding: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
+}
+
+.partner-item img:hover {
+  transform: scale(1.05);
+}
+
+.partner-item p {
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+@media (max-width: 768px) {
+  .partner-item {
+    width: 45%;
+  }
+}
+@media (max-width: 480px) {
+  .partner-item {
+    width: 100%;
+  }
+}
+
+/* === Vì sao chọn SchoMed === */
+.why-section {
+  padding: 60px 20px;
+  background-color: #f8fafc;
+  text-align: center;
+}
+
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 40px;
+  max-width: 1200px;
+  margin: 40px auto 0;
+}
+
+.why-item {
+  background-color: white;
+  border-radius: 1rem;
+  padding: 2rem 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.why-item:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+
+.why-icon {
+  font-size: 2.5rem;
+  color: #1e40af;
+  margin-bottom: 1rem;
+}
+
+.why-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+}
+
+.why-description {
+  font-size: 0.95rem;
+  color: #4b5563;
+  line-height: 1.5;
+}
+/* === Đăng ký gói thành viên === */
+.subscription-section {
+  background-color: #f0f9ff;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.subscription-title {
+  font-size: 28px;
+  font-weight: bold;
+  color: #1e40af;
+  margin-bottom: 20px;
+}
+
+.subscription-text {
+  font-size: 1rem;
+  color: #334155;
+  margin-bottom: 30px;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.subscription-button {
+  background-color: #1e40af;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 9999px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.subscription-button:hover {
+  background-color: #1e3a8a;
+}
+
+/* === Footer === */
+.footer {
+  background-color: #1e40af;
+  color: white;
+  padding: 2.5rem 1rem;
+  font-size: 1rem;
+}
+.footer-container {
+  max-width: 960px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+.footer-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+.footer-item {
+  margin-bottom: 0.5rem;
+}
+.label {
+  font-weight: 600;
+}
+.footer-link {
+  color: white;
+  text-decoration: underline;
+}
+
+/* === Gói Hội Viên === */
+.subscription-section {
+  background-color: #e0f2fe;
+  padding: 60px 20px;
+  text-align: center;
+}
+.subscription-title {
+  font-size: 32px;
+  font-weight: bold;
+  color: #1e40af;
+  margin-bottom: 12px;
+}
+.subscription-text {
+  font-size: 1rem;
+  color: #334155;
+  margin-bottom: 40px;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.plan-container {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 0 1rem;
+}
+.plan-card {
+  background-color: #ffffff;
+  border-radius: 1.5rem;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+  padding: 30px 24px;
+  width: 320px;
+  text-align: left;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.plan-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+.plan-card h2 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+.plan-card p {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  color: #475569;
+}
+.plan-card ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 1.5rem;
+}
+.plan-card li {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  color: #1f2937;
+}
+.plan-card li svg {
+  color: #22c55e;
+  margin-right: 8px;
+  font-size: 1rem;
+}
+.subscription-button {
+  background-color: #1e40af;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 9999px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: inline-block;
+}
+.subscription-button:hover {
+  background-color: #1e3a8a;
+}
+.plan-card .subscription-button.red {
+  background-color: #dc2626;
+}
+.plan-card .subscription-button.red:hover {
+  background-color: #b91c1c;
+}
+
