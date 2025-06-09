@@ -1,3 +1,4 @@
+// GooeyNav.jsx (đã chỉnh sửa)
 import { useRef, useEffect, useState } from "react";
 import "./GooeyNav.css";
 
@@ -10,6 +11,7 @@ const GooeyNav = ({
   timeVariance = 300,
   colors = [1, 2, 3, 1, 2, 3, 1, 4],
   initialActiveIndex = 0,
+  onItemClick,
 }) => {
   const containerRef = useRef(null);
   const navRef = useRef(null);
@@ -108,13 +110,15 @@ const GooeyNav = ({
 
     if (textRef.current) {
       textRef.current.classList.remove("active");
-      void textRef.current.offsetWidth; // Force reflow
+      void textRef.current.offsetWidth;
       textRef.current.classList.add("active");
     }
 
     if (filterRef.current) {
       makeParticles(filterRef.current);
     }
+
+    if (onItemClick) onItemClick(items[index].href);
   };
 
   const handleKeyDown = (e, index) => {
@@ -163,7 +167,8 @@ const GooeyNav = ({
           ))}
         </ul>
       </nav>
-      <span className="effect filter" ref={filterRef} />
+      {/* Đã ẩn filter blur */}
+      {/* <span className="effect filter" ref={filterRef} /> */}
       <span className="effect text" ref={textRef} />
     </div>
   );
