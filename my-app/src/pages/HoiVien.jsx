@@ -182,7 +182,7 @@ function HoiVien() {
                 fontSize: "0.95rem",
               }}
             >
-              Thanh toán  
+              Đăng ký ngay 
             </button>
           </div>
 
@@ -225,7 +225,7 @@ function HoiVien() {
                 fontSize: "0.95rem",
               }}
             >
-              Thanh toán
+              Đăng ký ngay
             </button>
           </div>
         </div>

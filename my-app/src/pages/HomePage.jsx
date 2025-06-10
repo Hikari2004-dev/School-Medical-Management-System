@@ -19,6 +19,9 @@ import ChoRay from "../image/choray1.png";
 import DaKhoa from "../image/dakhoa.png";
 import DHYDuoc from "../image/dhyduoc.png";
 import { useNavigate } from "react-router-dom";
+import ChatBot from "../hooks/ChatBot";
+import "../hooks/ChatBot.css";
+
 function HomePage() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const navigate = useNavigate();
@@ -395,8 +398,11 @@ function HomePage() {
           </div>
         </footer>
       </div>
+      <ChatBot />
+
     </ClickSpark>
   );
 }
 
 export default HomePage;
+
