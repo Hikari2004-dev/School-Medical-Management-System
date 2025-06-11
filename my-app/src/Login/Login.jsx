@@ -33,7 +33,13 @@ function Login() {
             alt="Logo thuốc"
             style={{ margin: "0 auto", width: "4rem", height: "4rem" }}
           />
-          <h2 style={{ fontSize: "1.5rem", fontWeight: "600", marginTop: "0.5rem" }}>
+          <h2
+            style={{
+              fontSize: "1.5rem",
+              fontWeight: "600",
+              marginTop: "0.5rem",
+            }}
+          >
             Đăng nhập
           </h2>
         </div>
@@ -71,7 +77,9 @@ function Login() {
               fontSize: "0.875rem",
             }}
           >
-            <label style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <label
+              style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
+            >
               <input type="checkbox" style={{ accentColor: "#3b82f6" }} />
               Ghi nhớ đăng nhập
             </label>
@@ -88,9 +96,21 @@ function Login() {
           </button>
 
           {/* OR line */}
-          <div style={{ display: "flex", alignItems: "center", margin: "0.5rem 0" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              margin: "0.5rem 0",
+            }}
+          >
             <hr style={{ flexGrow: 1, borderColor: "#d1d5db" }} />
-            <span style={{ margin: "0 0.5rem", fontSize: "0.875rem", color: "#6b7280" }}>
+            <span
+              style={{
+                margin: "0 0.5rem",
+                fontSize: "0.875rem",
+                color: "#6b7280",
+              }}
+            >
               OR
             </span>
             <hr style={{ flexGrow: 1, borderColor: "#d1d5db" }} />
@@ -98,7 +118,11 @@ function Login() {
 
           {/* Google Button */}
           <button type="button" className="btn-google">
-            <img src="../image/logo google.png" alt="Google" className="google-icon" />
+            <img
+              src="../image/logo google.png"
+              alt="Google"
+              className="google-icon"
+            />
             <span>Continue with Google</span>
           </button>
         </form>

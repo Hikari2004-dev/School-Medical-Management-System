@@ -23,7 +23,7 @@ function HoiVien() {
     { label: "Trang chủ", href: "/" },
     { label: "Tin tức", href: "/#news" },
     { label: "Hội viên", href: "/hoivien" },
-    { label: "Dịch vụ", href: "/#services" },
+    { label: "Dịch vụ", href: "/dichvu" },
     { label: "Tra cứu", href: "/#search" },
   ];
 

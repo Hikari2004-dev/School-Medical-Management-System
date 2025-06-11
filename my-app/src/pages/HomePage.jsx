@@ -19,8 +19,8 @@ import ChoRay from "../image/choray1.png";
 import DaKhoa from "../image/dakhoa.png";
 import DHYDuoc from "../image/dhyduoc.png";
 import { useNavigate } from "react-router-dom";
-import ChatBot from "../hooks/ChatBot";
-import "../hooks/ChatBot.css";
+
+
 
 function HomePage() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -41,7 +41,7 @@ function HomePage() {
     { label: "Trang chủ", href: "/" },
     { label: "Tin tức", href: "#news" },
     { label: "Hội viên", href: "/hoivien" },
-    { label: "Dịch vụ", href: "#services" },
+    { label: "Dịch vụ", href: "/dichvu" },
     { label: "Tra cứu", href: "#search" },
   ];
 
@@ -398,11 +398,8 @@ function HomePage() {
           </div>
         </footer>
       </div>
-      <ChatBot />
-
     </ClickSpark>
   );
 }
 
 export default HomePage;
-
