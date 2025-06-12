@@ -10,11 +10,12 @@ function Login() {
     <div className="login-wrapper">
       <div className="login-container">
         {/* Logo */}
-        <div className="login-header">
-          <img src={LogoImg} alt="Logo thuốc" className="logo" />
-          <h2 className="login-title">Đăng nhập</h2>
+        <div className="login-header" style={{ textAlign: "center", marginBottom: "1.5rem" }}>
+          <img src={LogoImg} alt="Logo thuốc" className="logo" style={{ margin: "0 auto", width: "4rem", height: "4rem" }} />
+          <h2 className="login-title" style={{ fontSize: "1.5rem", fontWeight: "600", marginTop: "0.5rem" }}>
+            Đăng nhập
+          </h2>
         </div>
-
         <form className="login-form">
           {/* Email */}
           <div>
@@ -42,10 +43,17 @@ function Login() {
             )}
           </div>
 
-          {/* Options */}
-          <div className="login-options">
-            <label className="remember-me">
-              <input type="checkbox" className="checkbox" />
+          {/* Checkbox + Links */}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              fontSize: "0.875rem",
+            }}
+          >
+            <label style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+              <input type="checkbox" style={{ accentColor: "#3b82f6" }} />
               Ghi nhớ đăng nhập
             </label>
             <div className="link-group">
@@ -60,10 +68,24 @@ function Login() {
           </button>
 
           {/* OR Divider */}
-          <div className="divider">
-            <hr className="divider-line" />
-            <span className="divider-text">OR</span>
-            <hr className="divider-line" />
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              margin: "0.5rem 0",
+            }}
+          >
+            <hr style={{ flexGrow: 1, borderColor: "#d1d5db" }} />
+            <span
+              style={{
+                margin: "0 0.5rem",
+                fontSize: "0.875rem",
+                color: "#6b7280",
+              }}
+            >
+              OR
+            </span>
+            <hr style={{ flexGrow: 1, borderColor: "#d1d5db" }} />
           </div>
 
           {/* Google Login */}
