@@ -17,7 +17,7 @@ function DichVu() {
 
   const navItems = [
     { label: "Trang chủ", href: "/" },
-    { label: "Tin tức", href: "#news" },
+    { label: "Tin tức", href: "/" },
     { label: "Hội viên", href: "/hoivien" },
     { label: "Dịch vụ", href: "/dichvu" },
     { label: "Tra cứu", href: "#search" },
@@ -164,7 +164,7 @@ function DichVu() {
               }}
             >
               <a
-                href="tel:0845638638"
+                href="tel:1900-1159"
                 style={{
                   background: "#1e40af",
                   color: "#fff",
@@ -174,7 +174,7 @@ function DichVu() {
                   fontWeight: "bold",
                 }}
               >
-                📞 0845638638
+                📞 1900-1159
               </a>
               <span>hoặc</span>
               <button
@@ -219,7 +219,7 @@ function DichVu() {
           </div>
         </section>
         <section className="services-section" id="services" data-aos="fade-up">
-          <h2 className="section-title">Dịch Vụ Của Chúng Tôi</h2>
+          <h2 className="section-title">Dịch Vụ y tế của SchoMed</h2>
           <div
             className="services-grid"
             style={{
