@@ -15,10 +15,13 @@ import Img2 from "../image/2.png";
 import Img3 from "../image/3.png";
 import Img4 from "../image/4.png";
 import BvNhiDong from "../image/bvnhidong.png";
-import ChoRay from "../image/choray.png";
+import ChoRay from "../image/choray1.png";
 import DaKhoa from "../image/dakhoa.png";
 import DHYDuoc from "../image/dhyduoc.png";
 import { useNavigate } from "react-router-dom";
+
+
+
 function HomePage() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const navigate = useNavigate();
@@ -35,10 +38,10 @@ function HomePage() {
   }, []);
 
   const navItems = [
-    { label: "Trang chủ", href: "#" },
+    { label: "Trang chủ", href: "/" },
     { label: "Tin tức", href: "#news" },
-    { label: "Thiết bị y tế", href: "#devices" },
-    { label: "Dịch vụ", href: "#services" },
+    { label: "Hội viên", href: "/hoivien" },
+    { label: "Dịch vụ", href: "/dichvu" },
     { label: "Tra cứu", href: "#search" },
   ];
 
@@ -97,11 +100,11 @@ function HomePage() {
             <i className="fa fa-bell"></i>
             <i className="fa fa-paper-plane"></i>
             <div className="auth-buttons">
-              <a href="checkaccount.html" className="login-link">
+              <a href="/WebPages/Login.html" className="login-link">
                 <i className="fa fa-user"></i> Log in
               </a>
               <span className="divider">/</span>
-              <a href="checkaccount.html" className="signup-link">
+              <a href="/WebPages/Register.html" className="signup-link">
                 <i className="fa fa-user"></i> Sign up
               </a>
             </div>
@@ -183,12 +186,11 @@ function HomePage() {
             ))}
           </div>
         </section>
-        {/* Tin tức */}
-        <section className="news-section" data-aos="fade-right">
+
+        <section className="news-section" id="news" data-aos="fade-right">
           <h2 className="section-title">Tin Tức</h2>
           <hr className="section-divider" />
           <div className="news-grid">
-            {/* Tin chính */}
             <div
               className="news-main"
               data-aos="zoom-in"
@@ -215,7 +217,6 @@ function HomePage() {
               </div>
             </div>
 
-            {/* Tin phụ 1 */}
             <div
               className="news-sub"
               data-aos="fade-up"
@@ -243,7 +244,6 @@ function HomePage() {
               </div>
             </div>
 
-            {/* Tin phụ 2 */}
             <div
               className="news-sub"
               data-aos="fade-up"
@@ -272,7 +272,7 @@ function HomePage() {
             </div>
           </div>
         </section>
-        {/* vì sao chọn SchoMed */}
+
         <section className="why-section" data-aos="fade-up">
           <h2 className="section-title">Vì sao bạn chọn SchoMed</h2>
           <div className="why-grid">
@@ -308,24 +308,46 @@ function HomePage() {
             ))}
           </div>
         </section>
-        {/* dịch vụ */}
-        <section className="subscription-section" data-aos="fade-up">
-          <h2 className="subscription-title">
-            Trải nghiệm tốt hơn với gói thành viên
-          </h2>
-          <p className="subscription-text">
-            Đăng ký gói thành viên để nhận tư vấn chuyên sâu, theo dõi sức khỏe
-            học sinh thường xuyên và ưu đãi hấp dẫn từ các đối tác y tế.
-          </p>
-          <button
-            className="subscription-button"
-            onClick={() => (window.location.href = "/hoivien")}
-          >
-            Đăng ký ngay
-          </button>
+
+        <section className="feedback-section" data-aos="fade-up">
+          <h2 className="section-title">Phụ huynh đánh giá về SchoMed</h2>
+          <div className="feedback-grid">
+            <div
+              className="feedback-card"
+              data-aos="fade-up"
+              data-aos-delay="100"
+            >
+              <p className="feedback-text">
+                "Từ ngày có SchoMed, tôi yên tâm hơn khi con ở trường. Mọi thông
+                tin sức khỏe đều được cập nhật rõ ràng."
+              </p>
+              <span className="feedback-author">– Chị Linh, Quận 3</span>
+            </div>
+            <div
+              className="feedback-card"
+              data-aos="fade-up"
+              data-aos-delay="200"
+            >
+              <p className="feedback-text">
+                "Nhân viên y tế hỗ trợ tận tình, hệ thống quản lý hồ sơ sức khỏe
+                tiện lợi và dễ dùng."
+              </p>
+              <span className="feedback-author">– Anh Hùng, Bình Thạnh</span>
+            </div>
+            <div
+              className="feedback-card"
+              data-aos="fade-up"
+              data-aos-delay="300"
+            >
+              <p className="feedback-text">
+                "Mỗi lần con uống thuốc ở trường đều được thông báo. Tôi thấy
+                rất chuyên nghiệp và an tâm."
+              </p>
+              <span className="feedback-author">– Cô Mai, Thủ Đức</span>
+            </div>
+          </div>
         </section>
 
-        {/* footer */}
         <footer className="footer" data-aos="fade-up">
           <div className="footer-container">
             <div>
