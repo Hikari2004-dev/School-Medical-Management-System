@@ -1,6 +1,4 @@
-
 import React from "react";
-
 
 import "./Login.css";
 import LogoImg from "../image/14 1.png";
@@ -13,7 +11,7 @@ function Login() {
       style={{
         minHeight: "100vh",
 
-        backgroundImage: "url('/image/backgroundyte.jpg')",
+        backgroundImage: "url('D:\SWP-391\School-Medical-Management-System\my-app\src\image\backgroundyte.jpg')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         display: "flex",

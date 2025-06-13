@@ -1,13 +1,13 @@
-/* Nền và bố cục */
-.login-wrapper {
-  min-height: 100vh;
-  background-image: url('../image/backgroundyte.jpg');
-  background-size: cover;
-  background-position: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+  /* Nền và bố cục */
+  .login-wrapper {
+    min-height: 100vh;
+    background-image: url('D:\SWP-391\School-Medical-Management-System\my-app\src\image\backgroundyte.jpg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
 /* Khung đăng nhập */
 .login-container {
@@ -131,6 +131,7 @@
   margin: 1rem 0;
 }
 
+/* css logo-google */
 .divider-line {
   flex-grow: 1;
   height: 1px;
@@ -165,6 +166,17 @@
 }
 
 .google-icon {
+  width: 1.25rem; /* w-5 */
+  height: 1.25rem; /* h-5 */
+}
+
+/* css Already have an account? */
+.login-footer {
+  background-color: #4f46e5; /* Màu xanh dương (indigo-600) */
+  padding: 1rem;
+  text-align: center;
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
   width: 1.25rem;
   height: 1.25rem;
 }
@@ -200,7 +212,6 @@
   color: #4f46e5;
 }
 
-/* Cảnh báo bật CapsLock */
 .caps-warning {
   font-size: 0.75rem;
   color: #dc2626;
