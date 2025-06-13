@@ -102,17 +102,14 @@ function HomePage() {
             <i className="fa fa-bell"></i>
             <i className="fa fa-paper-plane"></i>
             <div className="auth-buttons">
-<<<<<<< HEAD
-              <button 
+
+              <link 
                 className="login-link"
                 style={{ background: "none", border: "none", cursor: "pointer" }}
                 onClick={() => navigate("/login")}
               >
-=======
-              <a href="/WebPages/Login.html" className="login-link">
->>>>>>> c605bcec07dcba7239145b0db022cfb1acaf1919
                 <i className="fa fa-user"></i> Log in
-              </button>
+              </link>
               <span className="divider">/</span>
               <a href="/WebPages/Register.html" className="signup-link">
                 <i className="fa fa-user"></i> Sign up
