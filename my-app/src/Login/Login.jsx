@@ -3,6 +3,7 @@ import React from "react";
 import "./Login.css";
 import LogoImg from "../image/14 1.png";
 import GoogleLogo from "../image/logo google.png";
+import Background from "../image/backgroundyte.jpg";
 function Login() {
   return (
     <div
@@ -11,7 +12,7 @@ function Login() {
       style={{
         minHeight: "100vh",
 
-        backgroundImage: "url('D:\SWP-391\School-Medical-Management-System\my-app\src\image\backgroundyte.jpg')",
+        backgroundImage: `url(${Background})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         display: "flex",
