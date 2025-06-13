@@ -1,13 +1,13 @@
-  /* Nền và bố cục */
-  .login-wrapper {
-    min-height: 100vh;
-    background-image: url('D:\SWP-391\School-Medical-Management-System\my-app\src\image\backgroundyte.jpg');
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+/* Nền và bố cục */
+.login-wrapper {
+  min-height: 100vh;
+  background-image: url('../image/backgroundyte.jpg');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 /* Khung đăng nhập */
 .login-container {
@@ -54,10 +54,9 @@
   margin-bottom: 0.25rem;
 }
 
-
 /* Input */
 .input-custom {
-  width: 90%;
+  width: 100%;
   border-radius: 9999px;
   padding: 0.75rem 1rem;
   border: 1px solid #cbd5e1;
@@ -94,11 +93,14 @@
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+  font-size: 0.875rem;
 }
 
 .link-group a {
   color: #9333ea;
   text-decoration: none;
+  display: block;
+  transition: text-decoration 0.2s;
 }
 
 .link-group a:hover {
@@ -131,7 +133,6 @@
   margin: 1rem 0;
 }
 
-/* css logo-google */
 .divider-line {
   flex-grow: 1;
   height: 1px;
@@ -156,9 +157,9 @@
   padding: 0.75rem 0;
   border-radius: 9999px;
   background-color: white;
-  font-size: 1rem;
-  cursor: pointer;
   transition: background-color 0.3s ease;
+  cursor: pointer;
+  font-size: 1rem;
 }
 
 .btn-google:hover {
@@ -166,19 +167,36 @@
 }
 
 .google-icon {
-  width: 1.25rem; /* w-5 */
-  height: 1.25rem; /* h-5 */
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
-/* css Already have an account? */
+/* Footer */
 .login-footer {
-  background-color: #4f46e5; /* Màu xanh dương (indigo-600) */
+  background-color: #4f46e5;
   padding: 1rem;
   text-align: center;
   border-bottom-left-radius: 1rem;
   border-bottom-right-radius: 1rem;
-  width: 1.25rem;
-  height: 1.25rem;
+}
+
+.login-footer a {
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  font-family: 'Georgia', serif;
+  text-decoration: none;
+}
+
+.login-footer a span {
+  text-decoration: underline;
+}
+
+/* Cảnh báo bật CapsLock */
+.caps-warning {
+  font-size: 0.75rem;
+  color: #dc2626;
+  margin-top: 0.25rem;
 }
 
 /* Mắt ẩn/hiện mật khẩu */
@@ -189,6 +207,8 @@
 .input-password {
   position: relative;
   display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
   align-items: center;
 }
 
@@ -202,18 +222,26 @@
   justify-content: center;
 }
 
+.toggle-password-icon:hover {
+  color: #4f46e5;
+}
+
 .eye-icon {
   width: 1.25rem;
   height: 1.25rem;
   stroke-width: 2;
 }
 
-.toggle-password-icon:hover {
-  color: #4f46e5;
+.already-have-account {
+  color: #9333ea;
 }
 
-.caps-warning {
-  font-size: 0.75rem;
-  color: #dc2626;
-  margin-top: 0.25rem;
+a {
+  color: #9333ea;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #1e40af;
+  text-decoration: underline;
 }
