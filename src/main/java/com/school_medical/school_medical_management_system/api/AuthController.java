@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
+@CrossOrigin(origins = "*") // Cho phép React hoặc Postman truy cập
 public class AuthController {
 
     @Autowired
@@ -23,12 +24,16 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        Authentication auth = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
-        );
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
+            );
 
-        String jwt = jwtProvider.generateToken(auth);
+            String jwt = jwtProvider.generateToken(authentication);
 
-        return ResponseEntity.ok(new AuthResponse(jwt));
+            return ResponseEntity.ok(new AuthResponse(jwt));
+        } catch (BadCredentialsException ex) {
+            return ResponseEntity.status(401).body("Sai email hoặc mật khẩu");
+        }
     }
 }

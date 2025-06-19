@@ -43,6 +43,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authToken);
+        } else {
+            System.out.println("Token is missing or invalid for path: " + request.getRequestURI());
         }
 
         filterChain.doFilter(request, response);
@@ -54,5 +56,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return bearer.substring(7);
         }
         return null;
+    }
+
+    // ✅ BỎ QUA JWT CHO CÁC ĐƯỜNG DẪN /api/auth/** và /test
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getRequestURI();
+        return path.startsWith("/api/auth") || path.equals("/test");
     }
 }
