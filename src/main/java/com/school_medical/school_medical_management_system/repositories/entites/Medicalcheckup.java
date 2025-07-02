@@ -8,6 +8,7 @@ import java.time.LocalDate;
 @Table(name = "medicalcheckup")
 public class Medicalcheckup {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "CheckupID", nullable = false)
     private Integer id;
 

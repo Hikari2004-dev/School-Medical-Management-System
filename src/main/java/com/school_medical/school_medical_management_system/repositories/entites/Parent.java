@@ -2,32 +2,39 @@ package com.school_medical.school_medical_management_system.repositories.entites
 
 import jakarta.persistence.*;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "parent")
 public class Parent {
-
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ParentID", nullable = false)
-    private Integer parentId;
+    private Integer id;
 
     @Column(name = "Relationship", length = 50)
     private String relationship;
 
-    @Column(name = "UserID", nullable = false, insertable = false, updatable = false)
-    private Integer userId;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "UserID", referencedColumnName = "UserID")
-    private User user;
+    @JoinColumn(name = "UserID")
+    private User userID;
 
-    // Getters and Setters
+    @OneToMany(mappedBy = "sentToParentID")
+    private Set<Notification> notifications = new LinkedHashSet<>();
 
-    public Integer getParentId() {
-        return parentId;
+    @OneToMany(mappedBy = "parentID")
+    private Set<Providedservicelog> providedservicelogs = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "parentID")
+    private Set<Student> students = new LinkedHashSet<>();
+
+    public Integer getId() {
+        return id;
     }
 
-    public void setParentId(Integer parentId) {
-        this.parentId = parentId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getRelationship() {
@@ -38,19 +45,36 @@ public class Parent {
         this.relationship = relationship;
     }
 
-    public Integer getUserId() {
-        return userId;
+    public User getUserID() {
+        return userID;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setUserID(User userID) {
+        this.userID = userID;
     }
 
-    public User getUser() {
-        return user;
+    public Set<Notification> getNotifications() {
+        return notifications;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setNotifications(Set<Notification> notifications) {
+        this.notifications = notifications;
     }
+
+    public Set<Providedservicelog> getProvidedservicelogs() {
+        return providedservicelogs;
+    }
+
+    public void setProvidedservicelogs(Set<Providedservicelog> providedservicelogs) {
+        this.providedservicelogs = providedservicelogs;
+    }
+
+    public Set<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(Set<Student> students) {
+        this.students = students;
+    }
+
 }

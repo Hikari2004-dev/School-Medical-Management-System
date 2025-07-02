@@ -3,11 +3,14 @@ package com.school_medical.school_medical_management_system.repositories.entites
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "medicalevent")
 public class Medicalevent {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "EventID", nullable = false)
     private Integer id;
 
@@ -27,6 +30,9 @@ public class Medicalevent {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "HeadmasterID")
     private Headmaster headmasterID;
+
+    @OneToMany(mappedBy = "eventID")
+    private Set<Studentevent> studentevents = new LinkedHashSet<>();
 
     public Integer getId() {
         return id;
@@ -74,6 +80,14 @@ public class Medicalevent {
 
     public void setHeadmasterID(Headmaster headmasterID) {
         this.headmasterID = headmasterID;
+    }
+
+    public Set<Studentevent> getStudentevents() {
+        return studentevents;
+    }
+
+    public void setStudentevents(Set<Studentevent> studentevents) {
+        this.studentevents = studentevents;
     }
 
 }

@@ -24,7 +24,7 @@ public class Appointment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ProvidedServiceLogID")
-    private ProvidedServiceLog providedServiceLogID;
+    private Providedservicelog providedServiceLogID;
 
     public Integer getId() {
         return id;
@@ -58,11 +58,11 @@ public class Appointment {
         this.description = description;
     }
 
-    public ProvidedServiceLog getProvidedServiceLogID() {
+    public Providedservicelog getProvidedServiceLogID() {
         return providedServiceLogID;
     }
 
-    public void setProvidedServiceLogID(ProvidedServiceLog providedServiceLogID) {
+    public void setProvidedServiceLogID(Providedservicelog providedServiceLogID) {
         this.providedServiceLogID = providedServiceLogID;
     }
 

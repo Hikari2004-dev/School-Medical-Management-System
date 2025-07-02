@@ -2,10 +2,14 @@ package com.school_medical.school_medical_management_system.repositories.entites
 
 import jakarta.persistence.*;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "healthinfo")
 public class Healthinfo {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "HealthInfoID", nullable = false)
     private Integer id;
 
@@ -37,6 +41,9 @@ public class Healthinfo {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "StudentID")
     private Student studentID;
+
+    @OneToMany(mappedBy = "healthInfoID")
+    private Set<Medicalcheckup> medicalcheckups = new LinkedHashSet<>();
 
     public Integer getId() {
         return id;
@@ -116,6 +123,14 @@ public class Healthinfo {
 
     public void setStudentID(Student studentID) {
         this.studentID = studentID;
+    }
+
+    public Set<Medicalcheckup> getMedicalcheckups() {
+        return medicalcheckups;
+    }
+
+    public void setMedicalcheckups(Set<Medicalcheckup> medicalcheckups) {
+        this.medicalcheckups = medicalcheckups;
     }
 
 }

@@ -1,12 +1,15 @@
 package com.school_medical.school_medical_management_system.repositories.entites;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.persistence.*;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "user")
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "UserID", nullable = false)
     private Integer id;
 
@@ -31,6 +34,27 @@ public class User {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "RoleID")
     private Role roleID;
+
+    @OneToMany(mappedBy = "userID")
+    private Set<Headmaster> headmasters = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "userID")
+    private Set<Manager> managers = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "userID")
+    private Set<Notification> notifications = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "userID")
+    private Set<Parent> parents = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "userID")
+    private Set<Report> reports = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "userID")
+    private Set<Schoolnurse> schoolnurses = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "userID")
+    private Set<Student> students = new LinkedHashSet<>();
 
     public Integer getId() {
         return id;
@@ -94,6 +118,62 @@ public class User {
 
     public void setRoleID(Role roleID) {
         this.roleID = roleID;
+    }
+
+    public Set<Headmaster> getHeadmasters() {
+        return headmasters;
+    }
+
+    public void setHeadmasters(Set<Headmaster> headmasters) {
+        this.headmasters = headmasters;
+    }
+
+    public Set<Manager> getManagers() {
+        return managers;
+    }
+
+    public void setManagers(Set<Manager> managers) {
+        this.managers = managers;
+    }
+
+    public Set<Notification> getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(Set<Notification> notifications) {
+        this.notifications = notifications;
+    }
+
+    public Set<Parent> getParents() {
+        return parents;
+    }
+
+    public void setParents(Set<Parent> parents) {
+        this.parents = parents;
+    }
+
+    public Set<Report> getReports() {
+        return reports;
+    }
+
+    public void setReports(Set<Report> reports) {
+        this.reports = reports;
+    }
+
+    public Set<Schoolnurse> getSchoolnurses() {
+        return schoolnurses;
+    }
+
+    public void setSchoolnurses(Set<Schoolnurse> schoolnurses) {
+        this.schoolnurses = schoolnurses;
+    }
+
+    public Set<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(Set<Student> students) {
+        this.students = students;
     }
 
 }

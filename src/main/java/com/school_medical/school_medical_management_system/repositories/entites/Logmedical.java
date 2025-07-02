@@ -8,6 +8,7 @@ import java.time.LocalDate;
 @Table(name = "logmedical")
 public class Logmedical {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "LogMedicalID", nullable = false)
     private Integer id;
 
@@ -30,7 +31,7 @@ public class Logmedical {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ProvidedServiceLogID")
-    private ProvidedServiceLog providedServiceLogID;
+    private Providedservicelog providedServiceLogID;
 
     public Integer getId() {
         return id;
@@ -80,11 +81,11 @@ public class Logmedical {
         this.description = description;
     }
 
-    public ProvidedServiceLog getProvidedServiceLogID() {
+    public Providedservicelog getProvidedServiceLogID() {
         return providedServiceLogID;
     }
 
-    public void setProvidedServiceLogID(ProvidedServiceLog providedServiceLogID) {
+    public void setProvidedServiceLogID(Providedservicelog providedServiceLogID) {
         this.providedServiceLogID = providedServiceLogID;
     }
 

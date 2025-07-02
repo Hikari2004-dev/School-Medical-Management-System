@@ -1,15 +1,16 @@
 package com.school_medical.school_medical_management_system.repositories.entites;
 
-import com.school_medical.school_medical_management_system.repositories.entites.ProvidedServiceLog;
-
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "student")
 public class Student {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "StudentID", nullable = false)
     private Integer id;
 
@@ -42,7 +43,28 @@ public class Student {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ProvidedServiceLogID")
-    private ProvidedServiceLog providedServiceLogID;
+    private Providedservicelog providedServiceLogID;
+
+    @OneToMany(mappedBy = "studentID")
+    private Set<Detailvaccination> detailvaccinations = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "studentID")
+    private Set<Healthinfo> healthinfos = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "studentID")
+    private Set<Incidentreport> incidentreports = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "studentID")
+    private Set<Medicalcheckup> medicalcheckups = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "sentToStudentID")
+    private Set<Notification> notifications = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "studentID")
+    private Set<Schoolnurse> schoolnurses = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "studentID")
+    private Set<Studentevent> studentevents = new LinkedHashSet<>();
 
     public Integer getId() {
         return id;
@@ -116,12 +138,68 @@ public class Student {
         this.classID = classID;
     }
 
-    public ProvidedServiceLog getProvidedServiceLogID() {
+    public Providedservicelog getProvidedServiceLogID() {
         return providedServiceLogID;
     }
 
-    public void setProvidedServiceLogID(ProvidedServiceLog providedServiceLogID) {
+    public void setProvidedServiceLogID(Providedservicelog providedServiceLogID) {
         this.providedServiceLogID = providedServiceLogID;
+    }
+
+    public Set<Detailvaccination> getDetailvaccinations() {
+        return detailvaccinations;
+    }
+
+    public void setDetailvaccinations(Set<Detailvaccination> detailvaccinations) {
+        this.detailvaccinations = detailvaccinations;
+    }
+
+    public Set<Healthinfo> getHealthinfos() {
+        return healthinfos;
+    }
+
+    public void setHealthinfos(Set<Healthinfo> healthinfos) {
+        this.healthinfos = healthinfos;
+    }
+
+    public Set<Incidentreport> getIncidentreports() {
+        return incidentreports;
+    }
+
+    public void setIncidentreports(Set<Incidentreport> incidentreports) {
+        this.incidentreports = incidentreports;
+    }
+
+    public Set<Medicalcheckup> getMedicalcheckups() {
+        return medicalcheckups;
+    }
+
+    public void setMedicalcheckups(Set<Medicalcheckup> medicalcheckups) {
+        this.medicalcheckups = medicalcheckups;
+    }
+
+    public Set<Notification> getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(Set<Notification> notifications) {
+        this.notifications = notifications;
+    }
+
+    public Set<Schoolnurse> getSchoolnurses() {
+        return schoolnurses;
+    }
+
+    public void setSchoolnurses(Set<Schoolnurse> schoolnurses) {
+        this.schoolnurses = schoolnurses;
+    }
+
+    public Set<Studentevent> getStudentevents() {
+        return studentevents;
+    }
+
+    public void setStudentevents(Set<Studentevent> studentevents) {
+        this.studentevents = studentevents;
     }
 
 }
