@@ -1,5 +1,6 @@
 package com.school_medical.school_medical_management_system.repositories.entites;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.persistence.*;
 
 @Entity

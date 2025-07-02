@@ -5,23 +5,29 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "parent")
 public class Parent {
+
     @Id
     @Column(name = "ParentID", nullable = false)
-    private Integer id;
+    private Integer parentId;
 
     @Column(name = "Relationship", length = 50)
     private String relationship;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "UserID")
-    private User userID;
+    @Column(name = "UserID", nullable = false, insertable = false, updatable = false)
+    private Integer userId;
 
-    public Integer getId() {
-        return id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "UserID", referencedColumnName = "UserID")
+    private User user;
+
+    // Getters and Setters
+
+    public Integer getParentId() {
+        return parentId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setParentId(Integer parentId) {
+        this.parentId = parentId;
     }
 
     public String getRelationship() {
@@ -32,12 +38,19 @@ public class Parent {
         this.relationship = relationship;
     }
 
-    public User getUserID() {
-        return userID;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setUserID(User userID) {
-        this.userID = userID;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }
