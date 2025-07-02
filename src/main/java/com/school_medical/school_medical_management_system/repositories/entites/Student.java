@@ -1,5 +1,7 @@
 package com.school_medical.school_medical_management_system.repositories.entites;
 
+import com.school_medical.school_medical_management_system.repositories.entites.ProvidedServiceLog;
+
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -40,7 +42,7 @@ public class Student {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ProvidedServiceLogID")
-    private Providedservicelog providedServiceLogID;
+    private ProvidedServiceLog providedServiceLogID;
 
     public Integer getId() {
         return id;
@@ -114,11 +116,11 @@ public class Student {
         this.classID = classID;
     }
 
-    public Providedservicelog getProvidedServiceLogID() {
+    public ProvidedServiceLog getProvidedServiceLogID() {
         return providedServiceLogID;
     }
 
-    public void setProvidedServiceLogID(Providedservicelog providedServiceLogID) {
+    public void setProvidedServiceLogID(ProvidedServiceLog providedServiceLogID) {
         this.providedServiceLogID = providedServiceLogID;
     }
 

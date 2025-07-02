@@ -30,7 +30,7 @@ public class Logmedical {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ProvidedServiceLogID")
-    private Providedservicelog providedServiceLogID;
+    private ProvidedServiceLog providedServiceLogID;
 
     public Integer getId() {
         return id;
@@ -80,11 +80,11 @@ public class Logmedical {
         this.description = description;
     }
 
-    public Providedservicelog getProvidedServiceLogID() {
+    public ProvidedServiceLog getProvidedServiceLogID() {
         return providedServiceLogID;
     }
 
-    public void setProvidedServiceLogID(Providedservicelog providedServiceLogID) {
+    public void setProvidedServiceLogID(ProvidedServiceLog providedServiceLogID) {
         this.providedServiceLogID = providedServiceLogID;
     }
 
