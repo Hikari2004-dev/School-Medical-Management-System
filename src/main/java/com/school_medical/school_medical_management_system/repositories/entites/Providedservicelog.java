@@ -1,33 +1,34 @@
 package com.school_medical.school_medical_management_system.repositories.entites;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.ColumnDefault;
-
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "providedservicelog")
-public class Providedservicelog {
+public class ProvidedServiceLog {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ProvidedServiceLogID", nullable = false)
     private Integer id;
 
-    @ColumnDefault("CURRENT_TIMESTAMP")
-    @Column(name = "Timestamp")
-    private Instant timestamp;
+    @Column(name = "Timestamp", nullable = false)
+    private LocalDateTime timestamp;
 
-    @Column(name = "NameType", length = 100)
+    @Column(name = "NameType", length = 100, nullable = false)
     private String nameType;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ParentID")
-    private Parent parentID;
+    @JoinColumn(name = "ParentID", nullable = false)
+    private Parent parent;
 
-    @Column(name = "StudentID")
-    private Integer studentID;
+    @Column(name = "StudentID", nullable = false)
+    private Integer studentId;
 
-    @Column(name = "NurseID")
-    private Integer nurseID;
+    @Column(name = "NurseID", nullable = false)
+    private Integer nurseId;
+
+    // Getters and Setters
 
     public Integer getId() {
         return id;
@@ -37,11 +38,11 @@ public class Providedservicelog {
         this.id = id;
     }
 
-    public Instant getTimestamp() {
+    public LocalDateTime getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(Instant timestamp) {
+    public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -53,28 +54,27 @@ public class Providedservicelog {
         this.nameType = nameType;
     }
 
-    public Parent getParentID() {
-        return parentID;
+    public Parent getParent() {
+        return parent;
     }
 
-    public void setParentID(Parent parentID) {
-        this.parentID = parentID;
+    public void setParent(Parent parent) {
+        this.parent = parent;
     }
 
-    public Integer getStudentID() {
-        return studentID;
+    public Integer getStudentId() {
+        return studentId;
     }
 
-    public void setStudentID(Integer studentID) {
-        this.studentID = studentID;
+    public void setStudentId(Integer studentId) {
+        this.studentId = studentId;
     }
 
-    public Integer getNurseID() {
-        return nurseID;
+    public Integer getNurseId() {
+        return nurseId;
     }
 
-    public void setNurseID(Integer nurseID) {
-        this.nurseID = nurseID;
+    public void setNurseId(Integer nurseId) {
+        this.nurseId = nurseId;
     }
-
 }
