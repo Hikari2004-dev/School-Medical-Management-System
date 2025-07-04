@@ -1,5 +1,6 @@
 package com.school_medical.school_medical_management_system.repositories.entites;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties; // 🆕 import
 import jakarta.persistence.*;
 
 import java.util.LinkedHashSet;
@@ -7,6 +8,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "parent")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) // 🆕 dòng này
 public class Parent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -3,6 +3,7 @@ package com.school_medical.school_medical_management_system.services;
 
 import com.school_medical.school_medical_management_system.repositories.UserRepository;
 import com.school_medical.school_medical_management_system.repositories.entites.User;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,15 +20,16 @@ public class CustomUserDetailsService implements UserDetailsService {
     private UserRepository userRepository;
 
     @Override
+    @Transactional // ✅ Cần thiết để tránh LazyInitializationException
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-         User user = userRepository.findByEmail(email)
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
 
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(),                       // Username
                 user.getPassword(),                   // Password
                 List.of(new SimpleGrantedAuthority(   // Authorities (role)
-                        "ROLE_" + user.getRoleID().getRoleName()))
+                        "ROLE_" + user.getRoleID().getRoleName())) // ✅ Không còn lỗi lazy
         );
     }
 }
