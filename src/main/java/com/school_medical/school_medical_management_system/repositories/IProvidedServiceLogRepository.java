@@ -5,7 +5,7 @@ import com.school_medical.school_medical_management_system.repositories.entites.
 import java.util.Optional;
 import java.util.List;
 
-public interface ProvidedServiceLogRepository {
+public interface IProvidedServiceLogRepository {
     int createMedicationRequest(Providedservicelog log);
     int confirmMedicationRequest(int logId, int nurseId);
     Optional<Providedservicelog> findById(int id);

@@ -1,6 +1,6 @@
 package com.school_medical.school_medical_management_system.api;
 
-import com.school_medical.school_medical_management_system.repositories.ProvidedServiceLogRepository;
+import com.school_medical.school_medical_management_system.repositories.IProvidedServiceLogRepository;
 import com.school_medical.school_medical_management_system.repositories.entites.Providedservicelog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +14,7 @@ import java.util.List;
 public class ProvidedServiceLogController {
 
     @Autowired
-    private ProvidedServiceLogRepository providedServiceLogRepository;
+    private IProvidedServiceLogRepository providedServiceLogRepository;
 
     // Parent gửi yêu cầu thuốc
     @PostMapping("/request")

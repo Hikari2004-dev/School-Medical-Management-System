@@ -17,7 +17,6 @@ public class MedicalCheckupImpl implements RowMapper<Medicalcheckup> {
         checkup.setStatus(rs.getString("status"));
         checkup.setNeedFollowUp(rs.getBoolean("need_follow_up"));
         checkup.setCreatedByUserId(rs.getInt("created_by_user_id"));
-        // Bạn có thể set thêm Student, HealthInfo, StudentEvent nếu cần
         return checkup;
     }
 }

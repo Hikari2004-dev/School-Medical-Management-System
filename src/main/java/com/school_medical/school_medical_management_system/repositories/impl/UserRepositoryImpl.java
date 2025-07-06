@@ -6,9 +6,12 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class UserRepositoryImpl implements IUserRepository {
 
+    @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @Override
@@ -19,10 +22,11 @@ public class UserRepositoryImpl implements IUserRepository {
         try {
             return jdbcTemplate.queryForObject(sql, new Object[]{email}, (rs, rowNum) -> {
                 String role = rs.getString("role_name");
+                // .roles() tự động thêm tiền tố ROLE_, nhưng role_name trong DB phải là UPPERCASE không có tiền tố
                 return User.builder()
                         .username(rs.getString("email"))
                         .password(rs.getString("password"))
-                        .roles(role)
+                        .roles(role.toUpperCase())
                         .build();
             });
         } catch (EmptyResultDataAccessException e) {
