@@ -9,27 +9,26 @@ import java.time.Instant;
 @Table(name = "report")
 public class Report {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ReportID", nullable = false)
+    @Column(name = "report_id", nullable = false)
     private Integer id;
 
-    @Column(name = "Type", length = 50)
+    @Column(name = "type", length = 50)
     private String type;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
-    @Column(name = "CreatedDate")
+    @Column(name = "created_date")
     private Instant createdDate;
 
-    @Column(name = "GeneratedByUserID")
-    private Integer generatedByUserID;
+    @Column(name = "generated_by_user_id")
+    private Integer generatedByUserId;
 
     @Lob
-    @Column(name = "Content")
+    @Column(name = "content")
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "UserID")
-    private User userID;
+    @JoinColumn(name = "user_id")
+    private Appuser user;
 
     public Integer getId() {
         return id;
@@ -55,12 +54,12 @@ public class Report {
         this.createdDate = createdDate;
     }
 
-    public Integer getGeneratedByUserID() {
-        return generatedByUserID;
+    public Integer getGeneratedByUserId() {
+        return generatedByUserId;
     }
 
-    public void setGeneratedByUserID(Integer generatedByUserID) {
-        this.generatedByUserID = generatedByUserID;
+    public void setGeneratedByUserId(Integer generatedByUserId) {
+        this.generatedByUserId = generatedByUserId;
     }
 
     public String getContent() {
@@ -71,12 +70,12 @@ public class Report {
         this.content = content;
     }
 
-    public User getUserID() {
-        return userID;
+    public Appuser getUser() {
+        return user;
     }
 
-    public void setUserID(User userID) {
-        this.userID = userID;
+    public void setUser(Appuser user) {
+        this.user = user;
     }
 
 }

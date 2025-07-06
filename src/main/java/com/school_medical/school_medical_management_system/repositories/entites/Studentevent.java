@@ -2,31 +2,24 @@ package com.school_medical.school_medical_management_system.repositories.entites
 
 import jakarta.persistence.*;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 @Entity
 @Table(name = "studentevent")
 public class Studentevent {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "StudentEventID", nullable = false)
+    @Column(name = "student_event_id", nullable = false)
     private Integer id;
 
     @Lob
-    @Column(name = "Description")
+    @Column(name = "description")
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "StudentID")
-    private Student studentID;
+    @JoinColumn(name = "student_id")
+    private Student student;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "EventID")
-    private Medicalevent eventID;
-
-    @OneToMany(mappedBy = "studentEventID")
-    private Set<Medicalcheckup> medicalcheckups = new LinkedHashSet<>();
+    @JoinColumn(name = "event_id")
+    private Medicalevent event;
 
     public Integer getId() {
         return id;
@@ -44,28 +37,20 @@ public class Studentevent {
         this.description = description;
     }
 
-    public Student getStudentID() {
-        return studentID;
+    public Student getStudent() {
+        return student;
     }
 
-    public void setStudentID(Student studentID) {
-        this.studentID = studentID;
+    public void setStudent(Student student) {
+        this.student = student;
     }
 
-    public Medicalevent getEventID() {
-        return eventID;
+    public Medicalevent getEvent() {
+        return event;
     }
 
-    public void setEventID(Medicalevent eventID) {
-        this.eventID = eventID;
-    }
-
-    public Set<Medicalcheckup> getMedicalcheckups() {
-        return medicalcheckups;
-    }
-
-    public void setMedicalcheckups(Set<Medicalcheckup> medicalcheckups) {
-        this.medicalcheckups = medicalcheckups;
+    public void setEvent(Medicalevent event) {
+        this.event = event;
     }
 
 }

@@ -2,35 +2,28 @@ package com.school_medical.school_medical_management_system.repositories.entites
 
 import jakarta.persistence.*;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 @Entity
 @Table(name = "studentlist")
 public class Studentlist {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ClassID", nullable = false)
+    @Column(name = "class_id", nullable = false)
     private Integer id;
 
-    @Column(name = "Room", length = 50)
+    @Column(name = "room", length = 50)
     private String room;
 
-    @Column(name = "StudentID")
-    private Integer studentID;
+    @Column(name = "student_id")
+    private Integer studentId;
 
-    @Column(name = "TeacherID")
-    private Integer teacherID;
+    @Column(name = "teacher_id")
+    private Integer teacherId;
 
-    @Column(name = "StudentName", length = 100)
+    @Column(name = "student_name", length = 100)
     private String studentName;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ManagerID")
-    private Manager managerID;
-
-    @OneToMany(mappedBy = "classID")
-    private Set<Student> students = new LinkedHashSet<>();
+    @JoinColumn(name = "manager_id")
+    private Manager manager;
 
     public Integer getId() {
         return id;
@@ -48,20 +41,20 @@ public class Studentlist {
         this.room = room;
     }
 
-    public Integer getStudentID() {
-        return studentID;
+    public Integer getStudentId() {
+        return studentId;
     }
 
-    public void setStudentID(Integer studentID) {
-        this.studentID = studentID;
+    public void setStudentId(Integer studentId) {
+        this.studentId = studentId;
     }
 
-    public Integer getTeacherID() {
-        return teacherID;
+    public Integer getTeacherId() {
+        return teacherId;
     }
 
-    public void setTeacherID(Integer teacherID) {
-        this.teacherID = teacherID;
+    public void setTeacherId(Integer teacherId) {
+        this.teacherId = teacherId;
     }
 
     public String getStudentName() {
@@ -72,20 +65,12 @@ public class Studentlist {
         this.studentName = studentName;
     }
 
-    public Manager getManagerID() {
-        return managerID;
+    public Manager getManager() {
+        return manager;
     }
 
-    public void setManagerID(Manager managerID) {
-        this.managerID = managerID;
-    }
-
-    public Set<Student> getStudents() {
-        return students;
-    }
-
-    public void setStudents(Set<Student> students) {
-        this.students = students;
+    public void setManager(Manager manager) {
+        this.manager = manager;
     }
 
 }

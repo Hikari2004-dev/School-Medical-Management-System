@@ -2,31 +2,24 @@ package com.school_medical.school_medical_management_system.repositories.entites
 
 import jakarta.persistence.*;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 @Entity
 @Table(name = "schoolnurse")
 public class Schoolnurse {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "NurseID", nullable = false)
+    @Column(name = "nurse_id", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "UserID")
-    private User userID;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private Appuser user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "StudentID")
-    private Student studentID;
+    @JoinColumn(name = "student_id")
+    private Student student;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ProvidedServiceLogID")
-    private Providedservicelog providedServiceLogID;
-
-    @OneToMany(mappedBy = "nurseID")
-    private Set<Incidentreport> incidentreports = new LinkedHashSet<>();
+    @JoinColumn(name = "provided_service_log_id")
+    private Providedservicelog providedServiceLog;
 
     public Integer getId() {
         return id;
@@ -36,36 +29,28 @@ public class Schoolnurse {
         this.id = id;
     }
 
-    public User getUserID() {
-        return userID;
+    public Appuser getUser() {
+        return user;
     }
 
-    public void setUserID(User userID) {
-        this.userID = userID;
+    public void setUser(Appuser user) {
+        this.user = user;
     }
 
-    public Student getStudentID() {
-        return studentID;
+    public Student getStudent() {
+        return student;
     }
 
-    public void setStudentID(Student studentID) {
-        this.studentID = studentID;
+    public void setStudent(Student student) {
+        this.student = student;
     }
 
-    public Providedservicelog getProvidedServiceLogID() {
-        return providedServiceLogID;
+    public Providedservicelog getProvidedServiceLog() {
+        return providedServiceLog;
     }
 
-    public void setProvidedServiceLogID(Providedservicelog providedServiceLogID) {
-        this.providedServiceLogID = providedServiceLogID;
-    }
-
-    public Set<Incidentreport> getIncidentreports() {
-        return incidentreports;
-    }
-
-    public void setIncidentreports(Set<Incidentreport> incidentreports) {
-        this.incidentreports = incidentreports;
+    public void setProvidedServiceLog(Providedservicelog providedServiceLog) {
+        this.providedServiceLog = providedServiceLog;
     }
 
 }

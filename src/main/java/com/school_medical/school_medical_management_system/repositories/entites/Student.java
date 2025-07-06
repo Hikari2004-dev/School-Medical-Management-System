@@ -3,68 +3,44 @@ package com.school_medical.school_medical_management_system.repositories.entites
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "student")
 public class Student {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "StudentID", nullable = false)
+    @Column(name = "student_id", nullable = false)
     private Integer id;
 
-    @Column(name = "Name", length = 100)
+    @Column(name = "name", nullable = false, length = 100)
     private String name;
 
-    @Column(name = "DateOfBirth")
+    @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 
-    @Column(name = "Gender", length = 10)
+    @Column(name = "gender", length = 10)
     private String gender;
 
-    @Column(name = "Grade", length = 20)
+    @Column(name = "grade", length = 20)
     private String grade;
 
-    @Column(name = "HealthInfoID")
-    private Integer healthInfoID;
+    @Column(name = "health_info_id")
+    private Integer healthInfoId;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private Appuser user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "UserID")
-    private User userID;
+    @JoinColumn(name = "parent_id")
+    private Parent parent;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ParentID")
-    private Parent parentID;
+    @JoinColumn(name = "class_id")
+    private Studentlist classField;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ClassID")
-    private Studentlist classID;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ProvidedServiceLogID")
-    private Providedservicelog providedServiceLogID;
-
-    @OneToMany(mappedBy = "studentID")
-    private Set<Detailvaccination> detailvaccinations = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "studentID")
-    private Set<Healthinfo> healthinfos = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "studentID")
-    private Set<Incidentreport> incidentreports = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "studentID")
-    private Set<Medicalcheckup> medicalcheckups = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "sentToStudentID")
-    private Set<Notification> notifications = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "studentID")
-    private Set<Schoolnurse> schoolnurses = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "studentID")
-    private Set<Studentevent> studentevents = new LinkedHashSet<>();
+    @JoinColumn(name = "provided_service_log_id")
+    private Providedservicelog providedServiceLog;
 
     public Integer getId() {
         return id;
@@ -106,100 +82,44 @@ public class Student {
         this.grade = grade;
     }
 
-    public Integer getHealthInfoID() {
-        return healthInfoID;
+    public Integer getHealthInfoId() {
+        return healthInfoId;
     }
 
-    public void setHealthInfoID(Integer healthInfoID) {
-        this.healthInfoID = healthInfoID;
+    public void setHealthInfoId(Integer healthInfoId) {
+        this.healthInfoId = healthInfoId;
     }
 
-    public User getUserID() {
-        return userID;
+    public Appuser getUser() {
+        return user;
     }
 
-    public void setUserID(User userID) {
-        this.userID = userID;
+    public void setUser(Appuser user) {
+        this.user = user;
     }
 
-    public Parent getParentID() {
-        return parentID;
+    public Parent getParent() {
+        return parent;
     }
 
-    public void setParentID(Parent parentID) {
-        this.parentID = parentID;
+    public void setParent(Parent parent) {
+        this.parent = parent;
     }
 
-    public Studentlist getClassID() {
-        return classID;
+    public Studentlist getClassField() {
+        return classField;
     }
 
-    public void setClassID(Studentlist classID) {
-        this.classID = classID;
+    public void setClassField(Studentlist classField) {
+        this.classField = classField;
     }
 
-    public Providedservicelog getProvidedServiceLogID() {
-        return providedServiceLogID;
+    public Providedservicelog getProvidedServiceLog() {
+        return providedServiceLog;
     }
 
-    public void setProvidedServiceLogID(Providedservicelog providedServiceLogID) {
-        this.providedServiceLogID = providedServiceLogID;
-    }
-
-    public Set<Detailvaccination> getDetailvaccinations() {
-        return detailvaccinations;
-    }
-
-    public void setDetailvaccinations(Set<Detailvaccination> detailvaccinations) {
-        this.detailvaccinations = detailvaccinations;
-    }
-
-    public Set<Healthinfo> getHealthinfos() {
-        return healthinfos;
-    }
-
-    public void setHealthinfos(Set<Healthinfo> healthinfos) {
-        this.healthinfos = healthinfos;
-    }
-
-    public Set<Incidentreport> getIncidentreports() {
-        return incidentreports;
-    }
-
-    public void setIncidentreports(Set<Incidentreport> incidentreports) {
-        this.incidentreports = incidentreports;
-    }
-
-    public Set<Medicalcheckup> getMedicalcheckups() {
-        return medicalcheckups;
-    }
-
-    public void setMedicalcheckups(Set<Medicalcheckup> medicalcheckups) {
-        this.medicalcheckups = medicalcheckups;
-    }
-
-    public Set<Notification> getNotifications() {
-        return notifications;
-    }
-
-    public void setNotifications(Set<Notification> notifications) {
-        this.notifications = notifications;
-    }
-
-    public Set<Schoolnurse> getSchoolnurses() {
-        return schoolnurses;
-    }
-
-    public void setSchoolnurses(Set<Schoolnurse> schoolnurses) {
-        this.schoolnurses = schoolnurses;
-    }
-
-    public Set<Studentevent> getStudentevents() {
-        return studentevents;
-    }
-
-    public void setStudentevents(Set<Studentevent> studentevents) {
-        this.studentevents = studentevents;
+    public void setProvidedServiceLog(Providedservicelog providedServiceLog) {
+        this.providedServiceLog = providedServiceLog;
     }
 
 }

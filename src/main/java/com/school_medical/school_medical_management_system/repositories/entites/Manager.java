@@ -2,26 +2,19 @@ package com.school_medical.school_medical_management_system.repositories.entites
 
 import jakarta.persistence.*;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 @Entity
 @Table(name = "manager")
 public class Manager {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ManagerID", nullable = false)
+    @Column(name = "manager_id", nullable = false)
     private Integer id;
 
-    @Column(name = "Class", length = 50)
-    private String classField;
+    @Column(name = "class_name", length = 50)
+    private String className;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "UserID")
-    private User userID;
-
-    @OneToMany(mappedBy = "managerID")
-    private Set<Studentlist> studentlists = new LinkedHashSet<>();
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private Appuser user;
 
     public Integer getId() {
         return id;
@@ -31,28 +24,20 @@ public class Manager {
         this.id = id;
     }
 
-    public String getClassField() {
-        return classField;
+    public String getClassName() {
+        return className;
     }
 
-    public void setClassField(String classField) {
-        this.classField = classField;
+    public void setClassName(String className) {
+        this.className = className;
     }
 
-    public User getUserID() {
-        return userID;
+    public Appuser getUser() {
+        return user;
     }
 
-    public void setUserID(User userID) {
-        this.userID = userID;
-    }
-
-    public Set<Studentlist> getStudentlists() {
-        return studentlists;
-    }
-
-    public void setStudentlists(Set<Studentlist> studentlists) {
-        this.studentlists = studentlists;
+    public void setUser(Appuser user) {
+        this.user = user;
     }
 
 }

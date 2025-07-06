@@ -8,25 +8,24 @@ import java.time.LocalDate;
 @Table(name = "detailvaccination")
 public class Detailvaccination {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "VaccinationID", nullable = false)
+    @Column(name = "vaccination_id", nullable = false)
     private Integer id;
 
-    @Column(name = "VaccineName", length = 100)
+    @Column(name = "vaccine_name", length = 100)
     private String vaccineName;
 
-    @Column(name = "Date")
+    @Column(name = "date")
     private LocalDate date;
 
-    @Column(name = "Status", length = 50)
+    @Column(name = "status", length = 50)
     private String status;
 
-    @Column(name = "ConfirmedByParent")
+    @Column(name = "confirmed_by_parent")
     private Integer confirmedByParent;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "StudentID")
-    private Student studentID;
+    @JoinColumn(name = "student_id")
+    private Student student;
 
     public Integer getId() {
         return id;
@@ -68,12 +67,12 @@ public class Detailvaccination {
         this.confirmedByParent = confirmedByParent;
     }
 
-    public Student getStudentID() {
-        return studentID;
+    public Student getStudent() {
+        return student;
     }
 
-    public void setStudentID(Student studentID) {
-        this.studentID = studentID;
+    public void setStudent(Student student) {
+        this.student = student;
     }
 
 }

@@ -9,38 +9,37 @@ import java.time.Instant;
 @Table(name = "notification")
 public class Notification {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "NotificationID", nullable = false)
+    @Column(name = "notification_id", nullable = false)
     private Integer id;
 
     @Lob
-    @Column(name = "Content")
+    @Column(name = "content")
     private String content;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
-    @Column(name = "DateSent")
+    @Column(name = "date_sent")
     private Instant dateSent;
 
-    @Column(name = "SentByUserID")
-    private Integer sentByUserID;
+    @Column(name = "sent_by_user_id")
+    private Integer sentByUserId;
 
-    @Column(name = "Confirmed")
+    @Column(name = "confirmed")
     private Boolean confirmed;
 
-    @Column(name = "Type", length = 50)
+    @Column(name = "type", length = 50)
     private String type;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "SentToStudentID")
-    private Student sentToStudentID;
+    @JoinColumn(name = "sent_to_student_id")
+    private Student sentToStudent;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "SentToParentID")
-    private Parent sentToParentID;
+    @JoinColumn(name = "sent_to_parent_id")
+    private Parent sentToParent;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "UserID")
-    private User userID;
+    @JoinColumn(name = "user_id")
+    private Appuser user;
 
     public Integer getId() {
         return id;
@@ -66,12 +65,12 @@ public class Notification {
         this.dateSent = dateSent;
     }
 
-    public Integer getSentByUserID() {
-        return sentByUserID;
+    public Integer getSentByUserId() {
+        return sentByUserId;
     }
 
-    public void setSentByUserID(Integer sentByUserID) {
-        this.sentByUserID = sentByUserID;
+    public void setSentByUserId(Integer sentByUserId) {
+        this.sentByUserId = sentByUserId;
     }
 
     public Boolean getConfirmed() {
@@ -90,28 +89,28 @@ public class Notification {
         this.type = type;
     }
 
-    public Student getSentToStudentID() {
-        return sentToStudentID;
+    public Student getSentToStudent() {
+        return sentToStudent;
     }
 
-    public void setSentToStudentID(Student sentToStudentID) {
-        this.sentToStudentID = sentToStudentID;
+    public void setSentToStudent(Student sentToStudent) {
+        this.sentToStudent = sentToStudent;
     }
 
-    public Parent getSentToParentID() {
-        return sentToParentID;
+    public Parent getSentToParent() {
+        return sentToParent;
     }
 
-    public void setSentToParentID(Parent sentToParentID) {
-        this.sentToParentID = sentToParentID;
+    public void setSentToParent(Parent sentToParent) {
+        this.sentToParent = sentToParent;
     }
 
-    public User getUserID() {
-        return userID;
+    public Appuser getUser() {
+        return user;
     }
 
-    public void setUserID(User userID) {
-        this.userID = userID;
+    public void setUser(Appuser user) {
+        this.user = user;
     }
 
 }

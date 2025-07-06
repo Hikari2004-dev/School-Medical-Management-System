@@ -8,37 +8,36 @@ import java.time.LocalDate;
 @Table(name = "medicalcheckup")
 public class Medicalcheckup {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "CheckupID", nullable = false)
+    @Column(name = "checkup_id", nullable = false)
     private Integer id;
 
-    @Column(name = "Date")
+    @Column(name = "date")
     private LocalDate date;
 
     @Lob
-    @Column(name = "Description")
+    @Column(name = "description")
     private String description;
 
-    @Column(name = "Status", length = 50)
+    @Column(name = "status", length = 50)
     private String status;
 
-    @Column(name = "NeedFollowUp")
+    @Column(name = "need_follow_up")
     private Boolean needFollowUp;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "StudentID")
-    private Student studentID;
+    @JoinColumn(name = "student_id")
+    private Student student;
 
-    @Column(name = "CreatedByUserID")
-    private Integer createdByUserID;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "HealthInfoID")
-    private Healthinfo healthInfoID;
+    @Column(name = "created_by_user_id")
+    private Integer createdByUserId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "StudentEventID")
-    private Studentevent studentEventID;
+    @JoinColumn(name = "health_info_id")
+    private Healthinfo healthInfo;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "student_event_id")
+    private Studentevent studentEvent;
 
     public Integer getId() {
         return id;
@@ -80,36 +79,36 @@ public class Medicalcheckup {
         this.needFollowUp = needFollowUp;
     }
 
-    public Student getStudentID() {
-        return studentID;
+    public Student getStudent() {
+        return student;
     }
 
-    public void setStudentID(Student studentID) {
-        this.studentID = studentID;
+    public void setStudent(Student student) {
+        this.student = student;
     }
 
-    public Integer getCreatedByUserID() {
-        return createdByUserID;
+    public Integer getCreatedByUserId() {
+        return createdByUserId;
     }
 
-    public void setCreatedByUserID(Integer createdByUserID) {
-        this.createdByUserID = createdByUserID;
+    public void setCreatedByUserId(Integer createdByUserId) {
+        this.createdByUserId = createdByUserId;
     }
 
-    public Healthinfo getHealthInfoID() {
-        return healthInfoID;
+    public Healthinfo getHealthInfo() {
+        return healthInfo;
     }
 
-    public void setHealthInfoID(Healthinfo healthInfoID) {
-        this.healthInfoID = healthInfoID;
+    public void setHealthInfo(Healthinfo healthInfo) {
+        this.healthInfo = healthInfo;
     }
 
-    public Studentevent getStudentEventID() {
-        return studentEventID;
+    public Studentevent getStudentEvent() {
+        return studentEvent;
     }
 
-    public void setStudentEventID(Studentevent studentEventID) {
-        this.studentEventID = studentEventID;
+    public void setStudentEvent(Studentevent studentEvent) {
+        this.studentEvent = studentEvent;
     }
 
 }

@@ -9,26 +9,28 @@ import java.time.Instant;
 @Table(name = "providedservicelog")
 public class Providedservicelog {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ProvidedServiceLogID", nullable = false)
+    @Column(name = "provided_service_log_id", nullable = false)
     private Integer id;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
-    @Column(name = "Timestamp")
+    @Column(name = "timestamp")
     private Instant timestamp;
 
-    @Column(name = "NameType", length = 100)
+    @Column(name = "name_type", length = 100)
     private String nameType;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ParentID")
-    private Parent parentID;
+    @JoinColumn(name = "parent_id")
+    private Parent parent;
 
-    @Column(name = "StudentID")
-    private Integer studentID;
+    @Column(name = "student_id")
+    private Integer studentId;
 
-    @Column(name = "NurseID")
-    private Integer nurseID;
+    @Column(name = "nurse_id")
+    private Integer nurseId;
+
+    @Column(name = "status", length = 10)
+    private String status;
 
     public Integer getId() {
         return id;
@@ -54,28 +56,36 @@ public class Providedservicelog {
         this.nameType = nameType;
     }
 
-    public Parent getParentID() {
-        return parentID;
+    public Parent getParent() {
+        return parent;
     }
 
-    public void setParentID(Parent parentID) {
-        this.parentID = parentID;
+    public void setParent(Parent parent) {
+        this.parent = parent;
     }
 
-    public Integer getStudentID() {
-        return studentID;
+    public Integer getStudentId() {
+        return studentId;
     }
 
-    public void setStudentID(Integer studentID) {
-        this.studentID = studentID;
+    public void setStudentId(Integer studentId) {
+        this.studentId = studentId;
     }
 
-    public Integer getNurseID() {
-        return nurseID;
+    public Integer getNurseId() {
+        return nurseId;
     }
 
-    public void setNurseID(Integer nurseID) {
-        this.nurseID = nurseID;
+    public void setNurseId(Integer nurseId) {
+        this.nurseId = nurseId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
 }
