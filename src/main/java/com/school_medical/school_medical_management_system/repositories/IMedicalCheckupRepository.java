@@ -5,7 +5,7 @@ import com.school_medical.school_medical_management_system.repositories.entites.
 import java.util.List;
 import java.util.Optional;
 
-public interface MedicalCheckupRepository {
+public interface IMedicalCheckupRepository {
     int createPlan(Medicalcheckup checkup);
     int approvePlan(int checkupId);
     int parentConsent(int studentId, boolean consent);

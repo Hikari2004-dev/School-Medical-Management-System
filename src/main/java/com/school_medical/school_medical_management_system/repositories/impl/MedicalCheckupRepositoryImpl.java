@@ -1,6 +1,6 @@
 package com.school_medical.school_medical_management_system.repositories.impl;
 
-import com.school_medical.school_medical_management_system.repositories.MedicalCheckupRepository;
+import com.school_medical.school_medical_management_system.repositories.IMedicalCheckupRepository;
 import com.school_medical.school_medical_management_system.repositories.entites.Medicalcheckup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class MedicalCheckupRepositoryImpl implements MedicalCheckupRepository {
+public class MedicalCheckupRepositoryImpl implements IMedicalCheckupRepository {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;

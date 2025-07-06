@@ -1,6 +1,6 @@
 package com.school_medical.school_medical_management_system.api;
 
-import com.school_medical.school_medical_management_system.repositories.MedicalCheckupRepository;
+import com.school_medical.school_medical_management_system.repositories.IMedicalCheckupRepository;
 import com.school_medical.school_medical_management_system.repositories.entites.Medicalcheckup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 public class MedicalCheckupController {
 
     @Autowired
-    private MedicalCheckupRepository repository;
+    private IMedicalCheckupRepository repository;
 
     // ✅ Step 1: SchoolNurse lập kế hoạch khám
     @PostMapping("/plan")

@@ -1,6 +1,6 @@
 package com.school_medical.school_medical_management_system.repositories.impl;
 
-import com.school_medical.school_medical_management_system.repositories.ProvidedServiceLogRepository;
+import com.school_medical.school_medical_management_system.repositories.IProvidedServiceLogRepository;
 import com.school_medical.school_medical_management_system.repositories.entites.Providedservicelog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class ProvidedServiceLogRepositoryImpl implements ProvidedServiceLogRepository {
+public class ProvidedServiceLogRepositoryImpl implements IProvidedServiceLogRepository {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
