@@ -1,13 +1,14 @@
 package com.school_medical.school_medical_management_system.repositories.entites;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "role")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) // 🆕 dòng này
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" }) // 🆕 dòng này
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
