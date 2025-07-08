@@ -695,7 +695,7 @@ app.get('/api/health', (req, res) => {
 app.get('/api/debug/articles', async (req, res) => {
     try {
         const allArticles = await getCachedArticles();
-        
+
         res.json({
             success: true,
             total: allArticles.length,
@@ -723,9 +723,9 @@ app.post('/api/refresh-cache', async (req, res) => {
         console.log('🔄 Force refresh cache...');
         articlesCache.delete('all_articles');
         contentCache.clear();
-        
+
         const newArticles = await getCachedArticles();
-        
+
         res.json({
             success: true,
             message: 'Cache đã được refresh',
