@@ -104,6 +104,7 @@ body, .page-container {
   align-items: center;
   gap: 1rem;
 }
+
 .auth-buttons button{
   text-decoration: none;
   font-weight: bold;
@@ -426,41 +427,6 @@ body, .page-container {
   color: #4b5563;
   line-height: 1.5;
 }
-
-.feedback-section {
-  padding: 3rem 1.5rem;
-  background-color: #e0f2fe;
-  text-align: center;
-}
-
-.feedback-grid {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 2rem;
-  margin-top: 2rem;
-}
-
-.feedback-card {
-  background: white;
-  border-radius: 12px;
-  padding: 1.5rem;
-  width: 300px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  text-align: left;
-}
-
-.feedback-text {
-  font-style: italic;
-  margin-bottom: 1rem;
-  color: #334155;
-}
-
-.feedback-author {
-  font-weight: bold;
-  color: #1e40af;
-}
-
 /* === Đăng ký gói thành viên === */
 .subscription-section {
   background-color: #f0f9ff;
