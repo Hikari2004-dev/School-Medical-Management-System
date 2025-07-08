@@ -218,4 +218,79 @@ const NewsDetail = () => {
                 break;
         }
     };
-}
+
+    if (loading) {
+        return (
+            <div className="loading-container">
+                <div className="loading-spinner"></div>
+                <p>Đang tải bài viết...</p>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="error-container">
+                <p>{error}</p>
+                <button onClick={() => navigate(-1)}>Quay lại</button>
+            </div>
+        );
+    }
+
+    if (!article) {
+        return null;
+    }
+
+    return (
+        <div className="news-detail-container">
+            <Header />
+            <div className="news-detail-content">
+                <h1 className="news-title">{article.title}</h1>
+                <div className="news-meta">
+                    <span className="news-date">{formatDate(article.publishDate)}</span>
+                    <span className="news-source">{article.source}</span>
+                    <span className="news-views">{article.views} lượt xem</span>
+                </div>
+                <div className="news-image">
+                    <img src={article.image} alt={article.title} />
+                </div>
+                <div className="news-description" dangerouslySetInnerHTML={{ __html: article.content }} />
+                <div className="news-category" style={{ backgroundColor: getCategoryColor(article.category) }}>
+                    {article.category}
+                </div>
+                <div className="news-actions">
+                    <button className="btn-share" onClick={() => handleShare('facebook')}>Chia sẻ Facebook</button>
+                    <button className="btn-share" onClick={() => handleShare('twitter')}>Chia sẻ Twitter</button>
+                    <button className="btn-share" onClick={() => handleShare('linkedin')}>Chia sẻ LinkedIn</button>
+                    <button className="btn-share" onClick={() => handleShare('copy')}>Sao chép liên kết</button>
+                </div>
+                <div className="related-news">
+                    <h2>Tin tức liên quan</h2>
+                    <div className="related-news-list">
+                        {relatedNews.length > 0 ? (
+                            relatedNews.map(item => (
+                                <div key={item.id} className="related-news-item">
+                                    <div className="related-news-image">
+                                        <img src={item.image} alt={item.title} />
+                                    </div>
+                                    <div className="related-news-info">
+                                        <h3 className="related-news-title">{item.title}</h3>
+                                        <div className="related-news-meta">
+                                            <span className="related-news-date">{formatDate(item.publishDate)}</span>
+                                            <span className="related-news-source">{item.source}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            <p>Không có tin tức liên quan.</p>
+                        )}
+                    </div>
+                </div>
+            </div>
+            <Footer />
+        </div>
+    );
+};
+
+export default NewsDetail;
