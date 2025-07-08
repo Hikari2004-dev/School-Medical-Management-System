@@ -1,12 +1,13 @@
 package com.school_medical.school_medical_management_system.repositories.entites;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "role")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) // 🆕 dòng này
 public class Role {
     @Id
     @Column(name = "role_id", nullable = false)

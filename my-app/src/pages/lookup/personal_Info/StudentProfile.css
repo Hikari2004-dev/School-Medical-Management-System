@@ -1,0 +1,153 @@
+/* General styles */
+body {
+  font-family: 'Judson', serif;
+  background-color: #f5f7fa;
+  margin: 0;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 320px;
+  height: 100vh;
+  background-color: rgba(68, 71, 253, 0.8);
+  padding: 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  color: white;
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 40px;
+}
+
+.logo-img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+}
+
+.logo-text .main {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.logo-text .sub {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.nav-items {
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  cursor: pointer;
+  padding-left: 10px;
+}
+
+.nav-item .icon {
+  margin-right: 16px;
+  font-size: 24px;
+}
+
+.nav-item.active {
+  font-weight: bold;
+  background-color: rgba(255, 255, 255, 0.15);
+  padding: 10px;
+  border-radius: 10px;
+}
+
+/* Main Content */
+.main-content {
+  margin-left: 340px;
+  padding: 30px;
+  background-color: #f5f7fa;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 25px;
+}
+
+.avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 9999px;
+  object-fit: cover;
+  border: 3px solid #5551ff;
+}
+
+.info {
+  flex: 1;
+  margin-left: 30px;
+}
+
+.name {
+  font-size: 32px;
+  margin: 0;
+}
+
+.add-btn {
+  background-color: rgba(54, 35, 226, 0.9);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  border: none;
+  cursor: pointer;
+}
+
+.add-btn .plus {
+  font-size: 28px;
+  margin-right: 8px;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 40px;
+  border-bottom: 1px solid #bbb;
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+
+.tab {
+  font-size: 20px;
+  padding-bottom: 6px;
+  cursor: pointer;
+  color: #444;
+}
+
+.active-tab {
+  color: #420DFF;
+  border-bottom: 3px solid #420DFF;
+}
+
+/* Personal Info Section */
+.personal-section {
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  padding: 30px;
+}
+
+.personal-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  font-size: 18px;
+}

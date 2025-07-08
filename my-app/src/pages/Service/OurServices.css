@@ -1,0 +1,148 @@
+/* src/Service/OurServices.css */
+
+/* Main Services Section */
+.services-section {
+    background-color: #f9fafb;
+    padding: 4rem 1rem;
+}
+
+@media (min-width: 768px) {
+    .services-section {
+        padding: 4rem 2rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .services-section {
+        padding: 4rem 4rem;
+    }
+}
+
+.services-container {
+    max-width: 80rem;
+    margin: 0 auto;
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.services-title {
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+}
+
+.services-divider {
+    display: block;
+    width: 5rem;
+    height: 0.25rem;
+    background-color: #1e40af;
+    margin: 0 auto;
+    margin-top: 0.5rem;
+    border-radius: 9999px;
+}
+
+.services-description {
+    margin-top: 1rem;
+    color: #4b5563;
+    font-size: 1rem;
+}
+
+/* Services Grid */
+.services-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+@media (min-width: 640px) {
+    .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .services-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* Service Card */
+.service-card {
+    background-color: white;
+    border-radius: 1rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+}
+
+.service-card:hover {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    transform: translateY(-0.25rem);
+}
+
+.service-icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 4rem;
+    height: 4rem;
+    background-color: #e0e7ff;
+    border-radius: 50%;
+    margin: 0 auto 1.5rem auto;
+}
+
+.service-icon {
+    color: #1e40af;
+}
+
+.service-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 1rem;
+}
+
+.service-description {
+    color: #4b5563;
+    flex-grow: 1;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.service-button {
+    margin-top: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1e40af;
+    color: white;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 0.875rem;
+}
+
+.service-button:hover {
+    background-color: #1e3a8a;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+    .services-title {
+        font-size: 1.875rem;
+    }
+
+    .service-card {
+        padding: 1.5rem;
+    }
+
+    .services-section {
+        padding: 2rem 1rem;
+    }
+}
