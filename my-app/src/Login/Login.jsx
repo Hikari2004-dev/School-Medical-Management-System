@@ -1,4 +1,6 @@
+
 import React from "react";
+import { Link } from "react-router-dom";
 
 import "./Login.css";
 import LogoImg from "../image/14 1.png";
@@ -114,7 +116,7 @@ function Login() {
 
             <div className="link-group">
 
-              <a href="/Register.html">Tạo tài khoản mới</a>
+              <Link to="/register">Tạo tài khoản mới</Link>
               <a href="/forgetpassword.html">Quên mật khẩu</a>
             </div>
           </div>
