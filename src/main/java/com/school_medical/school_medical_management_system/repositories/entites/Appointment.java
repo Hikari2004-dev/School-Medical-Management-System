@@ -9,22 +9,22 @@ import java.time.LocalDate;
 public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "AppointmentID", nullable = false)
+    @Column(name = "appointment_id", nullable = false)
     private Integer id;
 
-    @Column(name = "Date")
+    @Column(name = "date")
     private LocalDate date;
 
-    @Column(name = "Confirm")
+    @Column(name = "confirm")
     private Boolean confirm;
 
     @Lob
-    @Column(name = "Description")
+    @Column(name = "description")
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ProvidedServiceLogID")
-    private Providedservicelog providedServiceLogID;
+    @JoinColumn(name = "provided_service_log_id")
+    private Providedservicelog providedServiceLog;
 
     public Integer getId() {
         return id;
@@ -58,12 +58,12 @@ public class Appointment {
         this.description = description;
     }
 
-    public Providedservicelog getProvidedServiceLogID() {
-        return providedServiceLogID;
+    public Providedservicelog getProvidedServiceLog() {
+        return providedServiceLog;
     }
 
-    public void setProvidedServiceLogID(Providedservicelog providedServiceLogID) {
-        this.providedServiceLogID = providedServiceLogID;
+    public void setProvidedServiceLog(Providedservicelog providedServiceLog) {
+        this.providedServiceLog = providedServiceLog;
     }
 
 }

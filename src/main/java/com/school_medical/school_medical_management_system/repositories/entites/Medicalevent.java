@@ -3,36 +3,30 @@ package com.school_medical.school_medical_management_system.repositories.entites
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "medicalevent")
 public class Medicalevent {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "EventID", nullable = false)
+    @Column(name = "event_id", nullable = false)
     private Integer id;
 
-    @Column(name = "Status", length = 50)
+    @Column(name = "status", length = 50)
     private String status;
 
     @Lob
-    @Column(name = "Description")
+    @Column(name = "description")
     private String description;
 
-    @Column(name = "Date")
+    @Column(name = "date")
     private LocalDate date;
 
-    @Column(name = "StudentName", length = 100)
+    @Column(name = "student_name", length = 100)
     private String studentName;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "HeadmasterID")
-    private Headmaster headmasterID;
-
-    @OneToMany(mappedBy = "eventID")
-    private Set<Studentevent> studentevents = new LinkedHashSet<>();
+    @JoinColumn(name = "headmaster_id")
+    private Headmaster headmaster;
 
     public Integer getId() {
         return id;
@@ -74,20 +68,12 @@ public class Medicalevent {
         this.studentName = studentName;
     }
 
-    public Headmaster getHeadmasterID() {
-        return headmasterID;
+    public Headmaster getHeadmaster() {
+        return headmaster;
     }
 
-    public void setHeadmasterID(Headmaster headmasterID) {
-        this.headmasterID = headmasterID;
-    }
-
-    public Set<Studentevent> getStudentevents() {
-        return studentevents;
-    }
-
-    public void setStudentevents(Set<Studentevent> studentevents) {
-        this.studentevents = studentevents;
+    public void setHeadmaster(Headmaster headmaster) {
+        this.headmaster = headmaster;
     }
 
 }

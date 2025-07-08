@@ -8,30 +8,29 @@ import java.time.LocalDate;
 @Table(name = "logmedical")
 public class Logmedical {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "LogMedicalID", nullable = false)
+    @Column(name = "log_medical_id", nullable = false)
     private Integer id;
 
-    @Column(name = "Date")
+    @Column(name = "date")
     private LocalDate date;
 
-    @Column(name = "Confirm")
+    @Column(name = "confirm")
     private Boolean confirm;
 
-    @Column(name = "Quantity")
+    @Column(name = "quantity")
     private Integer quantity;
 
     @Lob
-    @Column(name = "`Usage`")
-    private String usage;
+    @Column(name = "introduction")
+    private String introduction;
 
     @Lob
-    @Column(name = "Description")
+    @Column(name = "description")
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ProvidedServiceLogID")
-    private Providedservicelog providedServiceLogID;
+    @JoinColumn(name = "provided_service_log_id")
+    private Providedservicelog providedServiceLog;
 
     public Integer getId() {
         return id;
@@ -65,12 +64,12 @@ public class Logmedical {
         this.quantity = quantity;
     }
 
-    public String getUsage() {
-        return usage;
+    public String getIntroduction() {
+        return introduction;
     }
 
-    public void setUsage(String usage) {
-        this.usage = usage;
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
     }
 
     public String getDescription() {
@@ -81,12 +80,12 @@ public class Logmedical {
         this.description = description;
     }
 
-    public Providedservicelog getProvidedServiceLogID() {
-        return providedServiceLogID;
+    public Providedservicelog getProvidedServiceLog() {
+        return providedServiceLog;
     }
 
-    public void setProvidedServiceLogID(Providedservicelog providedServiceLogID) {
-        this.providedServiceLogID = providedServiceLogID;
+    public void setProvidedServiceLog(Providedservicelog providedServiceLog) {
+        this.providedServiceLog = providedServiceLog;
     }
 
 }

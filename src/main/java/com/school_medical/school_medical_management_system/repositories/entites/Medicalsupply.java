@@ -8,26 +8,25 @@ import java.time.LocalDate;
 @Table(name = "medicalsupplies")
 public class Medicalsupply {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "SupplyID", nullable = false)
+    @Column(name = "supply_id", nullable = false)
     private Integer id;
 
-    @Column(name = "Name", length = 100)
+    @Column(name = "name", length = 100)
     private String name;
 
-    @Column(name = "Quantity")
+    @Column(name = "quantity")
     private Integer quantity;
 
     @Lob
-    @Column(name = "Description")
+    @Column(name = "description")
     private String description;
 
-    @Column(name = "LastCheckedDate")
+    @Column(name = "last_checked_date")
     private LocalDate lastCheckedDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "IncidentID")
-    private Incidentreport incidentID;
+    @JoinColumn(name = "incident_id")
+    private Incidentreport incident;
 
     public Integer getId() {
         return id;
@@ -69,12 +68,12 @@ public class Medicalsupply {
         this.lastCheckedDate = lastCheckedDate;
     }
 
-    public Incidentreport getIncidentID() {
-        return incidentID;
+    public Incidentreport getIncident() {
+        return incident;
     }
 
-    public void setIncidentID(Incidentreport incidentID) {
-        this.incidentID = incidentID;
+    public void setIncident(Incidentreport incident) {
+        this.incident = incident;
     }
 
 }

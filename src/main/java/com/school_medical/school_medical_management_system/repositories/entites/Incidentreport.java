@@ -3,37 +3,31 @@ package com.school_medical.school_medical_management_system.repositories.entites
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "incidentreport")
 public class Incidentreport {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "IncidentID", nullable = false)
+    @Column(name = "incident_id", nullable = false)
     private Integer id;
 
-    @Column(name = "Type", length = 50)
+    @Column(name = "type", length = 50)
     private String type;
 
-    @Column(name = "Date")
+    @Column(name = "date")
     private LocalDate date;
 
     @Lob
-    @Column(name = "Description")
+    @Column(name = "description")
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "StudentID")
-    private Student studentID;
+    @JoinColumn(name = "student_id")
+    private Student student;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "NurseID")
-    private Schoolnurse nurseID;
-
-    @OneToMany(mappedBy = "incidentID")
-    private Set<Medicalsupply> medicalsupplies = new LinkedHashSet<>();
+    @JoinColumn(name = "nurse_id")
+    private Schoolnurse nurse;
 
     public Integer getId() {
         return id;
@@ -67,28 +61,20 @@ public class Incidentreport {
         this.description = description;
     }
 
-    public Student getStudentID() {
-        return studentID;
+    public Student getStudent() {
+        return student;
     }
 
-    public void setStudentID(Student studentID) {
-        this.studentID = studentID;
+    public void setStudent(Student student) {
+        this.student = student;
     }
 
-    public Schoolnurse getNurseID() {
-        return nurseID;
+    public Schoolnurse getNurse() {
+        return nurse;
     }
 
-    public void setNurseID(Schoolnurse nurseID) {
-        this.nurseID = nurseID;
-    }
-
-    public Set<Medicalsupply> getMedicalsupplies() {
-        return medicalsupplies;
-    }
-
-    public void setMedicalsupplies(Set<Medicalsupply> medicalsupplies) {
-        this.medicalsupplies = medicalsupplies;
+    public void setNurse(Schoolnurse nurse) {
+        this.nurse = nurse;
     }
 
 }

@@ -2,48 +2,41 @@ package com.school_medical.school_medical_management_system.repositories.entites
 
 import jakarta.persistence.*;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 @Entity
 @Table(name = "healthinfo")
 public class Healthinfo {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "HealthInfoID", nullable = false)
+    @Column(name = "health_info_id", nullable = false)
     private Integer id;
 
-    @Column(name = "Allergy")
+    @Column(name = "allergy")
     private String allergy;
 
-    @Column(name = "ChronicDisease")
+    @Column(name = "chronic_disease")
     private String chronicDisease;
 
-    @Column(name = "Vision", length = 50)
+    @Column(name = "vision", length = 50)
     private String vision;
 
-    @Column(name = "Hearing", length = 50)
+    @Column(name = "hearing", length = 50)
     private String hearing;
 
     @Lob
-    @Column(name = "MedicalHistory")
+    @Column(name = "medical_history")
     private String medicalHistory;
 
-    @Column(name = "Height")
+    @Column(name = "height")
     private Float height;
 
-    @Column(name = "Weight")
+    @Column(name = "weight")
     private Float weight;
 
-    @Column(name = "BMI")
+    @Column(name = "bmi")
     private Float bmi;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "StudentID")
-    private Student studentID;
-
-    @OneToMany(mappedBy = "healthInfoID")
-    private Set<Medicalcheckup> medicalcheckups = new LinkedHashSet<>();
+    @JoinColumn(name = "student_id")
+    private Student student;
 
     public Integer getId() {
         return id;
@@ -117,20 +110,12 @@ public class Healthinfo {
         this.bmi = bmi;
     }
 
-    public Student getStudentID() {
-        return studentID;
+    public Student getStudent() {
+        return student;
     }
 
-    public void setStudentID(Student studentID) {
-        this.studentID = studentID;
-    }
-
-    public Set<Medicalcheckup> getMedicalcheckups() {
-        return medicalcheckups;
-    }
-
-    public void setMedicalcheckups(Set<Medicalcheckup> medicalcheckups) {
-        this.medicalcheckups = medicalcheckups;
+    public void setStudent(Student student) {
+        this.student = student;
     }
 
 }
