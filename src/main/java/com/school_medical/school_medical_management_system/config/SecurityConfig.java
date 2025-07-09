@@ -51,8 +51,12 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/login",
                                 "/api/auth/**",
-                                "/api/medication/**",
-                                "/api/medical-checkups/**" // 👈 THÊM DÒNG NÀY
+                                "/api/medication-submissions/**",
+                                "/api/medical-checkups/**",
+                                "/login/checkemail",
+                                "/api/healthinfo/",
+                                "/api/medical-events/**",
+                                "/api/event-batches/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

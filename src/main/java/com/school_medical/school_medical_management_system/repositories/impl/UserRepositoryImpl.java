@@ -1,6 +1,7 @@
 package com.school_medical.school_medical_management_system.repositories.impl;
 
 import com.school_medical.school_medical_management_system.repositories.IUserRepository;
+import com.school_medical.school_medical_management_system.repositories.entites.Appuser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -29,6 +30,30 @@ public class UserRepositoryImpl implements IUserRepository {
                         .roles(role.toUpperCase())
                         .build();
             });
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public Appuser getUserByEmail(String email) {
+        String sql = "SELECT * FROM mesch.appuser WHERE email = ?";
+        try {
+            return jdbcTemplate.queryForObject(
+                    sql,
+                    new Object[]{email},
+                    (rs, rowNum) -> {
+                        Appuser user = new Appuser();
+                        user.setId(rs.getInt("user_id"));
+                        user.setFirstName(rs.getString("first_name"));
+                        user.setLastName(rs.getString("last_name"));
+                        user.setEmail(rs.getString("email"));
+                        user.setPassword(rs.getString("password"));
+                        user.setPhone(rs.getString("phone"));
+                        user.setAddress(rs.getString("address"));
+                        return user;
+                    }
+            );
         } catch (EmptyResultDataAccessException e) {
             return null;
         }

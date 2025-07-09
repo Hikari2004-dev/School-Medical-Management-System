@@ -2,6 +2,8 @@ package com.school_medical.school_medical_management_system.api;
 
 import com.school_medical.school_medical_management_system.config.JwtUtil;
 import com.school_medical.school_medical_management_system.services.CustomUserDetailsService;
+import com.school_medical.school_medical_management_system.services.IAppUserService;
+import com.school_medical.school_medical_management_system.utils.AuthUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,12 @@ public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;
 
+    @Autowired
+    private IAppUserService appUserService;
+
+    private AuthUtils authUtils;
+
+
     @PostMapping("/login")
     public ResponseEntity<?> createAuthToken(@RequestBody AuthRequest authRequest) {
         try {
@@ -36,6 +44,11 @@ public class AuthController {
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getEmail());
         final String jwt = jwtUtil.generateToken(userDetails);
         return ResponseEntity.ok(new AuthResponse(jwt));
+    }
+
+    @GetMapping(value = "/login/checkemail")
+    public ResponseEntity<?> checkCurrentEmail() {
+        return ResponseEntity.ok(appUserService.getUserByEmail().getId());
     }
 }
 
