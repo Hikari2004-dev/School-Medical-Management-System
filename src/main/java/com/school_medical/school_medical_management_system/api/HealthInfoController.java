@@ -1,8 +1,11 @@
 package com.school_medical.school_medical_management_system.api;
 
+import com.school_medical.school_medical_management_system.models.ApiResponse;
 import com.school_medical.school_medical_management_system.repositories.entites.Healthinfo;
 import com.school_medical.school_medical_management_system.services.impl.HealthInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -12,14 +15,32 @@ public class HealthInfoController {
     @Autowired
     private HealthInfoService service;
 
+    // GET - Xem hồ sơ
     @GetMapping("/{studentId}")
-    public Healthinfo getHealthInfo(@PathVariable int studentId) {
-        return service.getHealthInfoByStudentId(studentId);
+    public ResponseEntity<ApiResponse<Healthinfo>> getHealthInfo(@PathVariable int studentId) {
+        try {
+            Healthinfo info = service.getHealthInfoByStudentId(studentId);
+            if (info == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ApiResponse<>(false, "Không tìm thấy hồ sơ", null));
+            }
+            return ResponseEntity.ok(new ApiResponse<>(true, "Lấy hồ sơ thành công", info));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse<>(false, "Lỗi hệ thống: " + e.getMessage(), null));
+        }
     }
 
+    // POST - Lưu/Sửa hồ sơ
     @PostMapping("/save")
-    public String saveHealthInfo(@RequestBody Healthinfo healthInfo) {
-        service.saveOrUpdateHealthInfo(healthInfo);
-        return "Success";
+    public ResponseEntity<ApiResponse<String>> saveHealthInfo(@RequestBody Healthinfo healthInfo) {
+        try {
+            service.saveOrUpdateHealthInfo(healthInfo);
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(new ApiResponse<>(true, "Lưu hồ sơ thành công", null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiResponse<>(false, "Lưu thất bại: " + e.getMessage(), null));
+        }
     }
 }
