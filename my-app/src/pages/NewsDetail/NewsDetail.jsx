@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './NewsDetail.css';
 import Header from '../../components/Header/Header';
@@ -13,129 +13,48 @@ const NewsDetail = () => {
     const [article, setArticle] = useState(null);
     const [loading, setLoading] = useState(true);
     const [relatedNews, setRelatedNews] = useState([]);
-    // eslint-disable-next-line no-unused-vars
     const [error, setError] = useState(null);
-
-    console.log('NewsDetail component loaded with ID:', id);
-    console.log('Available news data length:', newsData.length);
 
     const fetchArticleDetails = async () => {
         try {
             setLoading(true);
             setError(null);
 
-            console.log('🔍 Đang tải bài viết với ID:', id);
-
-            // Bước 1: Thử lấy trực tiếp từ API detail
+            // Try API first
             try {
                 const response = await fetch(`${API_BASE_URL}/news/${id}`);
-
                 if (response.ok) {
                     const data = await response.json();
                     if (data.success && data.data) {
-                        console.log('✅ Tìm thấy bài viết từ API detail:', data.data.title);
                         setArticle(data.data);
-
-                        // Lấy tin tức liên quan
                         await fetchRelatedNews(data.data.category);
                         setLoading(false);
                         return;
-                    } else {
-                        console.log('❌ API detail response:', data);
                     }
-                } else {
-                    console.log('❌ API detail status:', response.status);
                 }
             } catch (apiError) {
-                console.log('❌ API detail error:', apiError.message);
+                console.log('API not available, using local data');
             }
 
-            // Bước 2: Thử lấy từ danh sách tin tức
-            try {
-                console.log('🔄 Thử lấy từ danh sách tin tức...');
-                const listResponse = await fetch(`${API_BASE_URL}/news/full?limit=50`);
-
-                if (listResponse.ok) {
-                    const listData = await listResponse.json();
-                    if (listData.success && listData.data) {
-                        console.log(`📋 Có ${listData.data.length} bài viết trong danh sách`);
-
-                        const foundArticle = listData.data.find(item => {
-                            console.log(`Comparing: "${item.id}" (${typeof item.id}) with "${id}" (${typeof id})`);
-                            return item.id === id ||
-                                item.id.toString() === id.toString() ||
-                                parseInt(item.id) === parseInt(id);
-                        });
-
-                        if (foundArticle) {
-                            console.log('✅ Tìm thấy bài viết từ danh sách:', foundArticle.title);
-                            setArticle(foundArticle);
-
-                            // Lấy tin tức liên quan từ cùng danh sách
-                            const related = listData.data
-                                .filter(item => item.category === foundArticle.category && item.id !== foundArticle.id)
-                                .slice(0, 3);
-                            setRelatedNews(related);
-                            setLoading(false);
-                            return;
-                        } else {
-                            console.log('❌ Không tìm thấy trong danh sách. IDs có sẵn:',
-                                listData.data.slice(0, 5).map(item => `${item.id} (${typeof item.id})`));
-                        }
-                    }
-                }
-            } catch (listError) {
-                console.log('❌ Lỗi khi lấy danh sách:', listError.message);
-            }
-
-            // Bước 3: Fallback to local data
-            console.log('🔄 Fallback to local data...');
+            // Fallback to local data
             let foundArticle = newsData.find(item =>
                 item.id === parseInt(id) ||
                 item.id.toString() === id.toString() ||
                 item.id === id
             );
 
-            // Bước 4: Xử lý ID dạng fallback (cho mock data)
-            if (!foundArticle && (id.includes('fallback-') || id.includes('mock-'))) {
-                const parts = id.split('-');
-                if (parts.length >= 3) {
-                    const originalIndex = parseInt(parts[2]);
-                    const demoRound = parseInt(parts[1]);
-                    const validIndex = originalIndex % newsData.length;
-
-                    if (validIndex >= 0 && validIndex < newsData.length) {
-                        foundArticle = {
-                            ...newsData[validIndex],
-                            id: id,
-                            title: `${newsData[validIndex].title} - Bản demo ${demoRound + 1}`,
-                            publishDate: new Date(Date.now() - demoRound * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-                            source: `${newsData[validIndex].source} (Demo)`,
-                            views: (newsData[validIndex].views || 100) + demoRound * 10,
-                            likes: (newsData[validIndex].likes || 10) + demoRound * 5
-                        };
-                    }
-                }
-            }
-
             if (foundArticle) {
-                console.log('✅ Tìm thấy bài viết trong local data:', foundArticle.title);
                 setArticle(foundArticle);
-
                 const related = newsData
                     .filter(item => item.category === foundArticle.category && item.id !== foundArticle.id)
                     .slice(0, 3);
                 setRelatedNews(related);
             } else {
-                console.log('❌ Hoàn toàn không tìm thấy bài viết');
-                setArticle(null);
                 setError('Không tìm thấy bài viết');
             }
 
         } catch (err) {
-            console.error('❌ Lỗi nghiêm trọng:', err);
             setError('Không thể tải bài viết');
-            setArticle(null);
         } finally {
             setLoading(false);
         }
@@ -143,7 +62,6 @@ const NewsDetail = () => {
 
     useEffect(() => {
         fetchArticleDetails();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
 
     const fetchRelatedNews = async (category) => {
@@ -160,10 +78,9 @@ const NewsDetail = () => {
                 }
             }
         } catch (err) {
-            console.log('❌ Không thể lấy tin tức liên quan:', err);
+            console.log('Using local data for related news');
         }
 
-        // Fallback: dùng local data
         const related = newsData
             .filter(item => item.category === category)
             .slice(0, 3);
@@ -181,16 +98,12 @@ const NewsDetail = () => {
 
     const getCategoryColor = (category) => {
         const colors = {
-            'Phẫu thuật': '#dc2626',
-            'Ung thư': '#7c3aed',
-            'Sản khoa': '#ec4899',
-            'Nhi khoa': '#06b6d4',
-            'Tim mạch': '#ef4444',
-            'Thần kinh': '#8b5cf6',
-            'Cấp cứu': '#f59e0b',
-            'Y tế công cộng': '#10b981',
-            'Chăm sóc sức khỏe': '#059669',
-            'Bệnh viện': '#2563eb',
+            'Sức khỏe': '#10b981',
+            'Dinh dưỡng': '#f59e0b',
+            'Mắt': '#ef4444',
+            'Y tế': '#8b5cf6',
+            'An toàn': '#06b6d4',
+            'Vaccine': '#2563eb',
             'default': '#6b7280'
         };
         return colors[category] || colors['default'];
@@ -219,75 +132,155 @@ const NewsDetail = () => {
         }
     };
 
+    const handleRelatedNewsClick = (newsId) => {
+        navigate(`/news/${newsId}`);
+    };
+
     if (loading) {
         return (
-            <div className="loading-container">
-                <div className="loading-spinner"></div>
-                <p>Đang tải bài viết...</p>
+            <div className="news-detail-page">
+                <Header />
+                <div className="loading-container">
+                    <div className="loading-spinner"></div>
+                    <p>Đang tải bài viết...</p>
+                </div>
+                <Footer />
             </div>
         );
     }
 
-    if (error) {
+    if (error || !article) {
         return (
-            <div className="error-container">
-                <p>{error}</p>
-                <button onClick={() => navigate(-1)}>Quay lại</button>
+            <div className="news-detail-page">
+                <Header />
+                <div className="error-container">
+                    <h2>Oops! Có lỗi xảy ra</h2>
+                    <p>{error || 'Không tìm thấy bài viết'}</p>
+                    <button className="back-button" onClick={() => navigate('/news')}>
+                        Về trang tin tức
+                    </button>
+                </div>
+                <Footer />
             </div>
         );
-    }
-
-    if (!article) {
-        return null;
     }
 
     return (
-        <div className="news-detail-container">
+        <div className="news-detail-page">
             <Header />
-            <div className="news-detail-content">
-                <h1 className="news-title">{article.title}</h1>
-                <div className="news-meta">
-                    <span className="news-date">{formatDate(article.publishDate)}</span>
-                    <span className="news-source">{article.source}</span>
-                    <span className="news-views">{article.views} lượt xem</span>
-                </div>
-                <div className="news-image">
-                    <img src={article.image} alt={article.title} />
-                </div>
-                <div className="news-description" dangerouslySetInnerHTML={{ __html: article.content }} />
-                <div className="news-category" style={{ backgroundColor: getCategoryColor(article.category) }}>
-                    {article.category}
-                </div>
-                <div className="news-actions">
-                    <button className="btn-share" onClick={() => handleShare('facebook')}>Chia sẻ Facebook</button>
-                    <button className="btn-share" onClick={() => handleShare('twitter')}>Chia sẻ Twitter</button>
-                    <button className="btn-share" onClick={() => handleShare('linkedin')}>Chia sẻ LinkedIn</button>
-                    <button className="btn-share" onClick={() => handleShare('copy')}>Sao chép liên kết</button>
-                </div>
-                <div className="related-news">
-                    <h2>Tin tức liên quan</h2>
-                    <div className="related-news-list">
-                        {relatedNews.length > 0 ? (
-                            relatedNews.map(item => (
-                                <div key={item.id} className="related-news-item">
-                                    <div className="related-news-image">
-                                        <img src={item.image} alt={item.title} />
-                                    </div>
-                                    <div className="related-news-info">
-                                        <h3 className="related-news-title">{item.title}</h3>
-                                        <div className="related-news-meta">
-                                            <span className="related-news-date">{formatDate(item.publishDate)}</span>
-                                            <span className="related-news-source">{item.source}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))
-                        ) : (
-                            <p>Không có tin tức liên quan.</p>
-                        )}
-                    </div>
-                </div>
+
+            {/* Breadcrumb */}
+            <div className="breadcrumb-container">
+                <nav className="breadcrumb">
+                    <span className="breadcrumb-link" onClick={() => navigate('/')}>Trang chủ</span>
+                    <span className="breadcrumb-separator">›</span>
+                    <span className="breadcrumb-link" onClick={() => navigate('/news')}>Tin tức</span>
+                    <span className="breadcrumb-separator">›</span>
+                    <span className="breadcrumb-current">{article.category}</span>
+                </nav>
             </div>
+
+            <main className="news-detail-main">
+                <div className="container">
+                    <article className="news-article">
+                        {/* Article Header */}
+                        <header className="article-header">
+                            <div className="category-badge" style={{ backgroundColor: getCategoryColor(article.category) }}>
+                                {article.category}
+                            </div>
+                            <h1 className="article-title">{article.title}</h1>
+                            <div className="article-meta">
+                                <div className="meta-info">
+                                    <span className="article-date">
+                                        <i className="fas fa-calendar-alt"></i>
+                                        {formatDate(article.publishDate)}
+                                    </span>
+                                    <span className="article-source">
+                                        <i className="fas fa-user-edit"></i>
+                                        {article.source}
+                                    </span>
+                                    <span className="article-views">
+                                        <i className="fas fa-eye"></i>
+                                        {article.views || 0} lượt xem
+                                    </span>
+                                </div>
+                            </div>
+                        </header>
+
+                        {/* Article Image */}
+                        <div className="article-image-container">
+                            <img src={article.image} alt={article.title} className="article-image" />
+                        </div>
+
+                        {/* Article Summary */}
+                        {article.summary && (
+                            <div className="article-summary">
+                                <p>{article.summary}</p>
+                            </div>
+                        )}
+
+                        {/* Article Content */}
+                        <div className="article-content">
+                            <div dangerouslySetInnerHTML={{ __html: article.content || article.summary }} />
+                        </div>
+
+                        {/* Share Section */}
+                        <div className="share-section">
+                            <h4>Chia sẻ bài viết</h4>
+                            <div className="share-buttons">
+                                <button className="share-btn facebook" onClick={() => handleShare('facebook')}>
+                                    <i className="fab fa-facebook-f"></i>
+                                    Facebook
+                                </button>
+                                <button className="share-btn twitter" onClick={() => handleShare('twitter')}>
+                                    <i className="fab fa-twitter"></i>
+                                    Twitter
+                                </button>
+                                <button className="share-btn linkedin" onClick={() => handleShare('linkedin')}>
+                                    <i className="fab fa-linkedin-in"></i>
+                                    LinkedIn
+                                </button>
+                                <button className="share-btn copy" onClick={() => handleShare('copy')}>
+                                    <i className="fas fa-link"></i>
+                                    Sao chép
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+
+                    {/* Related News */}
+                    {relatedNews.length > 0 && (
+                        <section className="related-news">
+                            <h3>Tin tức liên quan</h3>
+                            <div className="related-news-grid">
+                                {relatedNews.map(item => (
+                                    <article
+                                        key={item.id}
+                                        className="related-news-item"
+                                        onClick={() => handleRelatedNewsClick(item.id)}
+                                    >
+                                        <div className="related-news-image">
+                                            <img src={item.image} alt={item.title} />
+                                            <div className="related-news-category" style={{ backgroundColor: getCategoryColor(item.category) }}>
+                                                {item.category}
+                                            </div>
+                                        </div>
+                                        <div className="related-news-content">
+                                            <h4 className="related-news-title">{item.title}</h4>
+                                            <p className="related-news-summary">{item.summary}</p>
+                                            <div className="related-news-meta">
+                                                <span className="related-news-date">{formatDate(item.publishDate)}</span>
+                                                <span className="related-news-source">{item.source}</span>
+                                            </div>
+                                        </div>
+                                    </article>
+                                ))}
+                            </div>
+                        </section>
+                    )}
+                </div>
+            </main>
+
             <Footer />
         </div>
     );

@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
-import ApiStatus from '../../components/ApiStatus/ApiStatus';
 import newsData from '../../data/newsData';
 import './News.css';
 
@@ -368,7 +367,9 @@ export default function News() {
                     <div className="loading">
                         <div className="loading-spinner"></div>
                         <p>🔄 Đang tải tin tức y tế từ các nguồn uy tín...</p>
-                        <p className="loading-subtitle">VnExpress, Tuổi Trẻ, Sức khỏe Đời sống</p>
+                        <p className="loading-subtitle" style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '0.9rem', marginTop: '0.5rem' }}>
+                            VnExpress, Tuổi Trẻ, Sức khỏe Đời sống
+                        </p>
                     </div>
                 </div>
                 <Footer />
@@ -382,17 +383,17 @@ export default function News() {
             <div className="news-container">
                 {/* Breadcrumb - Fixed */}
                 <div className="breadcrumb-fixed">
-                    <a href="/">Trang chủ</a> &gt;&gt;&gt;&gt; Tin tức
+                    🏠 <a href="/">Trang chủ</a> &nbsp;›&nbsp; 📰 Tin tức
                 </div>
 
                 {/* Page Title with Controls */}
                 <div className="news-header">
-                    <h1 className="news-page-title">Tin tức Y tế - Sức khỏe</h1>
+                    <h1 className="news-page-title">📰 Tin tức Y tế - Sức khỏe</h1>
                     <div className="news-controls">
                         <div className="search-section">
                             <input
                                 type="text"
-                                placeholder="Tìm kiếm tin tức..."
+                                placeholder="🔍 Tìm kiếm tin tức..."
                                 value={searchTerm}
                                 onChange={handleSearchChange}
                                 className="search-input"
@@ -400,12 +401,12 @@ export default function News() {
                             <i className="fas fa-search search-icon"></i>
                         </div>
                         <button onClick={handleRefresh} className="refresh-button">
-                            <i className="fas fa-refresh"></i>
+                            <i className="fas fa-sync-alt"></i>
                             Cập nhật
                         </button>
                         {lastUpdated && (
                             <span className="last-updated">
-                                Cập nhật: {formatDate(lastUpdated)}
+                                ⏰ Cập nhật: {formatDate(lastUpdated)}
                             </span>
                         )}
                     </div>
@@ -529,7 +530,6 @@ export default function News() {
                 )}
             </div>
             <Footer />
-            <ApiStatus />
         </div>
     );
 }
