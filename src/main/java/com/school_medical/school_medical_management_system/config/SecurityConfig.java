@@ -54,7 +54,8 @@ public class SecurityConfig {
                                 "/api/medication/**",
                                 "/api/medical-checkups/**",
                                 "/login/checkemail",
-                                "/api/healthinfo/"
+                                "/api/healthinfo/",
+                                "/api/medical-events/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
