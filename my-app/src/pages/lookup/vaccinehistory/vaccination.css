@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Judson&display=swap');
+
+body {
+  font-family: 'Judson', serif;
+}
+
+/* Custom color utilities */
+.bg-purple-sidebar {
+  background-color: #7C3AED;
+}
+
+.bg-purple-header {
+  background-color: #5B21B6;
+}
+
+.bg-purple-active {
+  background-color: #6D28D9;
+}
+
+.text-purple-active {
+  color: #6D28D9;
+}
