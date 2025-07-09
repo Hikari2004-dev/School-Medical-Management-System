@@ -1,8 +1,8 @@
 // src/component/Header.jsx
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import BannerImg from "../../image/Banner-new-scaled.png";
-import logo from "../../image/logo google.png";
+import BannerImg from "../../image/hinhanh/backgroundyte.png";
+import logo from "../../image/hinhanh/logoproject.png";
 import "./Header.css";
 
 export default function Header() {
