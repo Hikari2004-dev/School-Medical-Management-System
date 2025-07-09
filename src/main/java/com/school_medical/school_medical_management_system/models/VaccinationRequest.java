@@ -1,11 +1,8 @@
-package com.school_medical.school_medical_management_system.repositories.entites;
+package com.school_medical.school_medical_management_system.models;
 
-import lombok.Data;
 import java.util.Date;
 
-
-public class Vaccination {
-    private Integer vaccinationId;
+public class VaccinationRequest {
     private String vaccineName;
     private Date vaccinationDate;
     private String status;
@@ -16,12 +13,12 @@ public class Vaccination {
     private String notes;
     private Integer batchId;
 
-    public Integer getVaccinationId() {
-        return vaccinationId;
+    public Boolean getDeclaredByParent() {
+        return declaredByParent;
     }
 
-    public void setVaccinationId(Integer vaccinationId) {
-        this.vaccinationId = vaccinationId;
+    public void setDeclaredByParent(Boolean declaredByParent) {
+        this.declaredByParent = declaredByParent;
     }
 
     public String getVaccineName() {
@@ -62,14 +59,6 @@ public class Vaccination {
 
     public void setStudentId(Integer studentId) {
         this.studentId = studentId;
-    }
-
-    public Boolean getDeclaredByParent() {
-        return declaredByParent;
-    }
-
-    public void setDeclaredByParent(Boolean declaredByParent) {
-        this.declaredByParent = declaredByParent;
     }
 
     public Date getDeclaredDate() {

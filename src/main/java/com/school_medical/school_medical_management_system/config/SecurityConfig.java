@@ -56,7 +56,8 @@ public class SecurityConfig {
                                 "/login/checkemail",
                                 "/api/healthinfo/",
                                 "/api/medical-events/**",
-                                "/api/event-batches/**"
+                                "/api/event-batches/**",
+                                "/api/vaccinations/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
