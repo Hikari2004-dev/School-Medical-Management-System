@@ -58,6 +58,10 @@ public class SecurityConfig {
                                 "/api/medical-events/**",
                                 "/api/event-batches/**",
                                 "/api/vaccinations/**"
+                                "/my-children",
+                                "/api/notifications/send-batch/**",
+                                "/api/notifications/consent/**",
+                                "/api/notifications/parent"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
