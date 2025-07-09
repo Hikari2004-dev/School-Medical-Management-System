@@ -1,7 +1,7 @@
 // src/Member/MemberPage.jsx
 import React from 'react';
 import { CheckCircle, AlertCircle } from 'lucide-react';
-import MemberIllustration from '../../image/Banner-new-scaled.png';
+import MemberIllustration from '../../image/hinhanh/backgroundyte2.png';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import './MemberPage.css';

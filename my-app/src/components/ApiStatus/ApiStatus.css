@@ -1,5 +1,7 @@
-/* API Status Component */
+/* API Status Component - HIDDEN */
 .api-status {
+    display: none;
+    /* Ẩn hoàn toàn component ApiStatus */
     position: fixed;
     bottom: 20px;
     right: 20px;

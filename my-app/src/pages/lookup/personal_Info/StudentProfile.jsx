@@ -1,79 +1,108 @@
 // File: StudentProfile.jsx
 import React, { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
 import "./StudentProfile.css"; // CSS file for custom styles
 
 export default function StudentProfile() {
   const [student, setStudent] = useState(null);
+  const location = useLocation();
 
   useEffect(() => {
-    // Fetch student profile data from backend
-    axios.get("/api/student-profile/12A1") // Example endpoint
-      .then(res => setStudent(res.data))
-      .catch(err => console.error("API error:", err));
+    // Mock data for demonstration - replace with actual API call later
+    const mockStudent = {
+      name: "Nguyễn Đoàn Duy Khánh",
+      className: "12A1",
+      teacher: "Lâm Phương Thúy",
+      height: 170,
+      weight: 60,
+      gender: "Nam/Nữ",
+      avatarUrl: "/logo192.png", // Using default logo as avatar
+      motherName: "",
+      motherPhone: "",
+      email: "",
+      fatherName: "",
+      fatherPhone: "",
+      address: ""
+    };
+
+    // Simulate API delay
+    setTimeout(() => {
+      setStudent(mockStudent);
+    }, 500);
+
+    // Original API call (commented out for now)
+    // axios.get("/api/student-profile/12A1")
+    //   .then(res => setStudent(res.data))
+    //   .catch(err => console.error("API error:", err));
   }, []);
 
-  if (!student) return <div className="text-center mt-10">Loading...</div>;
+  if (!student) return <div className="loading">Loading...</div>;
 
   return (
-    <div className="w-full h-full bg-white font-judson">
+    <div className="student-profile-container">
       {/* Sidebar */}
       <aside className="sidebar">
         <div className="logo-section">
-          <img src="/logo.png" alt="logo" className="logo-img" />
+          <img src="/logo192.png" alt="logo" className="logo-img" />
           <div className="logo-text">
             <div className="main">SchoMed</div>
             <div className="sub">School Medical</div>
           </div>
         </div>
         <nav className="nav-items">
-          <NavItem icon="🏠" text="Trang chủ" />
-          <NavItem icon="💊" text="Đơn thuốc" />
-          <NavItem icon="💉" text="Sổ vaccine" />
-          <NavItem icon="📋" text="Hồ sơ sức khỏe" active />
-          <NavItem icon="📄" text="Báo cáo" />
+          <NavItem icon="🏠" text="Trang chủ" link="/" currentPath={location.pathname} />
+          <NavItem icon="💊" text="Đơn thuốc" link="/medications" currentPath={location.pathname} />
+          <NavItem icon="💉" text="Sổ vaccine" link="/vaccination" currentPath={location.pathname} />
+          <NavItem icon="📋" text="Hồ sơ sức khỏe" link="/patient-search" currentPath={location.pathname} />
+          <NavItem icon="📄" text="Báo cáo" link="/report" currentPath={location.pathname} />
         </nav>
       </aside>
 
       {/* Main Content */}
       <main className="main-content">
         <div className="header">
-          <img src={student.avatarUrl} alt="Avatar" className="avatar" />
-          <div className="info">
-            <h1 className="name">{student.name}</h1>
-            <p>Lớp: {student.className} | GVCN: {student.teacher}</p>
-            <p>Chiều cao: {student.height}cm | Cân nặng: {student.weight}kg</p>
-            <p>Giới tính: {student.gender}</p>
+          <div className="header-left">
+            <img src={student.avatarUrl} alt="Avatar" className="avatar" />
+            <div className="info">
+              <h1 className="name">{student.name}</h1>
+              <p>Lớp: {student.className} | GVCN: {student.teacher}</p>
+              <p>Chiều cao: {student.height}cm | Cân nặng: {student.weight}kg</p>
+              <p>Giới tính: {student.gender}</p>
+            </div>
           </div>
           <button className="add-btn">
             <span className="plus">+</span> Thêm mới
           </button>
         </div>
 
-        <div className="tabs">
-          <Tab active>Thông tin cá nhân</Tab>
-          <Tab>Đơn thuốc</Tab>
-          <Tab>Lịch sử tiêm chủng</Tab>
-          <Tab>Hồ sơ sức khỏe</Tab>
-        </div>
-
-        <div className="personal-section">
-          <div className="personal-row">
-            <div>
-              <strong>Mẹ:</strong> {student.motherName}<br />
-              <strong>Điện thoại:</strong> {student.motherPhone}
-            </div>
-            <div>
-              <strong>Email:</strong> {student.email}
-            </div>
+        <div className="content-card">
+          <div className="tabs">
+            <Tab active>Thông tin cá nhân</Tab>
+            <Tab>Đơn thuốc</Tab>
+            <Tab>Lịch sử tiêm chủng</Tab>
+            <Tab>Hồ sơ sức khỏe</Tab>
           </div>
-          <div className="personal-row">
-            <div>
-              <strong>Ba:</strong> {student.fatherName}<br />
-              <strong>Điện thoại:</strong> {student.fatherPhone}
+
+          <div className="personal-section">
+            <div className="personal-row">
+              <div>
+                <strong>Mẹ:</strong><br />
+                <strong>Điện Thoại:</strong>
+              </div>
+              <div>
+                <strong>Email:</strong><br />
+                <strong>Địa chỉ:</strong>
+              </div>
             </div>
-            <div>
-              <strong>Địa chỉ:</strong> {student.address}
+            <div className="personal-row">
+              <div>
+                <strong>Ba:</strong><br />
+                <strong>Điện Thoại:</strong>
+              </div>
+              <div style={{ visibility: 'hidden' }}>
+                {/* Empty space to maintain layout */}
+              </div>
             </div>
           </div>
         </div>
@@ -82,12 +111,13 @@ export default function StudentProfile() {
   );
 }
 
-function NavItem({ icon, text, active }) {
+function NavItem({ icon, text, link, currentPath }) {
+  const isActive = currentPath === link;
   return (
-    <div className={`nav-item ${active ? "active" : ""}`}>
+    <Link to={link} className={`nav-item ${isActive ? "active" : ""}`}>
       <span className="icon">{icon}</span>
       <span>{text}</span>
-    </div>
+    </Link>
   );
 }
 
