@@ -1,13 +1,16 @@
 package com.school_medical.school_medical_management_system.repositories.entites;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
+@Getter
+@Setter
 @Entity
 @Table(name = "role")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) // 🆕 dòng này
 public class Role {
     @Id
     @Column(name = "role_id", nullable = false)
@@ -15,21 +18,5 @@ public class Role {
 
     @Column(name = "role_name", nullable = false, length = 50)
     private String roleName;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getRoleName() {
-        return roleName;
-    }
-
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
-    }
 
 }

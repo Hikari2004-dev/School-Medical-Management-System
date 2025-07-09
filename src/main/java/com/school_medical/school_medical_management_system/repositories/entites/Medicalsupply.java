@@ -1,11 +1,15 @@
 package com.school_medical.school_medical_management_system.repositories.entites;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
+@Getter
+@Setter
 @Entity
-@Table(name = "medicalsupplies")
+@Table(name = "medicalsupply")
 public class Medicalsupply {
     @Id
     @Column(name = "supply_id", nullable = false)
@@ -23,57 +27,5 @@ public class Medicalsupply {
 
     @Column(name = "last_checked_date")
     private LocalDate lastCheckedDate;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "incident_id")
-    private Incidentreport incident;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public LocalDate getLastCheckedDate() {
-        return lastCheckedDate;
-    }
-
-    public void setLastCheckedDate(LocalDate lastCheckedDate) {
-        this.lastCheckedDate = lastCheckedDate;
-    }
-
-    public Incidentreport getIncident() {
-        return incident;
-    }
-
-    public void setIncident(Incidentreport incident) {
-        this.incident = incident;
-    }
 
 }

@@ -1,9 +1,14 @@
 package com.school_medical.school_medical_management_system.repositories.entites;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDate;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "medicalevent")
 public class Medicalevent {
@@ -11,69 +16,30 @@ public class Medicalevent {
     @Column(name = "event_id", nullable = false)
     private Integer id;
 
-    @Column(name = "status", length = 50)
-    private String status;
+    @Column(name = "event_type", length = 50)
+    private String eventType;
+
+    @Column(name = "event_date")
+    private LocalDate eventDate;
 
     @Lob
     @Column(name = "description")
     private String description;
 
-    @Column(name = "date")
-    private LocalDate date;
-
-    @Column(name = "student_name", length = 100)
-    private String studentName;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "student_id")
+    private Student student;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "headmaster_id")
-    private Headmaster headmaster;
+    @JoinColumn(name = "nurse_id")
+    private Appuser nurse;
 
-    public Integer getId() {
-        return id;
-    }
+    @ColumnDefault("'Pending'")
+    @Column(name = "status", length = 50)
+    private String status;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public String getStudentName() {
-        return studentName;
-    }
-
-    public void setStudentName(String studentName) {
-        this.studentName = studentName;
-    }
-
-    public Headmaster getHeadmaster() {
-        return headmaster;
-    }
-
-    public void setHeadmaster(Headmaster headmaster) {
-        this.headmaster = headmaster;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "approved_by")
+    private Appuser approvedBy;
 
 }

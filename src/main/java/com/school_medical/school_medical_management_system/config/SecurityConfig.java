@@ -52,7 +52,8 @@ public class SecurityConfig {
                                 "/login",
                                 "/api/auth/**",
                                 "/api/medication/**",
-                                "/api/medical-checkups/**" // 👈 THÊM DÒNG NÀY
+                                "/api/medical-checkups/**",
+                                "/login/checkemail"// 👈 THÊM DÒNG NÀY
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
