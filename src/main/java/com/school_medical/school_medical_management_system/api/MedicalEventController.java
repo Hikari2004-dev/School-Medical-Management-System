@@ -2,7 +2,7 @@ package com.school_medical.school_medical_management_system.api;
 
 import com.school_medical.school_medical_management_system.models.ApiResponse;
 import com.school_medical.school_medical_management_system.models.ApprovalRequest;
-import com.school_medical.school_medical_management_system.models.MedicalEventDTO;
+import com.school_medical.school_medical_management_system.repositories.entites.MedicalEvent;
 import com.school_medical.school_medical_management_system.services.IMedicalEventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,10 +18,13 @@ public class MedicalEventController {
     @Autowired
     private IMedicalEventService medicalEventService;
 
+    /**
+     * Lấy danh sách tất cả sự kiện y tế
+     */
     @GetMapping
-    public ResponseEntity<ApiResponse<List<MedicalEventDTO>>> getAllMedicalEvents() {
+    public ResponseEntity<ApiResponse<List<MedicalEvent>>> getAllMedicalEvents() {
         try {
-            List<MedicalEventDTO> events = medicalEventService.getAllEvents();
+            List<MedicalEvent> events = medicalEventService.getAllEvents();
             return ResponseEntity.ok(new ApiResponse<>(true, "Lấy danh sách sự kiện thành công", events));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -29,34 +32,43 @@ public class MedicalEventController {
         }
     }
 
+    /**
+     * Tạo mới sự kiện y tế
+     */
     @PostMapping
-    public ResponseEntity<ApiResponse<MedicalEventDTO>> createMedicalEvent(@RequestBody MedicalEventDTO eventDTO) {
+    public ResponseEntity<ApiResponse<MedicalEvent>> createMedicalEvent(@RequestBody MedicalEvent event) {
         try {
-            MedicalEventDTO createdEvent = medicalEventService.createEvent(eventDTO);
+            MedicalEvent createdEvent = medicalEventService.createEvent(event);
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(new ApiResponse<>(true, "Tạo sự kiện thành công", null));
+                    .body(new ApiResponse<>(true, "Tạo sự kiện thành công", createdEvent));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse<>(false, "Tạo thất bại: " + e.getMessage(), null));
         }
     }
 
+    /**
+     * Cập nhật sự kiện y tế theo ID
+     */
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<MedicalEventDTO>> updateMedicalEvent(@PathVariable Long id, @RequestBody MedicalEventDTO eventDTO) {
+    public ResponseEntity<ApiResponse<MedicalEvent>> updateMedicalEvent(@PathVariable Long id, @RequestBody MedicalEvent event) {
         try {
-            MedicalEventDTO updatedEvent = medicalEventService.updateEvent(id, eventDTO);
-            return ResponseEntity.ok(new ApiResponse<>(true, "Cập nhật thành công", updatedEvent));
+            MedicalEvent updatedEvent = medicalEventService.updateEvent(id, event);
+            return ResponseEntity.ok(new ApiResponse<>(true, "Cập nhật sự kiện thành công", updatedEvent));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse<>(false, "Cập nhật thất bại: " + e.getMessage(), null));
         }
     }
 
+    /**
+     * Phê duyệt sự kiện y tế theo ID
+     */
     @PostMapping("/{id}/approve")
-    public ResponseEntity<ApiResponse<MedicalEventDTO>> approveMedicalEvent(@PathVariable Long id, @RequestBody ApprovalRequest approvalRequest) {
+    public ResponseEntity<ApiResponse<MedicalEvent>> approveMedicalEvent(@PathVariable Long id, @RequestBody ApprovalRequest approvalRequest) {
         try {
-            MedicalEventDTO approvedEvent = medicalEventService.approveEvent(id, approvalRequest);
-            return ResponseEntity.ok(new ApiResponse<>(true, "Phê duyệt thành công", null));
+            MedicalEvent approvedEvent = medicalEventService.approveEvent(id, approvalRequest);
+            return ResponseEntity.ok(new ApiResponse<>(true, "Phê duyệt sự kiện thành công", approvedEvent));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse<>(false, "Phê duyệt thất bại: " + e.getMessage(), null));

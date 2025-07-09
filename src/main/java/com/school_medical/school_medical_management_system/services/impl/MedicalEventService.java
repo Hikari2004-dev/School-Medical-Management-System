@@ -1,8 +1,8 @@
 package com.school_medical.school_medical_management_system.services.impl;
 
 import com.school_medical.school_medical_management_system.models.ApprovalRequest;
-import com.school_medical.school_medical_management_system.models.MedicalEventDTO;
 import com.school_medical.school_medical_management_system.repositories.IMedicalEventRepository;
+import com.school_medical.school_medical_management_system.repositories.entites.MedicalEvent;
 import com.school_medical.school_medical_management_system.services.IMedicalEventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,26 +16,26 @@ public class MedicalEventService implements IMedicalEventService {
     private IMedicalEventRepository medicalEventRepository;
 
     @Override
-    public List<MedicalEventDTO> getAllEvents() {
+    public List<MedicalEvent> getAllEvents() {
         return medicalEventRepository.getAllEvents();
     }
 
     @Override
-    public MedicalEventDTO createEvent(MedicalEventDTO eventDTO) {
+    public MedicalEvent createEvent(MedicalEvent eventDTO) {
         medicalEventRepository.createEvent(eventDTO);
         return eventDTO;
     }
 
     @Override
-    public MedicalEventDTO updateEvent(Long id, MedicalEventDTO eventDTO) {
+    public MedicalEvent updateEvent(Long id, MedicalEvent eventDTO) {
         medicalEventRepository.updateEvent(id, eventDTO);
         return eventDTO;
     }
 
     @Override
-    public MedicalEventDTO approveEvent(Long id, ApprovalRequest approvalRequest) {
+    public MedicalEvent approveEvent(Long id, ApprovalRequest approvalRequest) {
         medicalEventRepository.approveEvent(id, approvalRequest);
-        MedicalEventDTO dto = new MedicalEventDTO();
+        MedicalEvent dto = new MedicalEvent();
         dto.setEventId(id);
         dto.setApprovalStatus(approvalRequest.getApprovalStatus());
         dto.setApprovedBy(approvalRequest.getApprovedBy());

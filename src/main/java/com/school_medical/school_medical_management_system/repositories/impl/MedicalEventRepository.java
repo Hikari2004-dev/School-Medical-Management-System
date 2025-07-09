@@ -1,8 +1,8 @@
 package com.school_medical.school_medical_management_system.repositories.impl;
 
 import com.school_medical.school_medical_management_system.models.ApprovalRequest;
-import com.school_medical.school_medical_management_system.models.MedicalEventDTO;
 import com.school_medical.school_medical_management_system.repositories.IMedicalEventRepository;
+import com.school_medical.school_medical_management_system.repositories.entites.MedicalEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -16,15 +16,16 @@ public class MedicalEventRepository implements IMedicalEventRepository {
     @Autowired
     private DataSource dataSource;
 
-    public List<MedicalEventDTO> getAllEvents() {
-        List<MedicalEventDTO> events = new ArrayList<>();
+    @Override
+    public List<MedicalEvent> getAllEvents() {
+        List<MedicalEvent> events = new ArrayList<>();
         String sql = "SELECT * FROM MedicalEvent";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
-                MedicalEventDTO dto = new MedicalEventDTO();
+                MedicalEvent dto = new MedicalEvent();
                 dto.setEventId(rs.getLong("event_id"));
                 dto.setEventType(rs.getString("event_type"));
                 dto.setEventDate(rs.getDate("event_date").toLocalDate());
@@ -41,7 +42,8 @@ public class MedicalEventRepository implements IMedicalEventRepository {
         return events;
     }
 
-    public void createEvent(MedicalEventDTO event) {
+    @Override
+    public void createEvent(MedicalEvent event) {
         String sql = "INSERT INTO MedicalEvent (event_type, event_date, description, student_id, nurse_id, status) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -59,7 +61,8 @@ public class MedicalEventRepository implements IMedicalEventRepository {
         }
     }
 
-    public void updateEvent(Long id, MedicalEventDTO event) {
+    @Override
+    public void updateEvent(Long id, MedicalEvent event) {
         String sql = "UPDATE MedicalEvent SET event_type = ?, event_date = ?, description = ? WHERE event_id = ?";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -75,6 +78,7 @@ public class MedicalEventRepository implements IMedicalEventRepository {
         }
     }
 
+    @Override
     public void approveEvent(Long id, ApprovalRequest approvalRequest) {
         String sql = "UPDATE MedicalEvent SET status = ?, approved_by = ? WHERE event_id = ?";
         try (Connection connection = dataSource.getConnection();
