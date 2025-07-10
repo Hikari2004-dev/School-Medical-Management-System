@@ -27,4 +27,9 @@ public class MedicationsubmissionService implements IMedicationsubmissionService
     public Medicationsubmission findById(Integer id) {
         return repository.findById(id);
     }
+
+    @Override
+    public void approveSubmission(Integer medicationId, Long approvedBy, String approvalStatus) {
+        repository.approveSubmission(medicationId, approvedBy, approvalStatus);
+    }
 }

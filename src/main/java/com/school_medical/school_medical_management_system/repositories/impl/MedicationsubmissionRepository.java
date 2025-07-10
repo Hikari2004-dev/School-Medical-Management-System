@@ -105,5 +105,22 @@ public class MedicationsubmissionRepository implements IMedicationsubmissionRepo
         return null;
     }
 
+    @Override
+    public void approveSubmission(Integer medicationId, Long approvedBy, String approvalStatus) {
+        String sql = "UPDATE medicationsubmission SET approved_by = ?, status = ? WHERE medication_id = ?";
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setObject(1, approvedBy);
+            ps.setString(2, approvalStatus);
+            ps.setInt(3, medicationId);
+
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error approving medication submission", e);
+        }
+    }
 }
 

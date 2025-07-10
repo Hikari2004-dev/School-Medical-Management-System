@@ -1,35 +1,72 @@
 package com.school_medical.school_medical_management_system.repositories.entites;
 
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import java.util.Date;
 
-import java.time.LocalDate;
 
-@Getter
-@Setter
-@Entity
-@Table(name = "medicalcheckup")
 public class Medicalcheckup {
-    @Id
-    @Column(name = "checkup_id", nullable = false)
-    private Integer id;
-
-    @Column(name = "checkup_date")
-    private LocalDate checkupDate;
-
-    @Lob
-    @Column(name = "description")
+    private Integer checkupId;
+    private Date checkupDate;
     private String description;
-
-    @Column(name = "status", length = 50)
     private String status;
-
-    @Column(name = "need_follow_up")
     private Boolean needFollowUp;
+    private Integer studentId;
+    private Integer batchId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "student_id")
-    private Student student;
 
+    public Integer getCheckupId() {
+        return checkupId;
+    }
+
+    public void setCheckupId(Integer checkupId) {
+        this.checkupId = checkupId;
+    }
+
+    public Date getCheckupDate() {
+        return checkupDate;
+    }
+
+    public void setCheckupDate(Date checkupDate) {
+        this.checkupDate = checkupDate;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Boolean getNeedFollowUp() {
+        return needFollowUp;
+    }
+
+    public void setNeedFollowUp(Boolean needFollowUp) {
+        this.needFollowUp = needFollowUp;
+    }
+
+    public Integer getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(Integer studentId) {
+        this.studentId = studentId;
+    }
+
+    public Integer getBatchId() {
+        return batchId;
+    }
+
+    public void setBatchId(Integer batchId) {
+        this.batchId = batchId;
+    }
 }
