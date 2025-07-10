@@ -57,7 +57,7 @@ public class SecurityConfig {
                                 "/api/healthinfo/",
                                 "/api/medical-events/**",
                                 "/api/event-batches/**",
-                                "/api/vaccinations/**"
+                                "/api/vaccinations/**",
                                 "/my-children",
                                 "/api/notifications/send-batch/**",
                                 "/api/notifications/consent/**",
