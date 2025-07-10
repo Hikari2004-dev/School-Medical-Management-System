@@ -19,7 +19,7 @@ public class NotificationService implements INotificationService {
 
     @Override
     public void sendConsentNotificationsForBatch(int batchId, String content, String type, String consentType) {
-        notificationRepository.sendBatchNotifications(batchId, content, type, consentType);
+        notificationRepository.sendBatchNotifications(batchId, content, consentType);
     }
 
     @Override

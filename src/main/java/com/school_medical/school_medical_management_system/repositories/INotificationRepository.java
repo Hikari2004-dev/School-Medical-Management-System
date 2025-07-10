@@ -6,7 +6,7 @@ import com.school_medical.school_medical_management_system.repositories.entites.
 import java.util.List;
 
 public interface INotificationRepository {
-    void sendBatchNotifications(int batchId, String content, String type, String consentType);
+    void sendBatchNotifications(int batchId, String content, String consentType);
     void updateConsentStatus(Long notificationId, Boolean consentStatus);
     List<Notification> getNotificationsByParentId(Integer parentUserId);
 }

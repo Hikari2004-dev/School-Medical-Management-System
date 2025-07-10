@@ -1,5 +1,6 @@
 package com.school_medical.school_medical_management_system.repositories.impl;
 
+import com.school_medical.school_medical_management_system.repositories.IEventBatchRepository;
 import com.school_medical.school_medical_management_system.repositories.INotificationRepository;
 import com.school_medical.school_medical_management_system.repositories.entites.Notification;
 import com.school_medical.school_medical_management_system.repositories.entites.StudentParent;
@@ -18,8 +19,11 @@ public class NotificationRepository implements INotificationRepository {
     @Autowired
     private DataSource dataSource;
 
+    @Autowired
+    private IEventBatchRepository eventBatchRepository;
+
     @Override
-    public void sendBatchNotifications(int batchId, String content, String type, String consentType) {
+    public void sendBatchNotifications(int batchId, String content,String consentType) {
         String sql = "INSERT INTO Notification (\n" +
                 "    content,\n" +
                 "    student_id,\n" +
@@ -44,7 +48,7 @@ public class NotificationRepository implements INotificationRepository {
                 ")\n";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
+            String type = eventBatchRepository.getBatchById(batchId).getBatchType();
             stmt.setString(1, content);        // content
             stmt.setString(2, type);           // type
             stmt.setString(3, consentType);    // consent_type
