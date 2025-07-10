@@ -1,8 +1,10 @@
 package com.school_medical.school_medical_management_system.api;
 
 import com.school_medical.school_medical_management_system.config.JwtUtil;
+import com.school_medical.school_medical_management_system.repositories.entites.StudentParent;
 import com.school_medical.school_medical_management_system.services.CustomUserDetailsService;
 import com.school_medical.school_medical_management_system.services.IAppUserService;
+import com.school_medical.school_medical_management_system.services.IStudentParentService;
 import com.school_medical.school_medical_management_system.utils.AuthUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,6 +16,8 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class AuthController {
@@ -49,6 +53,18 @@ public class AuthController {
     @GetMapping(value = "/login/checkemail")
     public ResponseEntity<?> checkCurrentEmail() {
         return ResponseEntity.ok(appUserService.getUserByEmail().getId());
+    }
+
+    @Autowired
+    private IStudentParentService studentParentService;
+
+    @GetMapping("/my-children")
+    public ResponseEntity<List<StudentParent>> getMyChildren() {
+        List<StudentParent> list = studentParentService.getStudentsByParentId(); // ID sẽ được lấy trong service
+        if (list.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(list);
     }
 }
 

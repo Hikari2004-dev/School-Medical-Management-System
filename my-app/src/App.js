@@ -12,6 +12,12 @@ import Vaccination from './pages/lookup/vaccinehistory/vaccination';
 import StudentHealthProfile from './pages/lookup/info/StudentHealthProfile';
 import ReportPage from './pages/lookup/ReportPage/ReportPage';
 import ChatBot from './components/chat/ChatBot';
+import Login from './auth/Login/Login';
+import Register from './auth/Register/Register';
+import ForgetPassword from "./auth/ForgetPassword/ForgetPassword";
+import OtpVerification from './auth/OtpVerification/OtpVerification';
+import OtpSuccess from './auth/OtpSuccess/OtpSuccess';
+import ResetPassword from './auth/ResetPassword/ResetPassword';
 
 function App() {
   return (
@@ -29,6 +35,12 @@ function App() {
           <Route path="/vaccination" element={<Vaccination />} />
           <Route path="/student-health" element={<StudentHealthProfile />} />
           <Route path="/report" element={<ReportPage />} />
+          <Route path="/login" element={<Login />} /> 
+          <Route path="/register" element={<Register />} />
+          <Route path="/forget-password" element={<ForgetPassword />} />
+          <Route path="/otp-verification" element={<OtpVerification />} />
+          <Route path="/otp-success" element={<OtpSuccess />} />
+          <Route path="/reset-password" element={<ResetPassword/>} />
         </Routes>
         <ChatBot />
       </div>

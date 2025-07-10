@@ -54,9 +54,17 @@ public class SecurityConfig {
                                 "/api/medication-submissions/**",
                                 "/api/medical-checkups/**",
                                 "/login/checkemail",
-                                "/api/healthinfo/",
+                                "/api/healthinfo/**",  // ✅ sửa từ "/" thành "/**" để khớp cả /{id}
                                 "/api/medical-events/**",
-                                "/api/event-batches/**"
+                                "/api/event-batches/**",
+                                "/api/vaccinations/**",
+                                "/my-children",
+                                "/api/notifications/send-batch/**",
+                                "/api/notifications/consent/**",
+                                "/api/notifications/parent",
+                                "/api/event-supplies/**",
+                                "/api/medicalsupply/**",
+                                "/api/appointments/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

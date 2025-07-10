@@ -2,17 +2,18 @@ package com.school_medical.school_medical_management_system.repositories.impl;
 
 import com.school_medical.school_medical_management_system.repositories.IHealthInfoRepository;
 import com.school_medical.school_medical_management_system.repositories.entites.Healthinfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 @Repository
 public class HealthInfoRepository implements IHealthInfoRepository {
+
+    private static final Logger logger = LoggerFactory.getLogger(HealthInfoRepository.class);
 
     @Autowired
     private DataSource dataSource;
@@ -42,16 +43,18 @@ public class HealthInfoRepository implements IHealthInfoRepository {
                 return null;
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.error("Lỗi khi tìm HealthInfo theo student_id {}: {}", studentId, e.getMessage(), e);
+            throw new RuntimeException("Lỗi khi tìm HealthInfo theo student_id", e);
         }
     }
 
     @Override
-    public void saveOrUpdate(Healthinfo info) {
+    public void saveOrUpdate(int studentId, Healthinfo info) {
         String checkSql = "SELECT COUNT(*) FROM HealthInfo WHERE student_id = ?";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement checkStmt = conn.prepareStatement(checkSql)) {
-            checkStmt.setInt(1, info.getStudentId());
+
+            checkStmt.setInt(1, studentId);
             ResultSet rs = checkStmt.executeQuery();
             rs.next();
 
@@ -66,8 +69,9 @@ public class HealthInfoRepository implements IHealthInfoRepository {
                     stmt.setFloat(6, info.getHeight());
                     stmt.setFloat(7, info.getWeight());
                     stmt.setFloat(8, info.getBmi());
-                    stmt.setInt(9, info.getStudentId());
+                    stmt.setInt(9, studentId);
                     stmt.executeUpdate();
+                    logger.info("Cập nhật HealthInfo thành công cho student_id {}", studentId);
                 }
             } else {
                 String insertSql = "INSERT INTO HealthInfo (allergy, chronic_disease, vision, hearing, medical_history, height, weight, bmi, student_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -80,12 +84,15 @@ public class HealthInfoRepository implements IHealthInfoRepository {
                     stmt.setFloat(6, info.getHeight());
                     stmt.setFloat(7, info.getWeight());
                     stmt.setFloat(8, info.getBmi());
-                    stmt.setInt(9, info.getStudentId());
+                    stmt.setInt(9, studentId);
                     stmt.executeUpdate();
+                    logger.info("Thêm mới HealthInfo thành công cho student_id {}", studentId);
                 }
             }
+
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.error("Lỗi khi lưu hoặc cập nhật HealthInfo cho student_id {}: {}", studentId, e.getMessage(), e);
+            throw new RuntimeException("Lỗi khi lưu/cập nhật HealthInfo", e);
         }
     }
 }

@@ -1,41 +1,80 @@
 package com.school_medical.school_medical_management_system.repositories.entites;
 
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
+import java.sql.Timestamp;
 
-import java.time.Instant;
-
-@Getter
-@Setter
-@Entity
-@Table(name = "notification")
 public class Notification {
-    @Id
-    @Column(name = "notification_id", nullable = false)
-    private Integer id;
-
-    @Lob
-    @Column(name = "content")
+    private Long notificationId;
     private String content;
-
-    @ColumnDefault("CURRENT_TIMESTAMP")
-    @Column(name = "date_sent")
-    private Instant dateSent;
-
-    @Column(name = "confirmed")
+    private Timestamp dateSent;
     private Boolean confirmed;
-
-    @Column(name = "type", length = 50)
     private String type;
+    private Long studentId;
+    private Long parentUserId;
+    private Boolean consentStatus;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "student_id")
-    private Student student;
+    // Getters and Setters
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_user_id")
-    private Appuser parentUser;
+    public Long getNotificationId() {
+        return notificationId;
+    }
 
+    public void setNotificationId(Long notificationId) {
+        this.notificationId = notificationId;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public Timestamp getDateSent() {
+        return dateSent;
+    }
+
+    public void setDateSent(Timestamp dateSent) {
+        this.dateSent = dateSent;
+    }
+
+    public Boolean getConfirmed() {
+        return confirmed;
+    }
+
+    public void setConfirmed(Boolean confirmed) {
+        this.confirmed = confirmed;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Long getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(Long studentId) {
+        this.studentId = studentId;
+    }
+
+    public Long getParentUserId() {
+        return parentUserId;
+    }
+
+    public void setParentUserId(Long parentUserId) {
+        this.parentUserId = parentUserId;
+    }
+
+    public Boolean getConsentStatus() {
+        return consentStatus;
+    }
+
+    public void setConsentStatus(Boolean consentStatus) {
+        this.consentStatus = consentStatus;
+    }
 }

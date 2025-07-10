@@ -32,15 +32,13 @@ public class HealthInfoController {
     }
 
     // POST - Lưu/Sửa hồ sơ
-    @PostMapping("/save")
-    public ResponseEntity<ApiResponse<String>> saveHealthInfo(@RequestBody Healthinfo healthInfo) {
+    @PutMapping("/save/{studentId}")
+    public ResponseEntity<?> updateHealthInfo(@PathVariable int studentId, @RequestBody Healthinfo info) {
         try {
-            service.saveOrUpdateHealthInfo(healthInfo);
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(new ApiResponse<>(true, "Lưu hồ sơ thành công", null));
+            service.saveOrUpdate(studentId, info);
+            return ResponseEntity.ok("Cập nhật thành công");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new ApiResponse<>(false, "Lưu thất bại: " + e.getMessage(), null));
+            return ResponseEntity.status(500).body("Lỗi: " + e.getMessage());
         }
     }
 }

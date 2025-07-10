@@ -1,0 +1,158 @@
+/* Tổng thể nền đăng ký */
+.registerPage {
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+/* Container form */
+.registerContainer {
+  width: 100%;
+  max-width: 350px;
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  padding: 2rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Logo và tiêu đề */
+.logoSection {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.logoImage {
+  width: 80px;
+  height: 64px;
+  margin: 0 auto;
+}
+
+.heading {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 0.75rem;
+  color: #333;
+}
+
+/* Form chính */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Label */
+.label {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 0.25rem;
+}
+
+/* Input */
+.inputCustom {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 1rem;
+  background-color: #f5f7ff;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.15);
+  transition: box-shadow 0.2s ease;
+}
+
+.inputCustom::placeholder {
+  color: #bbb;
+}
+
+.inputCustom:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(63, 0, 255, 0.3);
+}
+
+/* Nút Submit */
+.btnSubmit {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: #3f00ff;
+  color: white;
+  border: none;
+  border-radius: 9999px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 4px 12px rgba(63, 0, 255, 0.4);
+}
+
+.btnSubmit:hover {
+  background-color: #2e00c6;
+  transform: translateY(-1px);
+}
+
+/* OR separator */
+.dividerRow {
+  display: flex;
+  align-items: center;
+}
+
+.dividerLine {
+  flex-grow: 1;
+  border: none;
+  border-top: 1px solid #ccc;
+}
+
+.dividerText {
+  margin: 0 0.5rem;
+  font-size: 0.875rem;
+  color: #666;
+}
+
+/* Google button */
+.btnGoogle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: white;
+  border: none;
+  padding: 0.75rem 1rem;
+  border-radius: 9999px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.2s ease;
+}
+
+.btnGoogle:hover {
+  background-color: #f3f4f6;
+}
+
+/* Icon Google */
+.googleIcon {
+  width: 20px;
+  height: 20px;
+}
+
+/* Link điều hướng */
+.footerLink {
+  text-align: center;
+  margin-top: 0.5rem; /* ✅ Thu gọn lại */
+}
+
+.linkText {
+  color: #3f00ff;
+  font-weight: 500;
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.linkText:hover {
+  text-decoration: underline;
+}
