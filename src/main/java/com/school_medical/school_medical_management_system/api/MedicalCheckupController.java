@@ -1,5 +1,6 @@
 package com.school_medical.school_medical_management_system.api;
 
+import com.school_medical.school_medical_management_system.models.ApprovalRequest;
 import com.school_medical.school_medical_management_system.models.MedicalCheckupRequest;
 import com.school_medical.school_medical_management_system.repositories.entites.Medicalcheckup;
 import com.school_medical.school_medical_management_system.services.IMedicalCheckupService;
@@ -40,4 +41,10 @@ public class MedicalCheckupController {
         return ResponseEntity.ok("Medical Checkup created successfully.");
     }
 
+    @PutMapping("/{id}/approve")
+    public ResponseEntity<String> approveCheckup(@PathVariable Integer id,
+                                                 @RequestBody ApprovalRequest request) {
+        medicalCheckupService.approveCheckup(id, request.getApprovalStatus());
+        return ResponseEntity.ok("Medical checkup status updated successfully");
+    }
 }

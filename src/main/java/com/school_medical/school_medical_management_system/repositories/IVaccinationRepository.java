@@ -7,4 +7,5 @@ public interface IVaccinationRepository {
     Vaccination findById(Integer vaccinationId);
     List<Vaccination> findAll();
     void create(Vaccination vaccination);
+    void approveVaccination(Integer vaccinationId, String approvalStatus);
 }

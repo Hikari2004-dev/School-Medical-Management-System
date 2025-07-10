@@ -1,5 +1,6 @@
 package com.school_medical.school_medical_management_system.api;
 
+import com.school_medical.school_medical_management_system.models.ApprovalRequest;
 import com.school_medical.school_medical_management_system.repositories.entites.Medicationsubmission;
 import com.school_medical.school_medical_management_system.services.impl.MedicationsubmissionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,5 +39,12 @@ public class MedicationsubmissionController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @PutMapping("/{id}/approve")
+    public ResponseEntity<String> approveSubmission(@PathVariable Integer id,
+                                                    @RequestBody ApprovalRequest request) {
+        service.approveSubmission(id, request.getApprovedBy(), request.getApprovalStatus());
+        return ResponseEntity.ok("Submission approved successfully");
     }
 }

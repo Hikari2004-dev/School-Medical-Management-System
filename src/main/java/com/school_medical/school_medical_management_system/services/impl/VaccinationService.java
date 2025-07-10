@@ -41,5 +41,8 @@ public class VaccinationService implements IVaccinationService {
         vaccinationRepository.create(vaccination);
     }
 
-
+    @Override
+    public void approveVaccination(Integer vaccinationId, String approvalStatus) {
+        vaccinationRepository.approveVaccination(vaccinationId, approvalStatus);
+    }
 }

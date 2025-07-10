@@ -8,4 +8,5 @@ public interface IVaccinationService {
     Vaccination getVaccinationById(Integer id);
     List<Vaccination> getAllVaccinations();
     void createVaccination(VaccinationRequest request);
+    void approveVaccination(Integer vaccinationId, String approvalStatus);
 }

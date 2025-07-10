@@ -61,7 +61,10 @@ public class SecurityConfig {
                                 "/my-children",
                                 "/api/notifications/send-batch/**",
                                 "/api/notifications/consent/**",
-                                "/api/notifications/parent"
+                                "/api/notifications/parent",
+                                "/api/event-supplies/**",
+                                "/api/medicalsupply/**",
+                                "/api/appointments/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

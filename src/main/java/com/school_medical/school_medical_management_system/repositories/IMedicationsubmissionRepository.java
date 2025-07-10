@@ -8,4 +8,5 @@ public interface IMedicationsubmissionRepository {
     void save(Medicationsubmission submission);
     List<Medicationsubmission> findByParentId(Integer parentId);
     Medicationsubmission findById(Integer id);
+    void approveSubmission(Integer medicationId, Long approvedBy, String approvalStatus);
 }

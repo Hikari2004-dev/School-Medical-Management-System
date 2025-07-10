@@ -1,5 +1,6 @@
 package com.school_medical.school_medical_management_system.api;
 
+import com.school_medical.school_medical_management_system.models.ApprovalRequest;
 import com.school_medical.school_medical_management_system.models.VaccinationRequest;
 import com.school_medical.school_medical_management_system.repositories.entites.Vaccination;
 import com.school_medical.school_medical_management_system.services.IVaccinationService;
@@ -35,5 +36,12 @@ public class VaccinationController {
     public ResponseEntity<?> createVaccination(@RequestBody VaccinationRequest request) {
         vaccinationService.createVaccination(request);
         return ResponseEntity.ok("Vaccination created successfully.");
+    }
+
+    @PutMapping("/{id}/approve")
+    public ResponseEntity<String> approveVaccination(@PathVariable Integer id,
+                                                     @RequestBody ApprovalRequest request) {
+        vaccinationService.approveVaccination(id, request.getApprovalStatus());
+        return ResponseEntity.ok("Vaccination status updated successfully");
     }
 }

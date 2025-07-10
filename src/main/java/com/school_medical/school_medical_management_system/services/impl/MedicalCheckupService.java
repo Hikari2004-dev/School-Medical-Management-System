@@ -38,4 +38,9 @@ public class MedicalCheckupService implements IMedicalCheckupService {
         medicalCheckupRepository.create(checkup);
     }
 
+    @Override
+    public void approveCheckup(Integer checkupId, String approvalStatus) {
+        medicalCheckupRepository.approveCheckup(checkupId, approvalStatus);
+    }
+
 }
