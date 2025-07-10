@@ -4,5 +4,5 @@ import com.school_medical.school_medical_management_system.repositories.entites.
 
 public interface IHealthInfoService {
     public Healthinfo getHealthInfoByStudentId(int studentId);
-    public void saveOrUpdateHealthInfo(Healthinfo info);
+    public void saveOrUpdate(int studentId, Healthinfo info);
 }

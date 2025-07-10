@@ -2,11 +2,12 @@ package com.school_medical.school_medical_management_system.services.impl;
 
 import com.school_medical.school_medical_management_system.repositories.entites.Healthinfo;
 import com.school_medical.school_medical_management_system.repositories.impl.HealthInfoRepository;
+import com.school_medical.school_medical_management_system.services.IHealthInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class HealthInfoService {
+public class HealthInfoService implements IHealthInfoService {
 
     @Autowired
     private HealthInfoRepository repository;
@@ -20,11 +21,8 @@ public class HealthInfoService {
         }
     }
 
-    public void saveOrUpdateHealthInfo(Healthinfo info) {
-        try {
-            repository.saveOrUpdate(info);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    @Override
+    public void saveOrUpdate(int studentId, Healthinfo info) {
+        repository.saveOrUpdate(studentId, info);
     }
 }

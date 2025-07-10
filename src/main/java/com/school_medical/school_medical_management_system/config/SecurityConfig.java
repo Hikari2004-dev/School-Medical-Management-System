@@ -54,7 +54,7 @@ public class SecurityConfig {
                                 "/api/medication-submissions/**",
                                 "/api/medical-checkups/**",
                                 "/login/checkemail",
-                                "/api/healthinfo/",
+                                "/api/healthinfo/**",  // ✅ sửa từ "/" thành "/**" để khớp cả /{id}
                                 "/api/medical-events/**",
                                 "/api/event-batches/**",
                                 "/api/vaccinations/**",
