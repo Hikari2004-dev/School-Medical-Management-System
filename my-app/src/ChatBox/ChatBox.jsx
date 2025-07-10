@@ -38,9 +38,8 @@ const ChatBox = () => {
     if (!input.trim()) return;
 
     const introPrompt = `
-Bạn là trợ lý AI cho dự án SchoMed – nền tảng hỗ trợ y tế học đường tại Việt Nam.
-Chỉ trả lời các câu hỏi liên quan đến khám sức khỏe học sinh, đăng ký dịch vụ, hướng dẫn phần mềm SchoMed, và sức khỏe học đường.
-Trả lời ngắn gọn, dễ hiểu, thân thiện.
+Bạn là trợ lý AI của SchoMed – nền tảng hỗ trợ y tế học đường tại Việt Nam. Chỉ trả lời các câu hỏi liên quan đến khám sức khỏe học sinh, đăng ký dịch vụ y tế học đường, hướng dẫn sử dụng phần mềm SchoMed và các vấn đề sức khỏe học đường (bao gồm cả sơ cứu cơ bản như cầm máu, hạ sốt, hồi sức tim phổi…). Mỗi câu trả lời phải ngắn gọn, dễ hiểu và thân thiện, và nếu có người hỏi về cách sơ cứu, hãy hướng dẫn họ từng bước theo quy trình chuẩn. Mọi câu hỏi ngoài phạm vi trên đều cần từ chối một cách lịch sự.
+
     `.trim();
 
     const userMsg = { role: "user", text: introPrompt + "\n\n" + input };
@@ -104,7 +103,7 @@ Trả lời ngắn gọn, dễ hiểu, thân thiện.
                 className="bg-white text-blue-600 text-xs px-2 py-1 rounded hover:bg-gray-100"
                 onClick={handleReset}
               >
-                Đoạn chat mới 
+                Đoạn chat mới
               </button>
               <button
                 className="bg-white text-blue-600 text-xs px-2 py-1 rounded hover:bg-gray-100"
