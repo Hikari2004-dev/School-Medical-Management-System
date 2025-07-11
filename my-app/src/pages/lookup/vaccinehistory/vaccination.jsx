@@ -80,7 +80,6 @@ const Vaccination = () => {
           <button onClick={() => navigate("/medications")} className={location.pathname === "/medications" ? "active" : ""}>💊 Đơn thuốc</button>
           <button onClick={() => navigate("/vaccinations")} className={location.pathname === "/vaccinations" ? "active" : ""}>💉 Sổ vaccine</button>
           <button onClick={() => navigate("/health-record")} className={location.pathname === "/health-record" ? "active" : ""}>📁 Hồ sơ sức khỏe</button>
-          <button onClick={() => navigate("/reports")} className={location.pathname === "/reports" ? "active" : ""}>📊 Báo cáo</button>
         </nav>
       </aside>
 

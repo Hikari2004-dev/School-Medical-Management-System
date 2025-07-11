@@ -10,7 +10,6 @@ import StudentProfile from './pages/lookup/personal_Info/StudentProfile';
 import Medications from './pages/lookup/prescription/Medications.jsx';
 import Vaccination from './pages/lookup/vaccinehistory/vaccination.jsx';
 import StudentHealthProfile from './pages/lookup/info/StudentHealthProfile';
-import ReportPage from './pages/lookup/ReportPage/ReportPage';
 import ChatBot from './components/chat/ChatBot';
 import Login from './auth/Login/Login';
 import Register from './auth/Register/Register';
@@ -35,7 +34,6 @@ function App() {
           <Route path="/medications" element={<Medications />} />
           <Route path="/vaccinations" element={<Vaccination />} />
           <Route path="/health-record" element={<StudentHealthProfile />} />
-          <Route path="/report" element={<ReportPage />} />
           <Route path="/login" element={<Login />} /> 
           <Route path="/register" element={<Register />} />
           <Route path="/forget-password" element={<ForgetPassword />} />
