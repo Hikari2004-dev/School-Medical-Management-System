@@ -1,79 +1,83 @@
-// File: StudentProfile.jsx
-import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import axios from "axios";
-import "./StudentProfile.css"; // CSS file for custom styles
+import React, { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import "./StudentProfile.css";
+import AvatarImg from "../../../image/hinhanh/avatar.png";
+import LogoImg from "../../../image/hinhanh/logoproject.png";
 
-export default function StudentProfile() {
-  const [student, setStudent] = useState(null);
+const StudentProfile = () => {
+  const navigate = useNavigate();
   const location = useLocation();
 
-  useEffect(() => {
-    // Mock data for demonstration - replace with actual API call later
-    const mockStudent = {
-      name: "Nguyễn Đoàn Duy Khánh",
-      className: "12A1",
-      teacher: "Lâm Phương Thúy",
-      height: 170,
-      weight: 60,
-      gender: "Nam/Nữ",
-      avatarUrl: "/logo192.png", // Using default logo as avatar
-      motherName: "",
-      motherPhone: "",
-      email: "",
-      fatherName: "",
-      fatherPhone: "",
-      address: ""
-    };
+  const tabRoutes = {
+    "/patient-search": "Thông tin cá nhân",
+    "/medications": "Đơn thuốc",
+    "/vaccinations": "Lịch sử tiêm chủng",
+    "/health-record": "Hồ sơ sức khỏe",
+  };
 
-    // Simulate API delay
-    setTimeout(() => {
-      setStudent(mockStudent);
-    }, 500);
+  const activeTab = tabRoutes[location.pathname] || "Thông tin cá nhân";
 
-    // Original API call (commented out for now)
-    // axios.get("/api/student-profile/12A1")
-    //   .then(res => setStudent(res.data))
-    //   .catch(err => console.error("API error:", err));
-  }, []);
+  const handleTabClick = (label) => {
+    const path = Object.keys(tabRoutes).find((key) => tabRoutes[key] === label);
+    if (path && location.pathname !== path) {
+      navigate(path, { state: { from: location.pathname } });
+    }
+  };
 
-  if (!student) return <div className="loading">Loading...</div>;
+  const [isEditing, setIsEditing] = useState(false);
+
+  const [profile, setProfile] = useState({
+    mother: "Trần Thị Hoa",
+    motherPhone: "0909 123 456",
+    father: "Nguyễn Văn B",
+    fatherPhone: "0908 654 321",
+    email: "duy.khanh@example.com",
+    address: "123 Nguyễn Văn Cừ, Quận 5, TP.HCM",
+  });
+
+  const handleChange = (field, value) => {
+    setProfile({ ...profile, [field]: value });
+  };
+
+  const handleEditToggle = () => setIsEditing(!isEditing);
 
   return (
-    <div className="student-profile-container">
-      {/* Sidebar */}
+    <div className="student-profile-page">
       <aside className="sidebar">
-        <div className="logo-section">
-          <img src="/logo192.png" alt="logo" className="logo-img" />
-          <div className="logo-text">
-            <div className="main">SchoMed</div>
-            <div className="sub">School Medical</div>
+        <div className="brand-box">
+          <img src={LogoImg} alt="Logo" className="brand-icon" />
+          <div className="brand-text">
+            <h1>SchoMed</h1>
+            <p>School Medical</p>
           </div>
         </div>
-        <nav className="nav-items">
-          <NavItem icon="🏠" text="Trang chủ" link="/" currentPath={location.pathname} />
-          <NavItem icon="💊" text="Đơn thuốc" link="/medications" currentPath={location.pathname} />
-          <NavItem icon="💉" text="Sổ vaccine" link="/vaccination" currentPath={location.pathname} />
-          <NavItem icon="📋" text="Hồ sơ sức khỏe" link="/patient-search" currentPath={location.pathname} />
-          <NavItem icon="📄" text="Báo cáo" link="/report" currentPath={location.pathname} />
+
+        <nav className="sidebar-nav">
+          <button onClick={() => navigate("/patient-search")} className={location.pathname === "/patient-search" ? "active" : ""}>🏠 Trang chủ</button>
+          <button onClick={() => navigate("/medications")} className={location.pathname === "/medications" ? "active" : ""}>💊 Đơn thuốc</button>
+          <button onClick={() => navigate("/vaccinations")} className={location.pathname === "/vaccinations" ? "active" : ""}>💉 Sổ vaccine</button>
+          <button onClick={() => navigate("/health-record")} className={location.pathname === "/health-record" ? "active" : ""}>📁 Hồ sơ sức khỏe</button>
         </nav>
       </aside>
 
       {/* Main Content */}
       <main className="main-content">
-        <div className="content-card">
-          <div className="header">
-            <div className="header-left">
-              <img src={student.avatarUrl} alt="Avatar" className="avatar" />
-              <div className="info">
-                <h1 className="name">{student.name}</h1>
-                <p>Lớp: {student.className} | GVCN: {student.teacher}</p>
-                <p>Chiều cao: {student.height}cm | Cân nặng: {student.weight}kg</p>
-                <p>Giới tính: {student.gender}</p>
-              </div>
+        <div className="header">
+          <div className="header-left">
+            <img src={student.avatarUrl} alt="Avatar" className="avatar" />
+            <div className="info">
+              <h1 className="name">{student.name}</h1>
+              <p>Lớp: {student.className} | GVCN: {student.teacher}</p>
+              <p>Chiều cao: {student.height}cm | Cân nặng: {student.weight}kg</p>
+              <p>Giới tính: {student.gender}</p>
             </div>
           </div>
+          <button className="add-btn">
+            <span className="plus">+</span> Thêm mới
+          </button>
+        </div>
 
+        <div className="content-card">
           <div className="tabs">
             <Tab active>Thông tin cá nhân</Tab>
             <Tab>Đơn thuốc</Tab>
@@ -82,34 +86,23 @@ export default function StudentProfile() {
           </div>
 
           <div className="personal-section">
-            <div className="personal-container">
-              <div className="personal-left">
-                <div className="personal-item">
-                  <strong>Mẹ:</strong>
-                  <span>{student.motherName || ""}</span>
-                </div>
-                <div className="personal-item">
-                  <strong>Điện Thoại:</strong>
-                  <span>{student.motherPhone || ""}</span>
-                </div>
-                <div className="personal-item">
-                  <strong>Ba:</strong>
-                  <span>{student.fatherName || ""}</span>
-                </div>
-                <div className="personal-item">
-                  <strong>Điện Thoại:</strong>
-                  <span>{student.fatherPhone || ""}</span>
-                </div>
+            <div className="personal-row">
+              <div>
+                <strong>Mẹ:</strong><br />
+                <strong>Điện Thoại:</strong>
               </div>
-              <div className="personal-right">
-                <div className="personal-item">
-                  <strong>Email:</strong>
-                  <span>{student.email || ""}</span>
-                </div>
-                <div className="personal-item">
-                  <strong>Địa chỉ:</strong>
-                  <span>{student.address || ""}</span>
-                </div>
+              <div>
+                <strong>Email:</strong><br />
+                <strong>Địa chỉ:</strong>
+              </div>
+            </div>
+            <div className="personal-row">
+              <div>
+                <strong>Ba:</strong><br />
+                <strong>Điện Thoại:</strong>
+              </div>
+              <div style={{ visibility: 'hidden' }}>
+                {/* Empty space to maintain layout */}
               </div>
             </div>
           </div>
@@ -117,22 +110,6 @@ export default function StudentProfile() {
       </main>
     </div>
   );
-}
+};
 
-function NavItem({ icon, text, link, currentPath }) {
-  const isActive = currentPath === link;
-  return (
-    <Link to={link} className={`nav-item ${isActive ? "active" : ""}`}>
-      <span className="icon">{icon}</span>
-      <span>{text}</span>
-    </Link>
-  );
-}
-
-function Tab({ children, active }) {
-  return (
-    <div className={`tab ${active ? "active-tab" : ""}`}>
-      {children}
-    </div>
-  );
-}
+export default StudentProfile;

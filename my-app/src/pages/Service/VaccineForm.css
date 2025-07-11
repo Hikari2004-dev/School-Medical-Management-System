@@ -1,0 +1,211 @@
+/* src/pages/Service/VaccineForm.css */
+
+/* Page background & layout */
+.vaccine-page {
+  background: #667eea;
+  padding: 2rem 1rem 4rem;
+  min-height: 100vh;
+  color: #2d3748;
+}
+
+/* Breadcrumb */
+.vaccine-breadcrumb {
+  display: flex;
+  align-items: center;
+  font-size: 0.875rem;
+  color: #e2e8f0;
+  margin-bottom: 1rem;
+}
+.breadcrumb-link {
+  color: #e2e8f0;
+  text-decoration: none;
+  transition: color .2s;
+}
+.breadcrumb-link:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+.breadcrumb-sep {
+  margin: 0 0.5rem;
+  color: #a3bffa;
+}
+.breadcrumb-current {
+  color: #fff;
+  font-weight: 600;
+}
+
+/* Titles */
+.vaccine-main-title {
+  color: #fff;
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+.vaccine-subtitle {
+  color: #e2e8f0;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1rem;
+}
+
+/* Main content: form + cards */
+.vaccine-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+@media (min-width: 1024px) {
+  .vaccine-content {
+    flex-direction: row;
+    align-items: stretch;
+  }
+}
+
+/* Form wrapper */
+.vaccine-form-wrapper {
+  background: #fff;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+  width: 100%;
+  flex: 1;
+  max-width: 600px;
+}
+.vaccine-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.vaccine-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+@media (min-width: 640px) {
+  .vaccine-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.vaccine-field {
+  display: flex;
+  flex-direction: column;
+}
+.vaccine-field.full-width {
+  grid-column: 1 / -1;
+}
+.vaccine-field label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+.required {
+  color: #e53e3e;
+}
+.vaccine-field input,
+.vaccine-field select,
+.vaccine-field textarea {
+  padding: 0.75rem 1rem;
+  border: 1px solid #cbd5e0;
+  border-radius: 0.75rem;
+  font-size: 1rem;
+  transition: border-color .2s, box-shadow .2s;
+}
+.vaccine-field input:focus,
+.vaccine-field select:focus,
+.vaccine-field textarea:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102,126,234,0.3);
+}
+.vaccine-submit {
+  background: linear-gradient(90deg, #d53f8c, #ed64a6);
+  color: #fff;
+  padding: 0.75rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: opacity .2s, transform .1s;
+  width: 100%;
+}
+.vaccine-submit:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+.vaccine-submit:active {
+  opacity: 0.8;
+  transform: translateY(0);
+}
+
+/* Cards wrapper */
+.vaccine-cards-wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+@media (min-width: 640px) {
+  .vaccine-cards-wrapper {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 1024px) {
+  .vaccine-cards-wrapper {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    grid-template-rows: repeat(2,1fr);
+    gap: 1.5rem;
+  }
+}
+
+/* Single card */
+.vaccine-card-small {
+  background: #fff;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-family: "Inter", sans-serif;
+}
+.card-title {
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: #2d3748;
+  margin-bottom: 0.75rem;
+  line-height: 1.3;
+}
+.card-subtitle {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #4a5568;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
+.card-details {
+  font-size: 0.875rem;
+  color: #2d3748;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  padding-left: 1rem;
+  list-style: none;
+}
+.card-details li {
+  margin-bottom: 0.5rem;
+  position: relative;
+}
+.card-details li::before {
+  content: "•";
+  position: absolute;
+  left: -0.75rem;
+  color: #667eea;
+}
+.card-price {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #e53e3e;
+  text-align: center;
+}

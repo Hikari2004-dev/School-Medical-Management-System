@@ -7,4 +7,6 @@ public interface IMedicalCheckupRepository {
     Medicalcheckup findById(Integer checkupId);
     List<Medicalcheckup> findAll();
     void create(Medicalcheckup checkup);
+    void approveCheckup(Integer checkupId, String approvalStatus);
+
 }

@@ -3,10 +3,11 @@ import React, { useState, useEffect } from 'react';
 import './HomePage.css';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
+import ChatBox from '../../components/chat/ChatBot';
 import { useNavigate } from 'react-router-dom';
 import { newsData } from '../../data/newsData';
 
-// Three Cards Section Component
+// ThreeCardsSection component
 function ThreeCardsSection() {
   const barColors = ['#34D399', '#2563EB', '#D946EF'];
 
@@ -24,57 +25,36 @@ function ThreeCardsSection() {
   );
 }
 
-// NewsSection Component
+// NewsSection component
 function NewsSection() {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Simulate loading news data
     setTimeout(() => {
       setNews(newsData);
       setLoading(false);
     }, 1000);
-
-    // Try to fetch from API
     fetchNewsFromAPI();
   }, []);
 
   const fetchNewsFromAPI = async () => {
     try {
-      let response = await fetch('http://localhost:5000/api/news/full?limit=5');
+      let response = await fetch('http://localhost:5000/api/news/full?limit=6');
       if (!response.ok) {
         response = await fetch('http://localhost:5000/api/news?limit=5');
       }
       if (response.ok) {
         const data = await response.json();
         if (data.success && data.data) {
-          const apiNews = data.data.slice(0, 5);
+          const apiNews = data.data.slice(0, 6);
           setNews(apiNews);
         }
       }
     } catch (error) {
       console.log('API not available, using mock data');
     }
-  };
-
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('vi-VN');
-  };
-
-  const getCategoryColor = (category) => {
-    const colors = {
-      'Sức khỏe': '#10b981',
-      'Dinh dưỡng': '#f59e0b',
-      'Mắt': '#ef4444',
-      'Y tế': '#8b5cf6',
-      'An toàn': '#06b6d4',
-      'Vaccine': '#2563eb',
-      'default': '#6b7280'
-    };
-    return colors[category] || colors['default'];
   };
 
   const handleNewsClick = (newsId) => {
@@ -99,64 +79,13 @@ function NewsSection() {
 
   return (
     <section className="news-section">
-      <div className="news-container">
-
+      <div className="container">
         <div className="news-header">
           <h2 className="news-title">Tin Tức Y Tế</h2>
         </div>
 
-        <div className="news-layout">
-          {/* Main News - Left Side */}
-          <div className="news-main">
-            <article className="main-article" onClick={() => handleNewsClick(mainNews.id)}>
-              <div className="main-image">
-                <img src={mainNews.image} alt={mainNews.title} />
-                <div className="main-overlay">
-                  <span
-                    className="main-category"
-                    style={{ backgroundColor: getCategoryColor(mainNews.category) }}
-                  >
-                    {mainNews.category}
-                  </span>
-                </div>
-              </div>
-              <div className="main-content">
-                <h3 className="main-title">{mainNews.title}</h3>
-                <p className="main-summary">{mainNews.summary}</p>
-                <div className="main-meta">
-                  <span className="main-date">{formatDate(mainNews.publishDate)}</span>
-                  <span className="main-source">{mainNews.source}</span>
-                </div>
-              </div>
-            </article>
-          </div>
-
-          {/* Side News - Right Side */}
-          <div className="news-side">
-            {sideNews.map((item, index) => (
-              <article
-                key={item.id}
-                className="side-article"
-                onClick={() => handleNewsClick(item.id)}
-              >
-                <div className="side-image">
-                  <img src={item.image} alt={item.title} />
-                  <span
-                    className="side-category"
-                    style={{ backgroundColor: getCategoryColor(item.category) }}
-                  >
-                    {item.category}
-                  </span>
-                </div>
-                <div className="side-content">
-                  <h4 className="side-title">{item.title}</h4>
-                  <div className="side-meta">
-                    <span className="side-date">{formatDate(item.publishDate)}</span>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
+        <div className="news-grid">
+          {/* News content here */}
         </div>
 
         <div className="news-footer">
@@ -172,7 +101,7 @@ function NewsSection() {
   );
 }
 
-// Event Component
+// Event component
 function Event() {
   const events = [
     { bgColor: 'bg-red-500', overlayColor: 'bg-red-700' },
@@ -206,7 +135,7 @@ function Event() {
   );
 }
 
-// Reason Component
+// Reason component
 function Reason() {
   return (
     <section className="reason-section">
@@ -222,7 +151,7 @@ function Reason() {
   );
 }
 
-// See Component
+// See component
 function See() {
   return (
     <section className="see-section">
@@ -245,11 +174,12 @@ function See() {
   );
 }
 
-// Main HomePage Component
 export default function HomePage() {
   return (
     <div className="homepage">
+      {/* ✅ Di chuyển nút login vào header thay vì để bên ngoài */}
       <Header />
+
       <ThreeCardsSection />
       <NewsSection />
       <Event />

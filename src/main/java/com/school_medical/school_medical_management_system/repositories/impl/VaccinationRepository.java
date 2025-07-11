@@ -154,4 +154,20 @@ public class VaccinationRepository implements IVaccinationRepository {
             throw new RuntimeException("Error while creating vaccination: " + e.getMessage(), e);
         }
     }
+
+    @Override
+    public void approveVaccination(Integer vaccinationId, String approvalStatus) {
+        String sql = "UPDATE Vaccination SET status = ? WHERE vaccination_id = ?";
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, approvalStatus);
+            stmt.setInt(2, vaccinationId);
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error approving vaccination: " + e.getMessage(), e);
+        }
+    }
 }

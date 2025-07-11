@@ -86,4 +86,19 @@ public class MedicalCheckupRepository implements IMedicalCheckupRepository {
         }
     }
 
+    @Override
+    public void approveCheckup(Integer checkupId, String approvalStatus) {
+        String sql = "UPDATE MedicalCheckup SET status = ? WHERE checkup_id = ?";
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, approvalStatus);
+            stmt.setInt(2, checkupId);
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error approving medical checkup", e);
+        }
+    }
 }

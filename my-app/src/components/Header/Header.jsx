@@ -1,4 +1,3 @@
-// src/component/Header.jsx
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import BannerImg from "../../image/hinhanh/backgroundyte.png";
@@ -79,10 +78,12 @@ export default function Header() {
             <span className="notification-dot"></span>
           </Link>
           <i className="fas fa-paper-plane action-icon"></i>
-          <button className="login-btn">
+
+          {/* ✅ Chuyển sang Link để hoạt động với react-router */}
+          <Link to="/login" className="login-btn">
             <i className="fas fa-user"></i>
             <span>Log in / Sign up</span>
-          </button>
+          </Link>
         </div>
       </div>
 
@@ -135,7 +136,6 @@ export default function Header() {
           className="banner-img"
         />
       </div>
-
     </header>
   );
 }

@@ -1,9 +1,15 @@
 package com.school_medical.school_medical_management_system.api;
 
+import com.school_medical.school_medical_management_system.models.ApprovalRequest;
 import com.school_medical.school_medical_management_system.repositories.entites.Medicationsubmission;
-import com.school_medical.school_medical_management_system.services.impl.MedicationsubmissionService;
+import com.school_medical.school_medical_management_system.services.IAppUserService;
+import com.school_medical.school_medical_management_system.services.IMedicationsubmissionService;
+import com.school_medical.school_medical_management_system.repositories.IUserRepository;
+import com.school_medical.school_medical_management_system.repositories.entites.Appuser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,23 +19,29 @@ import java.util.List;
 public class MedicationsubmissionController {
 
     @Autowired
-    private MedicationsubmissionService service;
+    private IMedicationsubmissionService service;
 
-    // Tạo mới MedicationSubmission
+    @Autowired
+    private IAppUserService appUserService;
+
+    // ✅ Phụ huynh gửi đơn - approvedBy luôn null
     @PostMapping
     public ResponseEntity<String> createSubmission(@RequestBody Medicationsubmission submission) {
+        submission.setApprovedBy(null);
+        if (submission.getStatus() == null || submission.getStatus().isEmpty()) {
+            submission.setStatus("PENDING");
+        }
         service.save(submission);
         return ResponseEntity.ok("Medication submission saved successfully.");
     }
 
-    // Lấy danh sách submissions theo parent ID
+    // ✅ Lấy danh sách đơn theo parent ID
     @GetMapping("/parent/{parentId}")
     public ResponseEntity<List<Medicationsubmission>> getSubmissionsByParent(@PathVariable Integer parentId) {
-        List<Medicationsubmission> submissions = service.findByParentId(parentId);
-        return ResponseEntity.ok(submissions);
+        return ResponseEntity.ok(service.findByParentId(parentId));
     }
 
-    // Lấy submission theo ID
+    // ✅ Lấy chi tiết đơn theo ID
     @GetMapping("/{id}")
     public ResponseEntity<Medicationsubmission> getSubmissionById(@PathVariable Integer id) {
         Medicationsubmission submission = service.findById(id);
@@ -38,5 +50,22 @@ public class MedicationsubmissionController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    // ✅ School Nurse duyệt đơn: lấy approvedBy từ token
+    @PutMapping("/{id}/approve")
+    public ResponseEntity<String> approveSubmission(@PathVariable Integer id,
+                                                    @RequestBody ApprovalRequest request,
+                                                    @AuthenticationPrincipal User user) {
+        String email = user.getUsername();
+        Appuser appuser = appUserService.getUserByEmail();
+
+        if (appuser == null) {
+            return ResponseEntity.badRequest().body("Invalid user.");
+        }
+
+        Long approvedByUserId = appuser.getId().longValue();
+        service.approveSubmission(id, approvedByUserId, request.getApprovalStatus());
+        return ResponseEntity.ok("Submission approval status updated successfully.");
     }
 }

@@ -1,198 +1,179 @@
-// StudentHealthProfile.jsx
-import { useEffect, useState } from "react";
-import {
-  Activity,
-  FileText,
-  Calendar,
-  BarChart3,
-  UserPlus,
-  Home,
-} from "lucide-react";
-import "./StudentHealthProfile.css";
+import React, { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import AvatarImg from "../../../image/hinhanh/avatar.png";
+import LogoImg from "../../../image/hinhanh/logoproject.png";
 
-export default function StudentHealthProfile() {
-  const [data, setData] = useState(null);
+const StudentHealthProfile = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  useEffect(() => {
-    fetch("/api/student-profile") // Backend API endpoint
-      .then((res) => res.json())
-      .then(setData)
-      .catch(console.error);
-  }, []);
+  const tabRoutes = {
+    "/patient-search": "Thông tin cá nhân",
+    "/medications": "Đơn thuốc",
+    "/vaccinations": "Lịch sử tiêm chủng",
+    "/health-record": "Hồ sơ sức khỏe",
+  };
 
-  if (!data) return <div>Loading...</div>;
-
-  const getBadgeClass = (status) => {
-    switch (status) {
-      case "bình thường":
-        return "badge green";
-      case "theo dõi":
-        return "badge yellow";
-      case "cần chú ý":
-        return "badge red";
-      case "nghiêm trọng":
-        return "badge red";
-      case "trung bình":
-        return "badge yellow";
-      default:
-        return "badge gray";
+  const activeTab = tabRoutes[location.pathname] || "Hồ sơ sức khỏe";
+  const handleTabClick = (label) => {
+    const path = Object.keys(tabRoutes).find((key) => tabRoutes[key] === label);
+    if (path && location.pathname !== path) {
+      navigate(path, { state: { from: location.pathname } });
     }
   };
 
+  const [isEditing, setIsEditing] = useState(false);
+  const [profile, setProfile] = useState({
+    allergies: "Không có dị ứng nghiêm trọng",
+    vision: "10/10 cả hai mắt",
+    body: "Cao 170cm - Nặng 60kg",
+    general: "Không bệnh mãn tính",
+    history: [
+      "01/07/2024 - Khám định kỳ - Kết quả: Bình thường - BS Lan",
+      "15/05/2024 - Nội soi - Kết quả: Không phát hiện bất thường - BS Minh",
+    ],
+  });
+
+  const handleInputChange = (field, value) => {
+    setProfile({ ...profile, [field]: value });
+  };
+
+  const handleHistoryChange = (index, value) => {
+    const updated = [...profile.history];
+    updated[index] = value;
+    setProfile({ ...profile, history: updated });
+  };
+
+  const handleEditToggle = () => setIsEditing(!isEditing);
+
   return (
-    <div className="app">
+    <div className="student-profile-page">
       <aside className="sidebar">
-        <div className="logo">SchoMed<br/><span>School Medical</span></div>
-        <nav>
-          <button className="active"><Home /> Trang chủ</button>
-          <button><FileText /> Đơn thuốc</button>
-          <button><Calendar /> Sổ vaccine</button>
-          <button><Activity /> Hồ sơ sức khỏe</button>
-          <button><BarChart3 /> Báo cáo</button>
-          <button><UserPlus /> Tạo hồ sơ tư vấn</button>
+        <div className="brand-box">
+          <img src={LogoImg} alt="Logo" className="brand-icon" />
+          <div className="brand-text">
+            <h1>SchoMed</h1>
+            <p>School Medical</p>
+          </div>
+        </div>
+
+        <nav className="sidebar-nav">
+          <button onClick={() => navigate("/patient-search")} className={location.pathname === "/patient-search" ? "active" : ""}>🏠 Trang chủ</button>
+          <button onClick={() => navigate("/medications")} className={location.pathname === "/medications" ? "active" : ""}>💊 Đơn thuốc</button>
+          <button onClick={() => navigate("/vaccinations")} className={location.pathname === "/vaccinations" ? "active" : ""}>💉 Sổ vaccine</button>
+          <button onClick={() => navigate("/health-record")} className={location.pathname === "/health-record" ? "active" : ""}>📁 Hồ sơ sức khỏe</button>
         </nav>
       </aside>
 
-      <main className="content">
-        <div className="profile-header">
-          <img src={data.avatar} alt="avatar" className="avatar" />
-          <div>
-            <h2>{data.name}</h2>
-            <p>{data.class}</p>
+      <main className="profile-main">
+        <button className="home-button" onClick={() => navigate("/")}>
+          ⬅ Quay về trang chính
+        </button>
+
+        <div className="profile-card">
+          <div className="profile-overview">
+            <img src={AvatarImg} alt="avatar" className="avatar" />
+            <div className="info-text">
+              <h2>Nguyễn Đoàn Duy Khánh</h2>
+              <p>Lớp 12A1 | GVCN: Lâm Phương Thúy</p>
+              <p>Chiều cao: 170cm | Cân nặng: 60 kg</p>
+              <p>Giới tính: Nam/Nữ</p>
+            </div>
           </div>
-          <button className="btn-add">+ Thêm mới</button>
+
+          <div className="profile-tabs">
+            {Object.values(tabRoutes).map((label) => (
+              <span
+                key={label}
+                className={`tab ${activeTab === label ? "active" : ""}`}
+                onClick={() => handleTabClick(label)}
+              >
+                {label}
+              </span>
+            ))}
+          </div>
+
+          <div className="profile-detail">
+            {activeTab === "Hồ sơ sức khỏe" ? (
+              <>
+                <div className="info-columns">
+                  <div>
+                    <label><strong>Dị ứng:</strong></label>
+                    {isEditing ? (
+                      <input
+                        className="input-line"
+                        value={profile.allergies}
+                        onChange={(e) => handleInputChange("allergies", e.target.value)}
+                      />
+                    ) : (
+                      <p>{profile.allergies}</p>
+                    )}
+                    <label><strong>Thị lực:</strong></label>
+                    {isEditing ? (
+                      <input
+                        className="input-line"
+                        value={profile.vision}
+                        onChange={(e) => handleInputChange("vision", e.target.value)}
+                      />
+                    ) : (
+                      <p>{profile.vision}</p>
+                    )}
+                  </div>
+                  <div>
+                    <label><strong>Chỉ số cơ thể:</strong></label>
+                    {isEditing ? (
+                      <input
+                        className="input-line"
+                        value={profile.body}
+                        onChange={(e) => handleInputChange("body", e.target.value)}
+                      />
+                    ) : (
+                      <p>{profile.body}</p>
+                    )}
+                    <label><strong>Tổng quát:</strong></label>
+                    {isEditing ? (
+                      <input
+                        className="input-line"
+                        value={profile.general}
+                        onChange={(e) => handleInputChange("general", e.target.value)}
+                      />
+                    ) : (
+                      <p>{profile.general}</p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="history-card">
+                  <h4>Lịch sử khám gần đây</h4>
+                  <ul>
+                    {profile.history.map((entry, index) => (
+                      <li key={index}>
+                        {isEditing ? (
+                          <input
+                            className="input-line"
+                            value={entry}
+                            onChange={(e) => handleHistoryChange(index, e.target.value)}
+                          />
+                        ) : (
+                          entry
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <button onClick={handleEditToggle} className="home-button" style={{ marginTop: "20px" }}>
+                  {isEditing ? "💾 Lưu lại" : "✏️ Chỉnh sửa"}
+                </button>
+              </>
+            ) : (
+              <p className="tab-placeholder">Hiện chưa có dữ liệu cho mục "{activeTab}".</p>
+            )}
+          </div>
         </div>
-
-        <div className="tabs">
-          <button>Thông tin cá nhân</button>
-          <button>Đơn thuốc</button>
-          <button>Lịch sử tiêm chủng</button>
-          <button className="active">Hồ sơ sức khỏe</button>
-        </div>
-
-        <div className="cards">
-          <div className="card pink">
-            <h4>Dị ứng</h4>
-            <p>{data.summary.allergies}</p>
-          </div>
-          <div className="card blue">
-            <h4>Thị lực</h4>
-            <p>{data.summary.vision}</p>
-          </div>
-          <div className="card green">
-            <h4>Chỉ số cơ thể</h4>
-            <p>{data.summary.body}</p>
-          </div>
-          <div className="card orange">
-            <h4>Chỉ số tổng quát</h4>
-            <p>{data.summary.general}</p>
-          </div>
-        </div>
-
-        <section>
-          <h3>Lịch sử khám gần đây</h3>
-          <table>
-            <thead>
-              <tr>
-                <th>Ngày khám</th>
-                <th>Loại khám</th>
-                <th>Kết quả</th>
-                <th>Bác sĩ</th>
-                <th>Trạng thái</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.recentRecords.map((r) => (
-                <tr key={r.id}>
-                  <td>{r.date}</td>
-                  <td>{r.type}</td>
-                  <td>{r.result}</td>
-                  <td>{r.doctor}</td>
-                  <td><span className={getBadgeClass(r.status)}>{r.status}</span></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </section>
-
-        <section>
-          <h3>Thông tin dị ứng chi tiết</h3>
-          <table>
-            <thead>
-              <tr>
-                <th>Chất gây dị ứng</th>
-                <th>Loại dị ứng</th>
-                <th>Mức độ</th>
-                <th>Triệu chứng</th>
-                <th>Ngày phát hiện</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.allergies.map((a) => (
-                <tr key={a.id}>
-                  <td>{a.allergen}</td>
-                  <td>{a.type}</td>
-                  <td><span className={getBadgeClass(a.severity)}>{a.severity}</span></td>
-                  <td>{a.symptoms}</td>
-                  <td>{a.discoveredDate}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </section>
-
-        <section>
-          <h3>Theo dõi thị lực</h3>
-          <table>
-            <thead>
-              <tr>
-                <th>Ngày khám</th>
-                <th>Mắt trái</th>
-                <th>Mắt phải</th>
-                <th>Ghi chú</th>
-                <th>Bác sĩ</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.vitals.map((v) => (
-                <tr key={v.id}>
-                  <td>{v.date}</td>
-                  <td>{v.systolic / 10}</td>
-                  <td>{v.diastolic / 10}</td>
-                  <td>{v.notes}</td>
-                  <td>{v.doctor}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </section>
-
-        <section>
-          <h3>Tiền sử bệnh án</h3>
-          <table>
-            <thead>
-              <tr>
-                <th>Bệnh</th>
-                <th>Thời gian mắc</th>
-                <th>Điều trị</th>
-                <th>Tình trạng</th>
-                <th>Ghi chú</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.medicalHistory.map((h) => (
-                <tr key={h.id}>
-                  <td>{h.condition}</td>
-                  <td>{h.period}</td>
-                  <td>{h.treatment}</td>
-                  <td><span className={getBadgeClass(h.status)}>{h.status}</span></td>
-                  <td>{h.notes}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </section>
       </main>
     </div>
   );
-}
+};
+
+export default StudentHealthProfile;
