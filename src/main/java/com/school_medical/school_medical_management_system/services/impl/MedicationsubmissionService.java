@@ -10,6 +10,7 @@ import java.util.List;
 
 @Service
 public class MedicationsubmissionService implements IMedicationsubmissionService {
+
     @Autowired
     private IMedicationsubmissionRepository repository;
 
@@ -33,3 +34,4 @@ public class MedicationsubmissionService implements IMedicationsubmissionService
         repository.approveSubmission(medicationId, approvedBy, approvalStatus);
     }
 }
+
