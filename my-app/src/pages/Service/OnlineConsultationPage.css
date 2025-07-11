@@ -1,0 +1,350 @@
+/* OnlineConsultationPage.css */
+
+/* ============ Global Utilities ============ */
+.oc-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* ============ Breadcrumb ============ */
+.oc-breadcrumb {
+  background-color: #ffffff;
+  padding: 0.5rem 1.5rem;
+}
+.oc-breadcrumb-nav {
+  color: #1e40af;
+  font-size: 0.875rem;
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+}
+.oc-breadcrumb-nav a {
+  text-decoration: none;
+  color: inherit;
+}
+.oc-breadcrumb-nav a:hover {
+  text-decoration: underline;
+}
+.oc-breadcrumb-nav .active {
+  font-weight: 600;
+}
+
+/* ============ Banner ============ */
+.oc-banner {
+  background-color: #eaf7ff;
+  padding: 1.5rem;
+}
+@media (min-width: 768px) {
+  .oc-banner {
+    padding: 2.5rem;
+  }
+}
+.oc-banner-card {
+  background-color: #ffffff;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  align-items: center;
+}
+@media (min-width: 768px) {
+  .oc-banner-card {
+    flex-direction: row;
+  }
+}
+.oc-banner-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.oc-banner-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e40af;
+  text-transform: uppercase;
+}
+.oc-feature-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.oc-feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+.oc-feature-icon {
+  color: #16a34a; /* green-600 */
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+.oc-contact {
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+}
+.oc-hotline-link {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: #1e40af;
+  font-weight: 700;
+  text-decoration: none;
+}
+.oc-chat-button {
+  background-color: #f97316; /* orange-400 */
+  color: #ffffff;
+  padding: 0.25rem 1rem;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+}
+.oc-chat-button:hover {
+  background-color: #ea580c; /* orange-500 */
+}
+.oc-banner-image {
+  flex: 1;
+  text-align: center;
+}
+.oc-banner-image img {
+  max-width: 100%;
+  border-top-right-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* ============ Consultation Section ============ */
+.oc-consultation {
+  background-color: #eaf7ff;
+  padding: 1.5rem;
+}
+@media (min-width: 768px) {
+  .oc-consultation {
+    padding: 2.5rem;
+  }
+}
+.oc-consultation-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+@media (min-width: 768px) {
+  .oc-consultation-wrapper {
+    flex-direction: row;
+  }
+}
+
+/* ---- Booking Panel ---- */
+.oc-booking {
+  background-color: #ffffff;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+  width: 100%;
+}
+@media (min-width: 768px) {
+  .oc-booking {
+    width: 50%;
+  }
+}
+.oc-booking-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e40af;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.oc-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.oc-form-group {
+  display: flex;
+  flex-direction: column;
+}
+.oc-label {
+  margin-bottom: 0.25rem;
+  font-weight: 500;
+}
+.oc-select,
+.oc-input,
+.oc-textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #d1d5db; /* gray-300 */
+  border-radius: 0.5rem;
+  font-size: 1rem;
+}
+.oc-slots {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+  max-height: 12rem;
+  overflow-y: auto;
+}
+.oc-slot-button {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  border: none;
+  cursor: pointer;
+  background-color: #ffffff;
+}
+.oc-slot-button:hover:not(.disabled):not(.selected) {
+  background-color: #e0f2fe; /* blue-100 */
+}
+.oc-slot-button.disabled {
+  background-color: #e5e7eb; /* gray-200 */
+  color: #9ca3af; /* gray-400 */
+  cursor: not-allowed;
+}
+.oc-slot-button.selected {
+  background-color: #3b82f6; /* blue-500 */
+  color: #ffffff;
+}
+.oc-error {
+  color: #dc2626; /* red-600 */
+  font-size: 0.875rem;
+}
+.oc-submit-button {
+  width: 100%;
+  background-color: #1e40af;
+  color: #ffffff;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: none;
+  cursor: pointer;
+}
+.oc-submit-button:hover {
+  opacity: 0.9;
+}
+
+/* ---- Booking Success ---- */
+.oc-success {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.oc-success-message {
+  background-color: #ecfdf5; /* green-100 */
+  color: #166534; /* green-800 */
+  padding: 1rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.oc-reset-button {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #3b82f6;
+  color: #3b82f6;
+  border-radius: 0.5rem;
+  background: none;
+  cursor: pointer;
+}
+.oc-reset-button:hover {
+  background-color: #eff6ff; /* blue-50 */
+}
+
+/* ---- Info List ---- */
+.oc-info-list {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: #4b5563; /* gray-600 */
+}
+.oc-info-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.oc-info-icon {
+  color: #3b82f6; /* blue-500 */
+  flex-shrink: 0;
+}
+
+/* ============ Nurse List ============ */
+.oc-nurse-list {
+  background-color: #ffffff;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+  width: 100%;
+  max-height: 45rem;
+  overflow-y: auto;
+}
+@media (min-width: 768px) {
+  .oc-nurse-list {
+    width: 50%;
+  }
+}
+.oc-nurse-list-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e40af;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.oc-nurse-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid #d1d5db; /* gray-300 */
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: box-shadow 0.2s;
+}
+.oc-nurse-card:hover:not(.disabled) {
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+.oc-nurse-card.selected {
+  border-color: #3b82f6; /* blue-500 */
+  background-color: #eff6ff; /* blue-50 */
+}
+.oc-nurse-card.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.oc-nurse-avatar {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 9999px;
+  object-fit: cover;
+}
+.oc-nurse-info {
+  flex: 1;
+}
+.oc-nurse-name {
+  font-weight: 600;
+}
+.oc-nurse-specialty {
+  font-size: 0.875rem;
+  color: #4b5563; /* gray-600 */
+}
+/* Căn giữa Booking & Nurse List titles */
+.oc-booking-title,
+.oc-nurse-list-title {
+  display: flex;           /* đã có, hoặc thêm nếu nhỡ */
+  justify-content: center; /* canh ngang giữa */
+  text-align: center;      /* đảm bảo text cũng giữa */
+}
+
