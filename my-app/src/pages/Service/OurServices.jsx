@@ -17,12 +17,14 @@ const services = [
     title: "Gửi Đơn Thuốc",
     description: "Gửi đơn thuốc trực tuyến nhanh chóng & tiện lợi. Nhận kết quả trong vòng 24h.",
     button: "Gửi Đơn Thuốc",
+    link: "/send-prescription",  // định tuyến tới trang gửi đơn thuốc
   },
   {
     icon: <CalendarCheck size={32} />,
     title: "Đăng Ký Tiêm Vaccine",
     description: "Tìm lịch tiêm, nhận nhắc nhở & theo dõi lịch sử tiêm chủng đầy đủ.",
     button: "Đăng Ký Vaccine",
+    link: "/vaccine-form",  // định tuyến tới form tiêm vaccine
   },
   {
     icon: <Heart size={32} />,
@@ -36,7 +38,7 @@ const services = [
     title: "Tư Vấn Trực Tuyến",
     description: "Tư vấn sức khỏe 24/7 qua chat hoặc video call với chuyên gia.",
     button: "Tư Vấn Ngay",
-    link: "/online-consultation",    // ← thêm đường dẫn ở đây
+    link: "/online-consultation",
   },
 ];
 

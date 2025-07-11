@@ -20,6 +20,8 @@ import OtpSuccess from './auth/OtpSuccess/OtpSuccess';
 import ResetPassword from './auth/ResetPassword/ResetPassword';
 import HealthCheck from './pages/Service/HealthCheck';
 import OnlineConsultationPage from './pages/Service/OnlineConsultationPage';
+import VaccineForm from './pages/Service/VaccineForm';
+import SendPrescription from './pages/Service/SendPrescription';
 function App() {
   return (
     <Router>
@@ -44,6 +46,8 @@ function App() {
           <Route path="/reset-password" element={<ResetPassword/>} />
           <Route path="/health-check" element={<HealthCheck />} />
           <Route path="/online-consultation" element={<OnlineConsultationPage />} />
+          <Route path="/vaccine-form" element={<VaccineForm />} />
+          <Route path="/send-prescription" element={<SendPrescription />} />
         </Routes>
         <ChatBot />
       </div>
