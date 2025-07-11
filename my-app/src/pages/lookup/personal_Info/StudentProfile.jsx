@@ -61,22 +61,19 @@ export default function StudentProfile() {
 
       {/* Main Content */}
       <main className="main-content">
-        <div className="header">
-          <div className="header-left">
-            <img src={student.avatarUrl} alt="Avatar" className="avatar" />
-            <div className="info">
-              <h1 className="name">{student.name}</h1>
-              <p>Lớp: {student.className} | GVCN: {student.teacher}</p>
-              <p>Chiều cao: {student.height}cm | Cân nặng: {student.weight}kg</p>
-              <p>Giới tính: {student.gender}</p>
+        <div className="content-card">
+          <div className="header">
+            <div className="header-left">
+              <img src={student.avatarUrl} alt="Avatar" className="avatar" />
+              <div className="info">
+                <h1 className="name">{student.name}</h1>
+                <p>Lớp: {student.className} | GVCN: {student.teacher}</p>
+                <p>Chiều cao: {student.height}cm | Cân nặng: {student.weight}kg</p>
+                <p>Giới tính: {student.gender}</p>
+              </div>
             </div>
           </div>
-          <button className="add-btn">
-            <span className="plus">+</span> Thêm mới
-          </button>
-        </div>
 
-        <div className="content-card">
           <div className="tabs">
             <Tab active>Thông tin cá nhân</Tab>
             <Tab>Đơn thuốc</Tab>
@@ -85,23 +82,34 @@ export default function StudentProfile() {
           </div>
 
           <div className="personal-section">
-            <div className="personal-row">
-              <div>
-                <strong>Mẹ:</strong><br />
-                <strong>Điện Thoại:</strong>
+            <div className="personal-container">
+              <div className="personal-left">
+                <div className="personal-item">
+                  <strong>Mẹ:</strong>
+                  <span>{student.motherName || ""}</span>
+                </div>
+                <div className="personal-item">
+                  <strong>Điện Thoại:</strong>
+                  <span>{student.motherPhone || ""}</span>
+                </div>
+                <div className="personal-item">
+                  <strong>Ba:</strong>
+                  <span>{student.fatherName || ""}</span>
+                </div>
+                <div className="personal-item">
+                  <strong>Điện Thoại:</strong>
+                  <span>{student.fatherPhone || ""}</span>
+                </div>
               </div>
-              <div>
-                <strong>Email:</strong><br />
-                <strong>Địa chỉ:</strong>
-              </div>
-            </div>
-            <div className="personal-row">
-              <div>
-                <strong>Ba:</strong><br />
-                <strong>Điện Thoại:</strong>
-              </div>
-              <div style={{ visibility: 'hidden' }}>
-                {/* Empty space to maintain layout */}
+              <div className="personal-right">
+                <div className="personal-item">
+                  <strong>Email:</strong>
+                  <span>{student.email || ""}</span>
+                </div>
+                <div className="personal-item">
+                  <strong>Địa chỉ:</strong>
+                  <span>{student.address || ""}</span>
+                </div>
               </div>
             </div>
           </div>

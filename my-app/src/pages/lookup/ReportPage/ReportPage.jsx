@@ -17,7 +17,7 @@ export default function ReportPage() {
                     <NavItem icon="🏠" text="Trang chủ" link="/" />
                     <NavItem icon="💊" text="Đơn thuốc" link="/medications" />
                     <NavItem icon="💉" text="Sổ vaccine" link="/vaccination" />
-                    <NavItem icon="📋" text="Hồ sơ sức khỏe" link="/patient-search" />
+                    <NavItem icon="📋" text="Hồ sơ sức khỏe" link="/student-profile"/>
                     <NavItem icon="📄" text="Báo cáo" link="/report" active />
                 </nav>
             </div>
@@ -34,7 +34,7 @@ export default function ReportPage() {
     );
 }
 
-function NavItem({ icon, text, link, active }) {
+export function NavItem({ icon, text, link, active }) {
     return (
         <a href={link} className={`nav-item ${active ? "active" : ""}`}>
             <span className="icon">{icon}</span>

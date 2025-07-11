@@ -242,3 +242,33 @@
         gap: 0.5rem;
     }
 }
+
+.header-actions .notification-link {
+    position: relative;
+    display: inline-block;
+}
+
+.header-actions .notification-link .notification-dot {
+    display: none;
+}
+
+.header-actions .notification-link:hover .notification-dot {
+    display: block;
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 10px;
+    height: 10px;
+    background: #ff1744;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    z-index: 2;
+}
+
+.header-actions .notification-link:hover .fa-bell {
+    color: #fff;
+    background: #2196f3;
+    border-radius: 50%;
+    padding: 8px;
+    transition: background 0.2s, color 0.2s;
+}

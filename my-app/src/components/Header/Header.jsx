@@ -5,6 +5,7 @@ import BannerImg from "../../image/hinhanh/backgroundyte.png";
 import logo from "../../image/hinhanh/logoproject.png";
 import "./Header.css";
 
+
 export default function Header() {
   const location = useLocation();
 
@@ -73,7 +74,10 @@ export default function Header() {
 
         {/* Actions */}
         <div className="header-actions">
-          <i className="fas fa-bell action-icon"></i>
+          <Link to="/notification" className="notification-link">
+            <i className="fas fa-bell action-icon"></i>
+            <span className="notification-dot"></span>
+          </Link>
           <i className="fas fa-paper-plane action-icon"></i>
           <button className="login-btn">
             <i className="fas fa-user"></i>
@@ -114,11 +118,11 @@ export default function Header() {
             <span>Dịch vụ</span>
           </Link>
           <Link
-            to="/patient-search"
-            className={`nav-link ${location.pathname === '/patient-search' ? 'active' : ''}`}
+            to="/student-profile"
+            className={`nav-link ${location.pathname === '/student-profile' ? 'active' : ''}`}
           >
             <i className="fas fa-archive"></i>
-            <span>Tra cứu bệnh nhân</span>
+            <span>Tra cứu học sinh</span>
           </Link>
         </div>
       </nav>

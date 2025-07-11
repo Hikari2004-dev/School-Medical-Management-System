@@ -12,6 +12,7 @@ import Vaccination from './pages/lookup/vaccinehistory/vaccination';
 import StudentHealthProfile from './pages/lookup/info/StudentHealthProfile';
 import ReportPage from './pages/lookup/ReportPage/ReportPage';
 import ChatBot from './components/chat/ChatBot';
+import Notification from "./pages/notification/Notification.jsx";
 
 function App() {
   return (
@@ -29,6 +30,9 @@ function App() {
           <Route path="/vaccination" element={<Vaccination />} />
           <Route path="/student-health" element={<StudentHealthProfile />} />
           <Route path="/report" element={<ReportPage />} />
+          <Route path="/student-profile" element={<StudentProfile />} />
+          <Route path="/notification" element={<Notification />} />
+          {/* Add more routes as needed */}
         </Routes>
         <ChatBot />
       </div>

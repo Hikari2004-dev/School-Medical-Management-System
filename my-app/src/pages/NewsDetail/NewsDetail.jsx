@@ -169,12 +169,11 @@ const NewsDetail = () => {
         <div className="news-detail-page">
             <Header />
 
-            {/* Breadcrumb */}
             <div className="breadcrumb-container">
                 <nav className="breadcrumb">
-                    <span className="breadcrumb-link" onClick={() => navigate('/')}>Trang chủ</span>
+                    <span className="breadcrumb-link" onClick={() => navigate('/')}> 🏠Trang chủ</span>
                     <span className="breadcrumb-separator">›</span>
-                    <span className="breadcrumb-link" onClick={() => navigate('/news')}>Tin tức</span>
+                    <span className="breadcrumb-link" onClick={() => navigate('/news')}>📰 Tin tức</span>
                     <span className="breadcrumb-separator">›</span>
                     <span className="breadcrumb-current">{article.category}</span>
                 </nav>

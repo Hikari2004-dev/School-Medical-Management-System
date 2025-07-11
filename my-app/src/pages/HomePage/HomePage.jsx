@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import './HomePage.css';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
-import ChatBox from '../../components/chat/ChatBot';
 import { useNavigate } from 'react-router-dom';
 import { newsData } from '../../data/newsData';
 
