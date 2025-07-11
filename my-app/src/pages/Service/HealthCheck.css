@@ -1,3 +1,5 @@
+/* src/pages/Service/HealthCheck.css */
+
 :root {
   --primary: #1e40af;
   --secondary: #eaf7ff;
@@ -48,9 +50,10 @@
     padding: 2.5rem;
   }
 }
+/* only round the two right corners */
 .hc-banner-card {
   background: var(--card);
-  border-radius: var(--radius);
+  border-radius: 0 var(--radius) var(--radius) 0;
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   display: flex;
   flex-direction: column;
@@ -138,7 +141,8 @@
 }
 .hc-banner-image img {
   max-width: 100%;
-  border-radius: var(--radius);
+  /* only round the two right corners on the image too */
+  border-radius: 0 var(--radius) var(--radius) 0;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
@@ -280,6 +284,7 @@
   flex-shrink: 0;
 }
 
+/* Center titles */
 .hc-form-title,
 .hc-packages-title {
   text-align: center;
