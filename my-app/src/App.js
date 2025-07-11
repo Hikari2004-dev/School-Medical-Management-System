@@ -6,9 +6,9 @@ import News from './pages/News/News';
 import NewsDetail from './pages/NewsDetail/NewsDetail';
 import NewsTestPage from './pages/NewsTestPage';
 import OurServices from './pages/Service/OurServices';
-import StudentProfile from './pages/lookup/personal_Info/StudentProfile';
-import Medications from './pages/lookup/prescription/medications';
-import Vaccination from './pages/lookup/vaccinehistory/vaccination';
+import StudentProfile from './pages/lookup/personal_Info/StudentProfile'; 
+import Medications from './pages/lookup/prescription/Medications.jsx';
+import Vaccination from './pages/lookup/vaccinehistory/vaccination.jsx';
 import StudentHealthProfile from './pages/lookup/info/StudentHealthProfile';
 import ReportPage from './pages/lookup/ReportPage/ReportPage';
 import ChatBot from './components/chat/ChatBot';
@@ -17,7 +17,8 @@ import Register from './auth/Register/Register';
 import ForgetPassword from "./auth/ForgetPassword/ForgetPassword";
 import OtpVerification from './auth/OtpVerification/OtpVerification';
 import OtpSuccess from './auth/OtpSuccess/OtpSuccess';
-import ResetPassword from './auth/ResetPassword/ResetPassword';
+import ResetPassword from './auth/ResetPassword/ResetPassword';  
+
 
 function App() {
   return (
@@ -32,8 +33,8 @@ function App() {
           <Route path="/services" element={<OurServices />} />
           <Route path="/patient-search" element={<StudentProfile />} />
           <Route path="/medications" element={<Medications />} />
-          <Route path="/vaccination" element={<Vaccination />} />
-          <Route path="/student-health" element={<StudentHealthProfile />} />
+          <Route path="/vaccinations" element={<Vaccination />} />
+          <Route path="/health-record" element={<StudentHealthProfile />} />
           <Route path="/report" element={<ReportPage />} />
           <Route path="/login" element={<Login />} /> 
           <Route path="/register" element={<Register />} />

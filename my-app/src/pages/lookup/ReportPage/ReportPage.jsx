@@ -42,3 +42,4 @@ function NavItem({ icon, text, link, active }) {
         </a>
     );
 }
+// export default ReportPage;
