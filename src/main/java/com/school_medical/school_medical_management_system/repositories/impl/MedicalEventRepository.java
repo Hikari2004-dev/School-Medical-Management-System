@@ -3,6 +3,7 @@ package com.school_medical.school_medical_management_system.repositories.impl;
 import com.school_medical.school_medical_management_system.models.ApprovalRequest;
 import com.school_medical.school_medical_management_system.repositories.IMedicalEventRepository;
 import com.school_medical.school_medical_management_system.repositories.entites.MedicalEvent;
+import com.school_medical.school_medical_management_system.services.IAppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -15,6 +16,9 @@ import java.util.List;
 public class MedicalEventRepository implements IMedicalEventRepository {
     @Autowired
     private DataSource dataSource;
+
+    @Autowired
+    private IAppUserService appUserService;
 
     @Override
     public List<MedicalEvent> getAllEvents() {
@@ -33,7 +37,7 @@ public class MedicalEventRepository implements IMedicalEventRepository {
                 dto.setStudentId(rs.getLong("student_id"));
                 dto.setNurseId(rs.getLong("nurse_id"));
                 dto.setStatus(rs.getString("status"));
-                dto.setApprovedBy(rs.getObject("approved_by") != null ? rs.getLong("approved_by") : null);
+                dto.setApprovedBy(rs.getObject("approved_by") != null ? rs.getInt("approved_by") : null);
                 events.add(dto);
             }
         } catch (SQLException e) {
@@ -85,7 +89,7 @@ public class MedicalEventRepository implements IMedicalEventRepository {
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
             ps.setString(1, approvalRequest.getApprovalStatus());
-            ps.setLong(2, approvalRequest.getApprovedBy());
+            ps.setLong(2, appUserService.getUserByEmail().getId());
             ps.setLong(3, id);
             ps.executeUpdate();
 
