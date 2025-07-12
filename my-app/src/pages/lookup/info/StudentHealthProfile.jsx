@@ -55,6 +55,7 @@ const StudentHealthProfile = () => {
             <h1>SchoMed</h1>
             <p>School Medical</p>
           </div>
+
         </div>
 
         <nav className="sidebar-nav">
@@ -161,7 +162,6 @@ const StudentHealthProfile = () => {
                     ))}
                   </ul>
                 </div>
-
                 <button onClick={handleEditToggle} className="home-button" style={{ marginTop: "20px" }}>
                   {isEditing ? "💾 Lưu lại" : "✏️ Chỉnh sửa"}
                 </button>
@@ -170,6 +170,7 @@ const StudentHealthProfile = () => {
               <p className="tab-placeholder">Hiện chưa có dữ liệu cho mục "{activeTab}".</p>
             )}
           </div>
+
         </div>
       </main>
     </div>

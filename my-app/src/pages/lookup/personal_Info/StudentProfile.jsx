@@ -1,17 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./StudentProfile.css";
 import AvatarImg from "../../../image/hinhanh/avatar.png";
 import LogoImg from "../../../image/hinhanh/logoproject.png";
-
-const Tab = ({ active, children, ...props }) => (
-  <button
-    className={`tab-btn${active ? " active" : ""}`}
-    {...props}
-  >
-    {children}
-  </button>
-);
 
 const StudentProfile = () => {
   const navigate = useNavigate();
@@ -50,18 +41,6 @@ const StudentProfile = () => {
 
   const handleEditToggle = () => setIsEditing(!isEditing);
 
-  const [student, setStudent] = useState(null);
-
-  useEffect(() => {
-    fetch("/data/student.json")
-      .then((res) => res.json())
-      .then((data) => setStudent(data));
-  }, []);
-
-  if (!student) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <div className="student-profile-page">
       <aside className="sidebar">
@@ -81,51 +60,72 @@ const StudentProfile = () => {
         </nav>
       </aside>
 
-      {/* Main Content */}
-      <main className="main-content">
-        <div className="header">
-          <div className="header-left">
-            <img src={student.avatarUrl} alt="Avatar" className="avatar" />
-            <div className="info">
-              <h1 className="name">{student.name}</h1>
-              <p>Lớp: {student.className} | GVCN: {student.teacher}</p>
-              <p>Chiều cao: {student.height}cm | Cân nặng: {student.weight}kg</p>
-              <p>Giới tính: {student.gender}</p>
+      <main className="profile-main">
+        <button className="home-button" onClick={() => navigate("/")}>
+          ⬅ Quay về trang chính
+        </button>
+
+        <div className="profile-card">
+          <div className="profile-overview">
+            <img src={AvatarImg} alt="avatar" className="avatar" />
+            <div className="info-text">
+              <h2>Nguyễn Đoàn Duy Khánh</h2>
+              <p>Lớp 12A1 | GVCN: Lâm Phương Thúy</p>
+              <p>Chiều cao: 170cm | Cân nặng: 60 kg</p>
+              <p>Giới tính: Nam/Nữ</p>
             </div>
           </div>
-          <button className="add-btn">
-            <span className="plus">+</span> Thêm mới
-          </button>
-        </div>
 
-        <div className="content-card">
-          <div className="tabs">
-            <Tab active>Thông tin cá nhân</Tab>
-            <Tab>Đơn thuốc</Tab>
-            <Tab>Lịch sử tiêm chủng</Tab>
-            <Tab>Hồ sơ sức khỏe</Tab>
+          <div className="profile-tabs">
+            {Object.values(tabRoutes).map((label) => (
+              <span
+                key={label}
+                className={`tab ${activeTab === label ? "active" : ""}`}
+                onClick={() => handleTabClick(label)}
+              >
+                {label}
+              </span>
+            ))}
           </div>
 
-          <div className="personal-section">
-            <div className="personal-row">
-              <div>
-                <strong>Mẹ:</strong><br />
-                <strong>Điện Thoại:</strong>
-              </div>
-              <div>
-                <strong>Email:</strong><br />
-                <strong>Địa chỉ:</strong>
-              </div>
-            </div>
-            <div className="personal-row">
-              <div>
-                <strong>Ba:</strong><br />
-                <strong>Điện Thoại:</strong>
-              </div>
-              <div style={{ visibility: 'hidden' }}>
-                {/* Empty space to maintain layout */}
-              </div>
-            </div>
+          <div className="profile-detail">
+            {activeTab === "Thông tin cá nhân" ? (
+              <>
+                <div className="info-columns">
+                  <div>
+                    <p><strong>Mẹ:</strong> {isEditing ? (
+                      <input className="input-line" value={profile.mother} onChange={(e) => handleChange("mother", e.target.value)} />
+                    ) : profile.mother}</p>
+
+                    <p><strong>Điện Thoại:</strong> {isEditing ? (
+                      <input className="input-line" value={profile.motherPhone} onChange={(e) => handleChange("motherPhone", e.target.value)} />
+                    ) : profile.motherPhone}</p>
+
+                    <p><strong>Ba:</strong> {isEditing ? (
+                      <input className="input-line" value={profile.father} onChange={(e) => handleChange("father", e.target.value)} />
+                    ) : profile.father}</p>
+
+                    <p><strong>Điện Thoại:</strong> {isEditing ? (
+                      <input className="input-line" value={profile.fatherPhone} onChange={(e) => handleChange("fatherPhone", e.target.value)} />
+                    ) : profile.fatherPhone}</p>
+                  </div>
+                  <div>
+                    <p><strong>Email:</strong> {isEditing ? (
+                      <input className="input-line" value={profile.email} onChange={(e) => handleChange("email", e.target.value)} />
+                    ) : profile.email}</p>
+
+                    <p><strong>Địa chỉ:</strong> {isEditing ? (
+                      <input className="input-line" value={profile.address} onChange={(e) => handleChange("address", e.target.value)} />
+                    ) : profile.address}</p>
+                  </div>
+                </div>
+                <button className="home-button" style={{ marginTop: "20px" }} onClick={handleEditToggle}>
+                  {isEditing ? "💾 Lưu lại" : "✏️ Chỉnh sửa"}
+                </button>
+              </>
+            ) : (
+              <p className="tab-placeholder">Hiện chưa có dữ liệu cho mục "{activeTab}".</p>
+            )}
           </div>
         </div>
       </main>

@@ -26,8 +26,8 @@ function App() {
           <Route path="/services" element={<OurServices />} />
           <Route path="/patient-search" element={<StudentProfile />} />
           <Route path="/medications" element={<Medications />} />
-          <Route path="/vaccination" element={<Vaccination />} />
-          <Route path="/student-health" element={<StudentHealthProfile />} />
+          <Route path="/vaccinations" element={<Vaccination />} />
+          <Route path="/health-record" element={<StudentHealthProfile />} />
           <Route path="/student-profile" element={<StudentProfile />} />
           <Route path="/notification" element={<Notification />} />
           {/* Add more routes as needed */}
