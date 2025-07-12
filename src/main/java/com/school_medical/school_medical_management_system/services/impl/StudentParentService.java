@@ -4,6 +4,7 @@ import com.school_medical.school_medical_management_system.repositories.IStudent
 import com.school_medical.school_medical_management_system.repositories.entites.StudentParent;
 import com.school_medical.school_medical_management_system.services.IAppUserService;
 import com.school_medical.school_medical_management_system.services.IStudentParentService;
+import com.school_medical.school_medical_management_system.utils.AuthUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +22,7 @@ public class StudentParentService implements IStudentParentService {
 
     @Override
     public List<StudentParent> getStudentsByParentId() {
-        int parentUserId = appUserService.getUserByEmail().getId();
+        int parentUserId = appUserService.getUserByEmail(AuthUtils.getCurrentUserEmail()).getId();
         List<StudentParent> studentParents = new ArrayList<>();
         studentParents = studentParent.getStudentsByParentId(parentUserId);
         return studentParents;

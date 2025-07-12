@@ -1,11 +1,13 @@
 package com.school_medical.school_medical_management_system.api;
 
+import com.school_medical.school_medical_management_system.config.JwtUtil;
 import com.school_medical.school_medical_management_system.models.ApprovalRequest;
 import com.school_medical.school_medical_management_system.repositories.entites.Medicationsubmission;
 import com.school_medical.school_medical_management_system.services.IAppUserService;
 import com.school_medical.school_medical_management_system.services.IMedicationsubmissionService;
 import com.school_medical.school_medical_management_system.repositories.IUserRepository;
 import com.school_medical.school_medical_management_system.repositories.entites.Appuser;
+import com.school_medical.school_medical_management_system.utils.AuthUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,6 +25,8 @@ public class MedicationsubmissionController {
 
     @Autowired
     private IAppUserService appUserService;
+
+    private AuthUtils authUtils;
 
     // ✅ Phụ huynh gửi đơn - approvedBy luôn null
     @PostMapping
@@ -58,7 +62,7 @@ public class MedicationsubmissionController {
                                                     @RequestBody ApprovalRequest request,
                                                     @AuthenticationPrincipal User user) {
         String email = user.getUsername();
-        Appuser appuser = appUserService.getUserByEmail();
+        Appuser appuser = appUserService.getUserByEmail(AuthUtils.getCurrentUserEmail());
 
         if (appuser == null) {
             return ResponseEntity.badRequest().body("Invalid user.");

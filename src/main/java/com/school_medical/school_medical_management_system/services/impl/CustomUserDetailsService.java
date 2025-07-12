@@ -1,4 +1,4 @@
-package com.school_medical.school_medical_management_system.services;
+package com.school_medical.school_medical_management_system.services.impl;
 
 
 import com.school_medical.school_medical_management_system.repositories.IUserRepository;

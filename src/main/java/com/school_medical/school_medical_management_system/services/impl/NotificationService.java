@@ -4,6 +4,7 @@ import com.school_medical.school_medical_management_system.repositories.entites.
 import com.school_medical.school_medical_management_system.repositories.impl.NotificationRepository;
 import com.school_medical.school_medical_management_system.services.IAppUserService;
 import com.school_medical.school_medical_management_system.services.INotificationService;
+import com.school_medical.school_medical_management_system.utils.AuthUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +30,7 @@ public class NotificationService implements INotificationService {
 
     @Override
     public List<Notification> getNotificationsByParentId() {
-        Integer parentUserId = appUserService.getUserByEmail().getId();
+        Integer parentUserId = appUserService.getUserByEmail(AuthUtils.getCurrentUserEmail()).getId();
         return notificationRepository.getNotificationsByParentId(parentUserId);
     }
 }

@@ -1,6 +1,6 @@
 package com.school_medical.school_medical_management_system.config;
 
-import com.school_medical.school_medical_management_system.services.CustomUserDetailsService;
+import com.school_medical.school_medical_management_system.services.impl.CustomUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

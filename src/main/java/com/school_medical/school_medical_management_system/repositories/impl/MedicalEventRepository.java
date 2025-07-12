@@ -4,6 +4,7 @@ import com.school_medical.school_medical_management_system.models.ApprovalReques
 import com.school_medical.school_medical_management_system.repositories.IMedicalEventRepository;
 import com.school_medical.school_medical_management_system.repositories.entites.MedicalEvent;
 import com.school_medical.school_medical_management_system.services.IAppUserService;
+import com.school_medical.school_medical_management_system.utils.AuthUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -89,7 +90,7 @@ public class MedicalEventRepository implements IMedicalEventRepository {
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
             ps.setString(1, approvalRequest.getApprovalStatus());
-            ps.setLong(2, appUserService.getUserByEmail().getId());
+            ps.setLong(2, appUserService.getUserByEmail(AuthUtils.getCurrentUserEmail()).getId());
             ps.setLong(3, id);
             ps.executeUpdate();
 

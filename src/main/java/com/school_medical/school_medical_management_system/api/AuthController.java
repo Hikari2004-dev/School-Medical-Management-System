@@ -1,8 +1,10 @@
 package com.school_medical.school_medical_management_system.api;
 
 import com.school_medical.school_medical_management_system.config.JwtUtil;
+import com.school_medical.school_medical_management_system.repositories.IUserRepository;
+import com.school_medical.school_medical_management_system.repositories.entites.Appuser;
 import com.school_medical.school_medical_management_system.repositories.entites.StudentParent;
-import com.school_medical.school_medical_management_system.services.CustomUserDetailsService;
+import com.school_medical.school_medical_management_system.services.impl.CustomUserDetailsService;
 import com.school_medical.school_medical_management_system.services.IAppUserService;
 import com.school_medical.school_medical_management_system.services.IStudentParentService;
 import com.school_medical.school_medical_management_system.utils.AuthUtils;
@@ -47,12 +49,11 @@ public class AuthController {
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getEmail());
         final String jwt = jwtUtil.generateToken(userDetails);
-        return ResponseEntity.ok(new AuthResponse(jwt));
-    }
 
-    @GetMapping(value = "/login/checkemail")
-    public ResponseEntity<?> checkCurrentEmail() {
-        return ResponseEntity.ok(appUserService.getUserByEmail());
+        // Lấy thông tin người dùng từ appUserService
+        Appuser user = appUserService.getUserByEmail(authRequest.getEmail());
+        String name = user.getFirstName();
+        return ResponseEntity.ok(new AuthResponse(jwt, name));
     }
 
     @Autowired
@@ -78,5 +79,6 @@ class AuthRequest {
 @AllArgsConstructor
 class AuthResponse {
     private String jwt;
+    private String name;
 }
 

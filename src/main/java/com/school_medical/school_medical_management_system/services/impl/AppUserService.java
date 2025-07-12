@@ -15,8 +15,7 @@ public class AppUserService implements IAppUserService {
     private AuthUtils authUtils;
 
     @Override
-    public Appuser getUserByEmail() {
-        String email = AuthUtils.getCurrentUserEmail();
+    public Appuser getUserByEmail(String email) {
         return userRepository.getUserByEmail(email);
     }
 }
