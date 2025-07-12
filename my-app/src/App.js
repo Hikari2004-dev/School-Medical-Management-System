@@ -28,7 +28,6 @@ function App() {
           <Route path="/medications" element={<Medications />} />
           <Route path="/vaccination" element={<Vaccination />} />
           <Route path="/student-health" element={<StudentHealthProfile />} />
-          <Route path="/report" element={<ReportPage />} />
           <Route path="/student-profile" element={<StudentProfile />} />
           <Route path="/notification" element={<Notification />} />
           {/* Add more routes as needed */}

@@ -1,8 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./StudentProfile.css";
 import AvatarImg from "../../../image/hinhanh/avatar.png";
 import LogoImg from "../../../image/hinhanh/logoproject.png";
+
+const Tab = ({ active, children, ...props }) => (
+  <button
+    className={`tab-btn${active ? " active" : ""}`}
+    {...props}
+  >
+    {children}
+  </button>
+);
 
 const StudentProfile = () => {
   const navigate = useNavigate();
@@ -40,6 +49,18 @@ const StudentProfile = () => {
   };
 
   const handleEditToggle = () => setIsEditing(!isEditing);
+
+  const [student, setStudent] = useState(null);
+
+  useEffect(() => {
+    fetch("/data/student.json")
+      .then((res) => res.json())
+      .then((data) => setStudent(data));
+  }, []);
+
+  if (!student) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="student-profile-page">
