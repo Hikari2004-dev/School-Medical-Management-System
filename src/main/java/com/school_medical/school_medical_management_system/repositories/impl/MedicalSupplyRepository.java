@@ -18,7 +18,7 @@ public class MedicalSupplyRepository implements IMedicalSupplyRepository {
 
     @Override
     public void createSupply(MedicalSupply supply) {
-        String sql = "INSERT INTO medicalsupply (name, quantity, description, last_checked_date) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO medicalsupply (name, quantity, description, last_checked_date, status) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -26,6 +26,7 @@ public class MedicalSupplyRepository implements IMedicalSupplyRepository {
             stmt.setInt(2, supply.getQuantity());
             stmt.setString(3, supply.getDescription());
             stmt.setDate(4, supply.getLastCheckedDate() != null ? new java.sql.Date(supply.getLastCheckedDate().getTime()) : null);
+            stmt.setInt(5, 1); // luôn tạo mới với status = 1
 
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -36,7 +37,7 @@ public class MedicalSupplyRepository implements IMedicalSupplyRepository {
     @Override
     public List<MedicalSupply> getAllSupplies() {
         List<MedicalSupply> supplies = new ArrayList<>();
-        String sql = "SELECT * FROM medicalsupply";
+        String sql = "SELECT * FROM medicalsupply WHERE status = 1";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
@@ -48,6 +49,7 @@ public class MedicalSupplyRepository implements IMedicalSupplyRepository {
                 supply.setQuantity(rs.getInt("quantity"));
                 supply.setDescription(rs.getString("description"));
                 supply.setLastCheckedDate(rs.getDate("last_checked_date"));
+                supply.setStatus(rs.getInt("status"));
                 supplies.add(supply);
             }
         } catch (SQLException e) {
@@ -58,7 +60,7 @@ public class MedicalSupplyRepository implements IMedicalSupplyRepository {
 
     @Override
     public MedicalSupply findById(Integer id) {
-        String sql = "SELECT * FROM medicalsupply WHERE supply_id = ?";
+        String sql = "SELECT * FROM medicalsupply WHERE supply_id = ? AND status = 1";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -71,6 +73,7 @@ public class MedicalSupplyRepository implements IMedicalSupplyRepository {
                     supply.setQuantity(rs.getInt("quantity"));
                     supply.setDescription(rs.getString("description"));
                     supply.setLastCheckedDate(rs.getDate("last_checked_date"));
+                    supply.setStatus(rs.getInt("status"));
                     return supply;
                 }
             }
@@ -82,7 +85,7 @@ public class MedicalSupplyRepository implements IMedicalSupplyRepository {
 
     @Override
     public void updateSupply(MedicalSupply supply) {
-        String sql = "UPDATE medicalsupply SET name = ?, quantity = ?, description = ?, last_checked_date = ? WHERE supply_id = ?";
+        String sql = "UPDATE medicalsupply SET name = ?, quantity = ?, description = ?, last_checked_date = ?, status = ? WHERE supply_id = ?";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -90,7 +93,8 @@ public class MedicalSupplyRepository implements IMedicalSupplyRepository {
             stmt.setInt(2, supply.getQuantity());
             stmt.setString(3, supply.getDescription());
             stmt.setDate(4, supply.getLastCheckedDate() != null ? new java.sql.Date(supply.getLastCheckedDate().getTime()) : null);
-            stmt.setInt(5, supply.getSupplyId());
+            stmt.setInt(5, supply.getStatus() != null ? supply.getStatus() : 1);
+            stmt.setInt(6, supply.getSupplyId());
 
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -100,14 +104,14 @@ public class MedicalSupplyRepository implements IMedicalSupplyRepository {
 
     @Override
     public void deleteSupply(Integer id) {
-        String sql = "DELETE FROM medicalsupply WHERE supply_id = ?";
+        String sql = "UPDATE medicalsupply SET status = 0 WHERE supply_id = ?";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
             stmt.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException("Error deleting supply", e);
+            throw new RuntimeException("Error soft-deleting supply", e);
         }
     }
 }

@@ -1,7 +1,6 @@
 package com.school_medical.school_medical_management_system.services.impl;
 
 import com.school_medical.school_medical_management_system.repositories.IMedicalSupplyRepository;
-import com.school_medical.school_medical_management_system.repositories.entites.MedicalEventSupply;
 import com.school_medical.school_medical_management_system.repositories.entites.MedicalSupply;
 import com.school_medical.school_medical_management_system.services.IMedicalSupplyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +38,4 @@ public class MedicalSupplyService implements IMedicalSupplyService {
     public void deleteSupply(Integer id) {
         repository.deleteSupply(id);
     }
-
 }
-
