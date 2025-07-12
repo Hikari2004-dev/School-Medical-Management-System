@@ -2,7 +2,9 @@ package com.school_medical.school_medical_management_system.services.impl;
 
 import com.school_medical.school_medical_management_system.models.ApprovalRequest;
 import com.school_medical.school_medical_management_system.repositories.IMedicalEventRepository;
+import com.school_medical.school_medical_management_system.repositories.IUserRepository;
 import com.school_medical.school_medical_management_system.repositories.entites.MedicalEvent;
+import com.school_medical.school_medical_management_system.services.IAppUserService;
 import com.school_medical.school_medical_management_system.services.IMedicalEventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,9 @@ public class MedicalEventService implements IMedicalEventService {
 
     @Autowired
     private IMedicalEventRepository medicalEventRepository;
+
+    @Autowired
+    private IAppUserService appUserService;
 
     @Override
     public List<MedicalEvent> getAllEvents() {
@@ -38,7 +43,7 @@ public class MedicalEventService implements IMedicalEventService {
         MedicalEvent dto = new MedicalEvent();
         dto.setEventId(id);
         dto.setApprovalStatus(approvalRequest.getApprovalStatus());
-        dto.setApprovedBy(approvalRequest.getApprovedBy());
+        dto.setApprovedBy(appUserService.getUserByEmail().getId());
         return dto;
     }
 }

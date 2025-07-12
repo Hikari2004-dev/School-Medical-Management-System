@@ -1,219 +1,152 @@
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import "./vaccination.css";
+import AvatarImg from "../../../image/hinhanh/avatar.png";
+import LogoImg from "../../../image/hinhanh/logoproject.png";
 
-import React, { useEffect, useState } from "react";
-import {
-  Check,
-  X,
-  Home,
-  Pill,
-  Syringe,
-  FileText,
-  User,
-  Plus,
-} from "lucide-react";
-import "./vaccination.css"; // ✅ File CSS riêng
+const Vaccination = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
 
-export default function VaccinationApp() {
-  const [records, setRecords] = useState([]);
+  const tabRoutes = {
+    "/patient-search": "Thông tin cá nhân",
+    "/medications": "Đơn thuốc",
+    "/vaccinations": "Lịch sử tiêm chủng",
+    "/health-record": "Hồ sơ sức khỏe",
+  };
 
-  const navigation = [
-    { name: "Trang chủ", icon: Home, active: false },
-    { name: "Đơn thuốc", icon: Pill, active: false },
-    { name: "Sổ vaccine", icon: Syringe, active: true },
-    { name: "Hồ sơ sức khỏe", icon: User, active: false },
-    { name: "Báo cáo", icon: FileText, active: false },
-  ];
+  const activeTab = tabRoutes[location.pathname] || "Lịch sử tiêm chủng";
 
-  const tabs = [
-    { name: "Thông tin cá nhân", active: false },
-    { name: "Đơn thuốc", active: false },
-    { name: "Lịch sử tiêm chủng", active: true },
-    { name: "Hồ sơ sức khỏe", active: false },
-  ];
+  const handleTabClick = (label) => {
+    const path = Object.keys(tabRoutes).find((key) => tabRoutes[key] === label);
+    if (path && location.pathname !== path)
+      navigate(path, { state: { from: location.pathname } });
+  };
 
   useEffect(() => {
-    fetchVaccinationRecords();
-  }, []);
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
-  const fetchVaccinationRecords = async () => {
-    try {
-      const response = await fetch("/api/vaccinations");
-      const data = await response.json();
-      setRecords(data);
-    } catch (error) {
-      console.error("Lỗi khi lấy dữ liệu:", error);
-      setRecords([
-        {
-          id: 1,
-          medicineName: "Covid-19",
-          dosage: "500 mg",
-          timesPerDay: 1,
-          startDate: "10/05/2025",
-          notes: "Hạ sốt",
-          approved: true,
-        },
-        {
-          id: 2,
-          medicineName: "Uốn ván",
-          dosage: "500 mg",
-          timesPerDay: 1,
-          startDate: "10/05/2025",
-          notes: "Uốn ván",
-          approved: false,
-        },
-      ]);
+  const [vaccines, setVaccines] = useState([
+    {
+      name: "Covid-19",
+      dose: "Mũi 1",
+      date: "12/05/2025",
+      note: "Không sốt",
+      status: "Đã tiêm",
+    },
+    {
+      name: "Viêm gan B",
+      dose: "Mũi 2",
+      date: "03/04/2025",
+      note: "Tiêm lại sau 6 tháng",
+      status: "Chưa tiêm",
+    },
+  ]);
+
+  const handleAdd = () => {
+    const name = prompt("Tên vaccine:");
+    const dose = prompt("Mũi tiêm:");
+    const date = prompt("Ngày tiêm:");
+    const note = prompt("Ghi chú:");
+    const status = prompt("Trạng thái (Đã tiêm / Chưa tiêm):");
+
+    if (name && dose && date) {
+      const newEntry = { name, dose, date, note, status };
+      setVaccines([...vaccines, newEntry]);
+    }
+  };
+
+  const handleDelete = (index) => {
+    if (window.confirm("Bạn có chắc chắn muốn xoá vaccine này không?")) {
+      const updated = vaccines.filter((_, i) => i !== index);
+      setVaccines(updated);
     }
   };
 
   return (
-    <div className="flex min-h-screen font-judson">
-      {/* Sidebar */}
-      <div className="w-64 bg-purple-sidebar text-white p-4">
-        <div className="flex items-center mb-10 gap-4">
-          <img
-            src="https://api.builder.io/api/v1/image/assets/TEMP/8b3e23527786923c57ed545f79e93f8dfd4d59a8?width=214"
-            className="w-12 h-12 rounded-full"
-            alt="Logo"
-          />
-          <div>
-            <h1 className="text-2xl">SchoMed</h1>
-            <p className="text-sm text-white/90">School Medical</p>
+    <div className="student-profile-page">
+      <aside className="sidebar">
+        <div className="brand-box">
+          <img src={LogoImg} alt="Logo" className="brand-icon" />
+          <div className="brand-text">
+            <h1>SchoMed</h1>
+            <p>School Medical</p>
           </div>
         </div>
-        {navigation.map((item) => {
-          const Icon = item.icon;
-          return (
-            <div
-              key={item.name}
-              className={`flex items-center gap-4 px-4 py-3 rounded-lg mb-2 cursor-pointer transition ${
-                item.active
-                  ? "bg-white/10 text-white"
-                  : "hover:bg-white/10 text-white/80"
-              }`}
-            >
-              <Icon size={20} />
-              <span>{item.name}</span>
-            </div>
-          );
-        })}
-      </div>
 
-      {/* Main */}
-      <div className="flex-1 p-6 bg-gray-50">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
-          <div className="flex items-center gap-4">
-            <img
-              src="https://api.builder.io/api/v1/image/assets/TEMP/2723c3e4c60d9a1d609fb00204102d84108a5216?width=400"
-              className="w-20 h-20 rounded-full"
-              alt="User"
-            />
-            <div>
-              <h2 className="text-2xl">Nguyễn Đoàn Duy Khánh</h2>
-              <p className="text-lg">Lớp 12A1</p>
+        <nav className="sidebar-nav">
+          <button onClick={() => navigate("/patient-search")} className={location.pathname === "/patient-search" ? "active" : ""}>🏠 Trang chủ</button>
+          <button onClick={() => navigate("/medications")} className={location.pathname === "/medications" ? "active" : ""}>💊 Đơn thuốc</button>
+          <button onClick={() => navigate("/vaccinations")} className={location.pathname === "/vaccinations" ? "active" : ""}>💉 Sổ vaccine</button>
+          <button onClick={() => navigate("/health-record")} className={location.pathname === "/health-record" ? "active" : ""}>📁 Hồ sơ sức khỏe</button>
+        </nav>
+      </aside>
+
+      <main className="profile-main">
+        <button className="home-button" onClick={() => navigate("/")}>
+          ⬅ Quay về trang chính
+        </button>
+
+        <div className="profile-card">
+          <div className="profile-overview">
+            <img src={AvatarImg} alt="avatar" className="avatar" />
+            <div className="info-text">
+              <h2>Nguyễn Đoàn Duy Khánh</h2>
+              <p>Lớp 12A1 | GVCN: Lâm Phương Thúy</p>
+              <p>Chiều cao: 170cm | Cân nặng: 60 kg</p>
+              <p>Giới tính: Nam/Nữ</p>
             </div>
           </div>
-          <button className="flex items-center gap-2 px-4 py-2 mt-4 sm:mt-0 bg-purple-active text-white rounded-xl hover:bg-purple-800">
-            <Plus size={20} />
-            Thêm mới
-          </button>
-        </div>
 
-        {/* Tabs */}
-        <div className="border-b mb-6">
-          <nav className="flex gap-4">
-            {tabs.map((tab) => (
-              <button
-                key={tab.name}
-                className={`py-2 border-b-2 ${
-                  tab.active
-                    ? "border-purple-active text-purple-active"
-                    : "border-transparent text-gray-600 hover:text-purple-700"
-                }`}
+          <div className="profile-tabs">
+            {Object.values(tabRoutes).map((label) => (
+              <span
+                key={label}
+                className={`tab ${activeTab === label ? "active" : ""}`}
+                onClick={() => handleTabClick(label)}
               >
-                {tab.name}
-              </button>
+                {label}
+              </span>
             ))}
-          </nav>
-        </div>
-
-        {/* Table (desktop) */}
-        <div className="hidden md:block bg-white rounded-xl shadow overflow-hidden">
-          <div className="bg-purple-700 text-white px-6 py-4 grid grid-cols-6 gap-4">
-            <div>Tên thuốc</div>
-            <div>Liều dùng</div>
-            <div>Số lần/Ngày</div>
-            <div>Ngày bắt đầu</div>
-            <div>Ghi chú</div>
-            <div className="text-center">Chấp thuận</div>
           </div>
-          {records.map((record, index) => (
-            <div
-              key={record.id}
-              className={`grid grid-cols-6 gap-4 px-6 py-4 ${
-                index % 2 === 0 ? "bg-white" : "bg-gray-50"
-              }`}
-            >
-              <div>{record.medicineName}</div>
-              <div>{record.dosage}</div>
-              <div className="text-center">{record.timesPerDay}</div>
-              <div>{record.startDate}</div>
-              <div className="italic">{record.notes}</div>
-              <div className="flex justify-center">
-                <div
-                  className={`w-8 h-8 flex items-center justify-center rounded-full ${
-                    record.approved ? "bg-emerald-500" : "bg-red-500"
-                  }`}
-                >
-                  {record.approved ? (
-                    <Check size={18} className="text-white" />
-                  ) : (
-                    <X size={18} className="text-white" />
-                  )}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
 
-        {/* Mobile cards */}
-        <div className="md:hidden space-y-4">
-          {records.map((record) => (
-            <div
-              key={record.id}
-              className="bg-white shadow rounded-xl p-4 border border-gray-200"
-            >
-              <div className="flex justify-between items-center mb-2">
-                <div className="text-purple-700 font-semibold text-lg">
-                  {record.medicineName}
-                </div>
-                <div
-                  className={`w-6 h-6 flex items-center justify-center rounded-full ${
-                    record.approved ? "bg-emerald-500" : "bg-red-500"
-                  }`}
-                >
-                  {record.approved ? (
-                    <Check size={14} className="text-white" />
-                  ) : (
-                    <X size={14} className="text-white" />
-                  )}
-                </div>
-              </div>
-              <div className="text-sm text-gray-600 italic mb-2">
-                {record.notes}
-              </div>
-              <div className="text-sm">
-                <p>Liều dùng: {record.dosage}</p>
-                <p>Số lần/Ngày: {record.timesPerDay}</p>
-                <p>Ngày bắt đầu: {record.startDate}</p>
-              </div>
+          <div className="profile-detail">
+            <div className="add-button-container" style={{ textAlign: "right", margin: "12px 0" }}>
+              <button className="add-button" onClick={handleAdd}>+ Thêm vaccine</button>
             </div>
-          ))}
-        </div>
 
-        <div className="text-sm text-gray-500 mt-6 text-right">
-          Cập nhật lần cuối: {new Date().toLocaleDateString("vi-VN")}
+            <table className="medications-table">
+              <thead>
+                <tr>
+                  <th>Tên vaccine</th>
+                  <th>Mũi tiêm</th>
+                  <th>Ngày tiêm</th>
+                  <th>Ghi chú</th>
+                  <th>Trạng thái</th>
+                  <th>Hành động</th>
+                </tr>
+              </thead>
+              <tbody>
+                {vaccines.map((v, index) => (
+                  <tr key={index}>
+                    <td>{v.name}</td>
+                    <td>{v.dose}</td>
+                    <td>{v.date}</td>
+                    <td>{v.note}</td>
+                    <td>{v.status}</td>
+                    <td>
+                      <button className="delete-button" onClick={() => handleDelete(index)}>Xoá</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      </main>
     </div>
   );
-}
+};
+
+export default Vaccination;

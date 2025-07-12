@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 public class ApprovalRequest {
     private String approvalStatus;  // e.g., "Approved" or "Rejected"
-    private Long approvedBy;
+    private Integer approvedBy;
 
     public String getApprovalStatus() {
         return approvalStatus;
@@ -14,11 +14,11 @@ public class ApprovalRequest {
         this.approvalStatus = approvalStatus;
     }
 
-    public Long getApprovedBy() {
+    public Integer getApprovedBy() {
         return approvedBy;
     }
 
-    public void setApprovedBy(Long approvedBy) {
+    public void setApprovedBy(Integer approvedBy) {
         this.approvedBy = approvedBy;
     }
 }

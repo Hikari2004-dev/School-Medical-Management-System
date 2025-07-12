@@ -11,7 +11,7 @@ public class MedicalEvent {
     private Long nurseId;
     private String status;
     private String approvalStatus;
-    private Long approvedBy;
+    private Integer approvedBy;
 
     public String getApprovalStatus() {
         return approvalStatus;
@@ -21,11 +21,11 @@ public class MedicalEvent {
         this.approvalStatus = approvalStatus;
     }
 
-    public Long getApprovedBy() {
+    public Integer getApprovedBy() {
         return approvedBy;
     }
 
-    public void setApprovedBy(Long approvedBy) {
+    public void setApprovedBy(Integer approvedBy) {
         this.approvedBy = approvedBy;
     }
 
