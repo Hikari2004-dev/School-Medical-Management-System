@@ -9,3 +9,4 @@ public interface IMedicalAppointmentRepository {
     List<MedicalAppointment> getAppointmentsByStudentId(int studentId);
     void approveAppointment(int appointmentId, String status);
 }
+    

@@ -5,6 +5,7 @@ import { CheckCircle, AlertCircle } from 'lucide-react';
 import MemberIllustration from '../../image/hinhanh/hoivien.png';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
+import VNPAYPaymentButton from './VNPAYPaymentButton'; // Thêm dòng này
 import './MemberPage.css';
 
 const plans = [
@@ -55,7 +56,7 @@ export default function MemberPage() {
               <Link to="/" className="breadcrumb-link">Trang Chủ</Link> &gt; Hội Viên
             </span>
             <h1 className="hero-title">
-              Gói đăng ký quản lý<br/>sức khỏe học sinh
+              Gói đăng ký quản lý<br />sức khỏe học sinh
             </h1>
             <p className="hero-subtitle">
               Chọn gói phù hợp nhất với nhu cầu của trường bạn
@@ -101,12 +102,21 @@ export default function MemberPage() {
             </ul>
 
             <div className="package-button-container">
-              <button
+              <VNPAYPaymentButton
+                amount={plan.type === 'basic' ? 550000000 : 1500000000}
+                orderInfo={
+                  `Đăng ký gói ${plan.title} - ${plan.subtitle}`
+                }
+                onSuccess={() => {
+                  // Handle successful payment here
+                  navigate('/success');
+                }}
+                onError={() => {
+                  // Handle payment error here
+                  navigate('/error');
+                }}
                 className={`package-button package-button-${plan.type}`}
-                onClick={() => navigate(`/payment/${plan.type}`)}
-              >
-                Mua ngay
-              </button>
+              />
             </div>
           </div>
         ))}
