@@ -6,22 +6,13 @@ import News from './pages/News/News';
 import NewsDetail from './pages/NewsDetail/NewsDetail';
 import NewsTestPage from './pages/NewsTestPage';
 import OurServices from './pages/Service/OurServices';
-import StudentProfile from './pages/lookup/personal_Info/StudentProfile';
-import Medications from './pages/lookup/prescription/medications';
-import Vaccination from './pages/lookup/vaccinehistory/vaccination';
+import StudentProfile from './pages/lookup/personal_Info/StudentProfile'; 
+import Medications from './pages/lookup/prescription/Medications.jsx';
+import Vaccination from './pages/lookup/vaccinehistory/vaccination.jsx';
 import StudentHealthProfile from './pages/lookup/info/StudentHealthProfile';
-import ReportPage from './pages/lookup/ReportPage/ReportPage';
 import ChatBot from './components/chat/ChatBot';
-import Login from './auth/Login/Login';
-import Register from './auth/Register/Register';
-import ForgetPassword from "./auth/ForgetPassword/ForgetPassword";
-import OtpVerification from './auth/OtpVerification/OtpVerification';
-import OtpSuccess from './auth/OtpSuccess/OtpSuccess';
-import ResetPassword from './auth/ResetPassword/ResetPassword';
-import HealthCheck from './pages/Service/HealthCheck';
-import OnlineConsultationPage from './pages/Service/OnlineConsultationPage';
-import VaccineForm from './pages/Service/VaccineForm';
-import SendPrescription from './pages/Service/SendPrescription';
+import Notification from "./pages/notification/Notification.jsx";
+
 function App() {
   return (
     <Router>
@@ -38,16 +29,9 @@ function App() {
           <Route path="/vaccination" element={<Vaccination />} />
           <Route path="/student-health" element={<StudentHealthProfile />} />
           <Route path="/report" element={<ReportPage />} />
-          <Route path="/login" element={<Login />} /> 
-          <Route path="/register" element={<Register />} />
-          <Route path="/forget-password" element={<ForgetPassword />} />
-          <Route path="/otp-verification" element={<OtpVerification />} />
-          <Route path="/otp-success" element={<OtpSuccess />} />
-          <Route path="/reset-password" element={<ResetPassword/>} />
-          <Route path="/health-check" element={<HealthCheck />} />
-          <Route path="/online-consultation" element={<OnlineConsultationPage />} />
-          <Route path="/vaccine-form" element={<VaccineForm />} />
-          <Route path="/send-prescription" element={<SendPrescription />} />
+          <Route path="/student-profile" element={<StudentProfile />} />
+          <Route path="/notification" element={<Notification />} />
+          {/* Add more routes as needed */}
         </Routes>
         <ChatBot />
       </div>
