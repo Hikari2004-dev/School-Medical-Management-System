@@ -7,31 +7,63 @@ import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDate;
 
-@Getter
-@Setter
-@Entity
-@Table(name = "parentconsent")
 public class Parentconsent {
-    @Id
-    @Column(name = "consent_id", nullable = false)
     private Integer id;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "parent_user_id", nullable = false)
     private Appuser parentUser;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "student_id", nullable = false)
     private Student student;
 
-    @Column(name = "consent_type", length = 100)
     private String consentType;
 
-    @Column(name = "consent_date")
     private LocalDate consentDate;
 
-    @ColumnDefault("0")
-    @Column(name = "status")
     private Boolean status;
 
+    public LocalDate getConsentDate() {
+        return consentDate;
+    }
+
+    public void setConsentDate(LocalDate consentDate) {
+        this.consentDate = consentDate;
+    }
+
+    public String getConsentType() {
+        return consentType;
+    }
+
+    public void setConsentType(String consentType) {
+        this.consentType = consentType;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Appuser getParentUser() {
+        return parentUser;
+    }
+
+    public void setParentUser(Appuser parentUser) {
+        this.parentUser = parentUser;
+    }
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
 }

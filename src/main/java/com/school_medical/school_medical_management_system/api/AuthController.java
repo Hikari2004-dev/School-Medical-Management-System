@@ -52,7 +52,7 @@ public class AuthController {
 
     @GetMapping(value = "/login/checkemail")
     public ResponseEntity<?> checkCurrentEmail() {
-        return ResponseEntity.ok(appUserService.getUserByEmail().getId());
+        return ResponseEntity.ok(appUserService.getUserByEmail());
     }
 
     @Autowired

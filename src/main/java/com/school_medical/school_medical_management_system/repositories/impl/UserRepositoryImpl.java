@@ -45,7 +45,10 @@ public class UserRepositoryImpl implements IUserRepository {
 
     @Override
     public Appuser getUserByEmail(String email) {
-        String sql = "SELECT * FROM appuser WHERE email = ?";
+        String sql = "SELECT user_id,first_name,last_name,email,phone,address,role_name \n" +
+                "FROM appuser \n" +
+                "JOIN role on appuser.role_id = role.role_id\n" +
+                "WHERE email = ?";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -57,9 +60,9 @@ public class UserRepositoryImpl implements IUserRepository {
                     user.setFirstName(rs.getString("first_name"));
                     user.setLastName(rs.getString("last_name"));
                     user.setEmail(rs.getString("email"));
-                    user.setPassword(rs.getString("password"));
                     user.setPhone(rs.getString("phone"));
                     user.setAddress(rs.getString("address"));
+                    user.setRoleName(rs.getString("role_name"));
                     return user;
                 }
             }
