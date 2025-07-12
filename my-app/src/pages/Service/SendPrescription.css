@@ -1,0 +1,186 @@
+/* src/pages/Service/SendPrescription.css */
+
+/* Breadcrumb container */
+.breadcrumb-container {
+  position: relative;
+  z-index: 1000;
+  background: white;
+}
+
+/* Breadcrumb */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  font-size: 0.875rem;
+  padding: 0.5rem 1rem;
+}
+.breadcrumb-link {
+  color: #4a5568;
+  text-decoration: none;
+  transition: color .2s;
+}
+.breadcrumb-link:hover {
+  color: #2d3748;
+  text-decoration: underline;
+}
+.breadcrumb-sep {
+  margin: 0 0.5rem;
+  color: #a0aec0;
+}
+.breadcrumb-current {
+  color: #2d3748;
+  font-weight: 600;
+}
+
+/* Tạo khoảng cách nội dung chính khỏi breadcrumb */
+.send-prescription-page {
+  margin-top: 1rem;
+}
+
+/* Page wrapper */
+.send-prescription-page {
+  background: #f5f7fa;
+  padding: 1rem;
+  min-height: calc(100vh - 200px);
+}
+
+/* Content layout */
+.send-prescription-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+@media (min-width: 768px) {
+  .send-prescription-content {
+    flex-direction: row;
+  }
+}
+
+/* Form column */
+.form-column {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: .75rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  flex: 1;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+.field label {
+  font-size: .875rem;
+  font-weight: 500;
+  margin-bottom: .25rem;
+}
+.field input {
+  padding: .5rem .75rem;
+  border: 1px solid #d1d5db;
+  border-radius: .5rem;
+  font-size: 1rem;
+}
+.two-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+@media (max-width: 767px) {
+  .two-fields {
+    grid-template-columns: 1fr;
+  }
+}
+.btn-add {
+  width: 100%;
+  padding: .75rem;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: .5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .2s;
+}
+.btn-add:hover {
+  background: #1e40af;
+}
+
+/* Items column */
+.items-column {
+  background: #fff;
+  padding: 1rem;
+  border-radius: .75rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  flex: 1;
+  max-height: 500px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.items-heading {
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+/* Individual item */
+.prescription-item {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  padding: .75rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: .5rem;
+  margin-bottom: .75rem;
+  cursor: pointer;
+  transition: border-color .2s, background .2s;
+}
+.prescription-item:hover {
+  border-color: #2563eb;
+  background: #f0f8ff;
+}
+.remove-btn {
+  position: absolute;
+  top: .5rem;
+  right: .5rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+.prescription-item h4 {
+  margin: 0 0 .25rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+.prescription-item .dose,
+.prescription-item .note {
+  margin: 0;
+  font-size: .875rem;
+  color: #4a5568;
+}
+.prescription-item .meta {
+  margin-top: .5rem;
+  font-size: .75rem;
+  color: #a0aec0;
+  font-style: italic;
+}
+
+/* Confirm button */
+.btn-confirm {
+  width: 100%;
+  max-width: 400px;
+  padding: .75rem;
+  background: #facc15;
+  color: #1a202c;
+  border: none;
+  border-radius: .5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .2s;
+  align-self: center;
+}
+.btn-confirm:hover {
+  background: #eab308;
+}

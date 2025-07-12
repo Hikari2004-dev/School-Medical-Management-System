@@ -4,7 +4,7 @@ import './HomePage.css';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import ChatBox from '../../components/chat/ChatBot';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { newsData } from '../../data/newsData';
 
 // ThreeCardsSection component
