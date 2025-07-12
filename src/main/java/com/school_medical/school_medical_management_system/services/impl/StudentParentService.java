@@ -21,10 +21,7 @@ public class StudentParentService implements IStudentParentService {
     private IStudentParent studentParent;
 
     @Override
-    public List<StudentParent> getStudentsByParentId() {
-        int parentUserId = appUserService.getUserByEmail(AuthUtils.getCurrentUserEmail()).getId();
-        List<StudentParent> studentParents = new ArrayList<>();
-        studentParents = studentParent.getStudentsByParentId(parentUserId);
-        return studentParents;
+    public List<StudentParent> getStudentInfoByParentId(int parentId) {
+        return studentParent.findByParentId(parentId);
     }
 }

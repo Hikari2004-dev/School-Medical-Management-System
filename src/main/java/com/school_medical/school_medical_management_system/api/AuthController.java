@@ -61,7 +61,7 @@ public class AuthController {
 
     @GetMapping("/my-children")
     public ResponseEntity<List<StudentParent>> getMyChildren() {
-        List<StudentParent> list = studentParentService.getStudentsByParentId(); // ID sẽ được lấy trong service
+        List<StudentParent> list = studentParentService.getStudentInfoByParentId(appUserService.getUserByEmail(AuthUtils.getCurrentUserEmail()).getId());
         if (list.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
