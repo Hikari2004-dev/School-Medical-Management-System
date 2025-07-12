@@ -24,7 +24,7 @@ public class MedicalSupplyController {
 
     @GetMapping("/all")
     public ResponseEntity<List<MedicalSupply>> getAllSupplies() {
-        return ResponseEntity.ok(service.getAllSupplies());
+        return ResponseEntity.ok(service.getAllSupplies()); // đã lọc status = 1 trong repo
     }
 
     @GetMapping("/{id}")
@@ -44,6 +44,12 @@ public class MedicalSupplyController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Supply not found or already deleted");
         }
+
+        // giữ nguyên status cũ nếu không truyền từ client
+        if (supply.getStatus() == null) {
+            supply.setStatus(existing.getStatus());
+        }
+
         service.updateSupply(supply);
         return ResponseEntity.ok("Supply updated successfully");
     }
@@ -55,7 +61,7 @@ public class MedicalSupplyController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Supply not found or already deleted");
         }
-        service.deleteSupply(id);
+        service.deleteSupply(id); // soft delete: status = 0
         return ResponseEntity.ok("Supply deleted successfully");
     }
 }
