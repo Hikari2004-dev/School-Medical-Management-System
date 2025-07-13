@@ -7,6 +7,7 @@ import "./Header.css";
 
 export default function Header() {
   const location = useLocation();
+  const userName = localStorage.getItem("userName");
 
   return (
     <header className="homepage-header">
@@ -80,10 +81,17 @@ export default function Header() {
           <i className="fas fa-paper-plane action-icon"></i>
 
           {/* ✅ Chuyển sang Link để hoạt động với react-router */}
-          <Link to="/login" className="login-btn">
-            <i className="fas fa-user"></i>
-            <span>Log in / Sign up</span>
-          </Link>
+          {userName ? (
+            <span className="login-btn">
+              <i className="fas fa-user"></i>
+              Xin chào, {userName}
+            </span>
+          ) : (
+            <Link to="/login" className="login-btn">
+              <i className="fas fa-user"></i>
+              <span>Log in </span> <span>/ Sign up</span>
+            </Link>
+          )}
         </div>
       </div>
 
