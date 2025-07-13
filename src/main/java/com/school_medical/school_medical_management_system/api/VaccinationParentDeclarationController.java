@@ -12,6 +12,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -27,25 +28,6 @@ public class VaccinationParentDeclarationController {
     @Autowired
     private IParentStudentService parentStudentService;
 
-    // ✅ Xem lịch sử tiêm của con
-    @GetMapping("/student/{studentId}")
-    public ResponseEntity<?> getHistoryByStudent(
-            @AuthenticationPrincipal User user,
-            @PathVariable int studentId) {
-
-        String email = user.getUsername();
-        Appuser parent = appUserService.getUserByEmail(email);
-        if (parent == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid parent user");
-        }
-
-        if (!parentStudentService.isStudentBelongsToParent(parent.getId(), studentId)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not authorized to access this student's data.");
-        }
-
-        List<VaccinationParentDeclarationDTO> list = service.getAllByStudentId(studentId);
-        return ResponseEntity.ok(list);
-    }
 
     // ✅ Phụ huynh khai báo lịch sử tiêm chủng cho con
     @PostMapping
@@ -70,4 +52,30 @@ public class VaccinationParentDeclarationController {
         service.save(dto);
         return ResponseEntity.ok("Vaccination history declared successfully.");
     }
+
+
+    // ✅ Phụ huynh xem toàn bộ lịch sử tiêm chủng của các con
+    @GetMapping("/my-children")
+    public ResponseEntity<?> getHistoryOfMyChildren(@AuthenticationPrincipal User user) {
+        String email = user.getUsername();
+        Appuser parent = appUserService.getUserByEmail(email);
+        if (parent == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid parent user");
+        }
+
+        // Lấy danh sách student_id của con
+        List<Integer> studentIds = parentStudentService.getStudentIdsByParentId(parent.getId());
+        if (studentIds.isEmpty()) {
+            return ResponseEntity.ok("No students associated with this parent.");
+        }
+
+        // Lấy danh sách lịch sử tiêm chủng cho tất cả học sinh
+        List<VaccinationParentDeclarationDTO> allDeclarations = new ArrayList<>();
+        for (int studentId : studentIds) {
+            allDeclarations.addAll(service.getAllByStudentId(studentId));
+        }
+
+        return ResponseEntity.ok(allDeclarations);
+    }
+
 }
