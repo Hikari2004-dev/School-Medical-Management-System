@@ -66,6 +66,8 @@ public class SecurityConfig {
                                 "/api/event-supplies/**",
                                 "/api/medicalsupply/**",
                                 "/api/appointments/**",
+                                "/login/checkemail",
+                                "/api/payment/**",
                                 "/api/vaccination-history"
                         ).permitAll()
                         // 🔒 Chặn nếu không có token cho parent-info
