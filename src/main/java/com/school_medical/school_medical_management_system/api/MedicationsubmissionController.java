@@ -1,13 +1,11 @@
 package com.school_medical.school_medical_management_system.api;
 
-import com.school_medical.school_medical_management_system.config.JwtUtil;
 import com.school_medical.school_medical_management_system.models.ApprovalRequest;
 import com.school_medical.school_medical_management_system.repositories.entites.Medicationsubmission;
 import com.school_medical.school_medical_management_system.services.IAppUserService;
 import com.school_medical.school_medical_management_system.services.IMedicationsubmissionService;
 import com.school_medical.school_medical_management_system.repositories.IUserRepository;
 import com.school_medical.school_medical_management_system.repositories.entites.Appuser;
-import com.school_medical.school_medical_management_system.utils.AuthUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -26,8 +24,6 @@ public class MedicationsubmissionController {
     @Autowired
     private IAppUserService appUserService;
 
-    private AuthUtils authUtils;
-
     // ✅ Phụ huynh gửi đơn - approvedBy luôn null
     @PostMapping
     public ResponseEntity<String> createSubmission(@RequestBody Medicationsubmission submission) {
@@ -39,11 +35,21 @@ public class MedicationsubmissionController {
         return ResponseEntity.ok("Medication submission saved successfully.");
     }
 
-    // ✅ Lấy danh sách đơn theo parent ID
-    @GetMapping("/parent/{parentId}")
-    public ResponseEntity<List<Medicationsubmission>> getSubmissionsByParent(@PathVariable Integer parentId) {
-        return ResponseEntity.ok(service.findByParentId(parentId));
+    // ✅ Lấy danh sách đơn thuốc của con cái phụ huynh đang đăng nhập
+    @GetMapping("/my-submissions")
+    public ResponseEntity<List<Medicationsubmission>> getSubmissionsByCurrentParent(@AuthenticationPrincipal User user) {
+        String email = user.getUsername(); // Lấy email từ JWT
+        Appuser appuser = appUserService.getUserByEmail(email); // Truy lại thông tin người dùng
+
+        if (appuser == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Integer parentId = appuser.getId(); // Lấy ID phụ huynh từ Appuser
+        List<Medicationsubmission> submissions = service.findByParentId(parentId); // Truy vấn đơn thuốc của các con
+        return ResponseEntity.ok(submissions);
     }
+
 
     // ✅ Lấy chi tiết đơn theo ID
     @GetMapping("/{id}")
@@ -62,7 +68,7 @@ public class MedicationsubmissionController {
                                                     @RequestBody ApprovalRequest request,
                                                     @AuthenticationPrincipal User user) {
         String email = user.getUsername();
-        Appuser appuser = appUserService.getUserByEmail(AuthUtils.getCurrentUserEmail());
+        Appuser appuser = appUserService.getUserByEmail(email);
 
         if (appuser == null) {
             return ResponseEntity.badRequest().body("Invalid user.");
