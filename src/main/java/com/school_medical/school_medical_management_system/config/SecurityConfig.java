@@ -45,7 +45,9 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
+        http    
+                .cors() // Enable CORS
+                .and()
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
@@ -92,8 +94,8 @@ public class SecurityConfig {
                         .allowedOrigins("http://localhost:3000")
                         .allowedMethods("*")
                         .allowedHeaders("*")
-                        .allowCredentials(true); // ❗ BẮT BUỘC PHẢI CÓ
+                        .allowCredentials(true); 
             }
         };
     }
-}
+} 

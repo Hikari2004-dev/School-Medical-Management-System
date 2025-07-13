@@ -1,6 +1,6 @@
 // src/pages/notification/Notification.jsx
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Footer from "../../components/Footer/Footer";
 import Header from "../../components/Header/Header";
 import "./Notification.css";
@@ -126,7 +126,48 @@ const NavigationControls = ({ currentPage, totalPages, onPageChange }) => (
 );
 
 export default function Notification() {
-  const [data] = useState(defaultData);
+  // Thay vì dùng defaultData, dùng state để lưu thông báo từ API
+  const [data, setData] = useState({ announcements: [], events: [] });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    fetch("http://localhost:8080/api/notifications/parent", {
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      }
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error(res.status);
+        return res.json();
+      })
+      .then((notifications) => {
+        setData({
+          announcements: notifications
+            .filter(n => n.type === "Vaccine")
+            .map(n => ({
+              id: n.notificationId,
+              title: "💉 Tiêm chủng",
+              content: n.content,
+              date: n.dateSent,
+            })),
+          events: notifications
+            .filter(n => n.type === "Event")
+            .map(n => ({
+              id: n.notificationId,
+              title: "📅 Sự kiện",
+              content: n.content,
+              date: n.dateSent,
+            })),
+        });
+      })
+      .catch((e) => {
+        setError("Không tải được thông báo.");
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
   // phân trang announcements
   const [annPage, setAnnPage] = useState(0);
   const annTotal = Math.ceil(data.announcements.length / 3);
