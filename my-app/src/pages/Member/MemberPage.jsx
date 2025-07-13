@@ -5,7 +5,7 @@ import { CheckCircle, AlertCircle } from 'lucide-react';
 import MemberIllustration from '../../image/hinhanh/hoivien.png';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
-import VNPAYPaymentButton from './VNPAYPaymentButton';
+import VNPAYPaymentButton from './VNPAYPaymentButton'; // Thêm dòng này
 import './MemberPage.css';
 
 const plans = [
