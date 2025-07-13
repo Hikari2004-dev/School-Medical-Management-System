@@ -16,6 +16,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -45,9 +46,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http    
-                .cors() // Enable CORS
-                .and()
+        http
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
@@ -57,7 +56,7 @@ public class SecurityConfig {
                                 "/api/medication-submissions/**",
                                 "/api/medical-checkups/**",
                                 "/login/checkemail",
-                                "/api/healthinfo/**",  // ✅ sửa từ "/" thành "/**" để khớp cả /{id}
+                                "/api/healthinfo/**",
                                 "/api/medical-events/**",
                                 "/api/event-batches/**",
                                 "/api/vaccinations/**",
@@ -69,19 +68,28 @@ public class SecurityConfig {
                                 "/api/medicalsupply/**",
                                 "/api/appointments/**",
                                 "/login/checkemail",
-                                "/api/payment/**"
+                                "/api/payment/**",
+                                "/api/vaccination-history"                                
                         ).permitAll()
+                        
+                        // 🔒 Chặn nếu không có token cho parent-info
+                        .requestMatchers("/api/parent-info/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                    .logout(logout -> logout
+                    .logoutUrl("/logout")
+                    .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler()) // Prevent redirection issues for REST clients
+                    .invalidateHttpSession(true)
+                    .deleteCookies("JSESSIONID") // Clear session cookies
+                );
         return http.build();
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
+        // ❗ Chỉ dùng NoOpPasswordEncoder khi phát triển
         return org.springframework.security.crypto.password.NoOpPasswordEncoder.getInstance();
     }
 
@@ -94,7 +102,7 @@ public class SecurityConfig {
                         .allowedOrigins("http://localhost:3000")
                         .allowedMethods("*")
                         .allowedHeaders("*")
-                        .allowCredentials(true); 
+                        .allowCredentials(true); // ❗ BẮT BUỘC PHẢI CÓ
             }
         };
     }

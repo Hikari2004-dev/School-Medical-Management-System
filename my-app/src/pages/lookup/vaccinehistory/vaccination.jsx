@@ -8,6 +8,45 @@ const Vaccination = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const [vaccines, setVaccines] = useState([]);
+
+  useEffect(() => {
+    fetchVaccines();
+  }, []);
+
+  const fetchVaccines = () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    fetch("http://localhost:8080/api/vaccination-history/my-children", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Không thể tải danh sách vaccine");
+        return res.json();
+      })
+      .then((data) => setVaccines(data))
+      .catch((err) => console.error("❌ Lỗi fetch:", err));
+  };
+
+  const handleDelete = (id) => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    if (window.confirm("Bạn có chắc chắn muốn xoá bản ghi này?")) {
+      fetch(`http://localhost:8080/api/vaccination-history/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then((res) => {
+          if (!res.ok) throw new Error("Xoá thất bại");
+          // Cập nhật danh sách sau khi xoá
+          setVaccines((prev) => prev.filter((v) => v.id !== id));
+        })
+        .catch((err) => alert("❌ Xoá thất bại: " + err.message));
+    }
+  };
+
   const tabRoutes = {
     "/patient-search": "Thông tin cá nhân",
     "/medications": "Đơn thuốc",
@@ -19,48 +58,8 @@ const Vaccination = () => {
 
   const handleTabClick = (label) => {
     const path = Object.keys(tabRoutes).find((key) => tabRoutes[key] === label);
-    if (path && location.pathname !== path)
-      navigate(path, { state: { from: location.pathname } });
-  };
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [location.pathname]);
-
-  const [vaccines, setVaccines] = useState([
-    {
-      name: "Covid-19",
-      dose: "Mũi 1",
-      date: "12/05/2025",
-      note: "Không sốt",
-      status: "Đã tiêm",
-    },
-    {
-      name: "Viêm gan B",
-      dose: "Mũi 2",
-      date: "03/04/2025",
-      note: "Tiêm lại sau 6 tháng",
-      status: "Chưa tiêm",
-    },
-  ]);
-
-  const handleAdd = () => {
-    const name = prompt("Tên vaccine:");
-    const dose = prompt("Mũi tiêm:");
-    const date = prompt("Ngày tiêm:");
-    const note = prompt("Ghi chú:");
-    const status = prompt("Trạng thái (Đã tiêm / Chưa tiêm):");
-
-    if (name && dose && date) {
-      const newEntry = { name, dose, date, note, status };
-      setVaccines([...vaccines, newEntry]);
-    }
-  };
-
-  const handleDelete = (index) => {
-    if (window.confirm("Bạn có chắc chắn muốn xoá vaccine này không?")) {
-      const updated = vaccines.filter((_, i) => i !== index);
-      setVaccines(updated);
+    if (path && location.pathname !== path) {
+      navigate(path);
     }
   };
 
@@ -74,7 +73,6 @@ const Vaccination = () => {
             <p>School Medical</p>
           </div>
         </div>
-
         <nav className="sidebar-nav">
           <button onClick={() => navigate("/patient-search")} className={location.pathname === "/patient-search" ? "active" : ""}>🏠 Trang chủ</button>
           <button onClick={() => navigate("/medications")} className={location.pathname === "/medications" ? "active" : ""}>💊 Đơn thuốc</button>
@@ -112,36 +110,40 @@ const Vaccination = () => {
           </div>
 
           <div className="profile-detail">
-            <div className="add-button-container" style={{ textAlign: "right", margin: "12px 0" }}>
-              <button className="add-button" onClick={handleAdd}>+ Thêm vaccine</button>
-            </div>
-
             <table className="medications-table">
               <thead>
                 <tr>
+                  <th>Học sinh</th>
                   <th>Tên vaccine</th>
                   <th>Mũi tiêm</th>
-                  <th>Ngày tiêm</th>
+                  <th>Ngày khai báo</th>
                   <th>Ghi chú</th>
                   <th>Trạng thái</th>
+                  <th>Lô vaccine</th>
                   <th>Hành động</th>
                 </tr>
               </thead>
               <tbody>
-                {vaccines.map((v, index) => (
-                  <tr key={index}>
-                    <td>{v.name}</td>
-                    <td>{v.dose}</td>
-                    <td>{v.date}</td>
-                    <td>{v.note}</td>
+                {vaccines.map((v) => (
+                  <tr key={v.id}>
+                    <td>{v.studentName}</td>
+                    <td>{v.vaccineName}</td>
+                    <td>{v.doseNumber}</td>
+                    <td>{v.declaredDate}</td>
+                    <td>{v.notes}</td>
                     <td>{v.status}</td>
+                    <td>{v.vaccineLot}</td>
                     <td>
-                      <button className="delete-button" onClick={() => handleDelete(index)}>Xoá</button>
+                      <button className="delete-button" onClick={() => handleDelete(v.id)}>🗑 Xoá</button>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
+
+            {vaccines.length === 0 && (
+              <p style={{ padding: "12px", color: "gray" }}>Không có dữ liệu tiêm chủng.</p>
+            )}
           </div>
         </div>
       </main>
