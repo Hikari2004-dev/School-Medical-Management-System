@@ -16,9 +16,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -53,7 +57,8 @@ public class AuthController {
         // Lấy thông tin người dùng từ appUserService
         Appuser user = appUserService.getUserByEmail(authRequest.getEmail());
         String name = user.getFirstName();
-        return ResponseEntity.ok(new AuthResponse(jwt, name));
+        String role = user.getRoleName();
+        return ResponseEntity.ok(new AuthResponse(jwt, name, role));
     }
 
     @Autowired
@@ -66,6 +71,14 @@ public class AuthController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(list);
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> getCurrentUser(@AuthenticationPrincipal User user) {
+        String email = user.getUsername();
+        Collection<? extends GrantedAuthority> roles = user.getAuthorities();
+
+        return ResponseEntity.ok("Email: " + email + ", Roles: " + roles);
     }
 }
 
@@ -80,5 +93,6 @@ class AuthRequest {
 class AuthResponse {
     private String jwt;
     private String name;
+    private String role;
 }
 
