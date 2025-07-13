@@ -1,13 +1,14 @@
 package com.school_medical.school_medical_management_system.services.impl;
 
-import com.school_medical.school_medical_management_system.models.VaccinationParentDeclarationDTO;
-import com.school_medical.school_medical_management_system.repositories.IVaccinationParentDeclarationRepository;
-import com.school_medical.school_medical_management_system.services.IVaccinationParentDeclarationService;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.school_medical.school_medical_management_system.models.VaccinationParentDeclarationDTO;
+import com.school_medical.school_medical_management_system.repositories.IVaccinationParentDeclarationRepository;
+import com.school_medical.school_medical_management_system.services.IVaccinationParentDeclarationService;
 
 @Service
 public class VaccinationParentDeclarationServiceImpl implements IVaccinationParentDeclarationService {
@@ -43,4 +44,10 @@ public class VaccinationParentDeclarationServiceImpl implements IVaccinationPare
             throw new RuntimeException("Error saving vaccination declaration: " + e.getMessage(), e);
         }
     }
+
+    @   Override
+public void deleteById(int id) {
+    repository.deleteById(id);
+}
+
 }

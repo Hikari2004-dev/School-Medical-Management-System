@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import BannerImg from "../../image/hinhanh/backgroundyte.png";
 import logo from "../../image/hinhanh/logoproject.png";
 import "./Header.css";
@@ -7,6 +7,7 @@ import "./Header.css";
 
 export default function Header() {
   const location = useLocation();
+  const navigate = useNavigate();
   const userName = localStorage.getItem("userName");
   const token = localStorage.getItem("token");
   const [showDropdown, setShowDropdown] = useState(false);
@@ -158,6 +159,15 @@ export default function Header() {
           <Link
             to="/student-profile"
             className={`nav-link ${location.pathname === '/student-profile' ? 'active' : ''}`}
+            onClick={(e) => {
+              e.preventDefault();
+              const token = localStorage.getItem("token");
+              if (token) {
+                navigate("/student-profile");
+              } else {
+                navigate("/login");
+              }
+            }}
           >
             <i className="fas fa-archive"></i>
             <span>Tra cứu học sinh</span>

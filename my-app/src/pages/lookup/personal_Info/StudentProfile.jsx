@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./StudentProfile.css";
 import AvatarImg from "../../../image/hinhanh/avatar.png";
@@ -10,13 +10,36 @@ const StudentProfile = () => {
 
   const [isEditing, setIsEditing] = useState(false);
   const [profile, setProfile] = useState({
-    mother: "",
-    motherPhone: "",
-    father: "",
-    fatherPhone: "",
+    fullName: "",
+    phone: "",
     email: "",
-    address: ""
+    address: "",
   });
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("⚠️ Không tìm thấy token trong localStorage");
+      return;
+    }
+
+    fetch("http://localhost:8080/api/parent-info/me", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("❌ Không thể lấy dữ liệu phụ huynh.");
+        return res.json();
+      })
+      .then((data) => {
+        console.log("✅ Dữ liệu phụ huynh:", data);
+        setProfile(data);
+      })
+      .catch((err) => {
+        console.error("Lỗi khi fetch:", err);
+      });
+  }, []);
 
   const handleChange = (field, value) => {
     setProfile((prev) => ({ ...prev, [field]: value }));
@@ -98,31 +121,44 @@ const StudentProfile = () => {
             {activeTab === "Thông tin cá nhân" ? (
               <>
                 <div className="info-columns">
-                  <div>
-                    <p><strong>Mẹ:</strong> {isEditing ? (
-                      <input className="input-line" value={profile.mother} onChange={(e) => handleChange("mother", e.target.value)} />
-                    ) : profile.mother}</p>
+                  <div className="contact-left">
+                    <p>
+                      <strong>Phụ huynh:</strong>{" "}
+                      {isEditing ? (
+                        <input className="input-line" value={profile.fullName} onChange={(e) => handleChange("fullName", e.target.value)} />
+                      ) : (
+                        profile.fullName
+                      )}
+                    </p>
 
-                    <p><strong>Điện thoại:</strong> {isEditing ? (
-                      <input className="input-line" value={profile.motherPhone} onChange={(e) => handleChange("motherPhone", e.target.value)} />
-                    ) : profile.motherPhone}</p>
-
-                    <p><strong>Ba:</strong> {isEditing ? (
-                      <input className="input-line" value={profile.father} onChange={(e) => handleChange("father", e.target.value)} />
-                    ) : profile.father}</p>
-
-                    <p><strong>Điện thoại:</strong> {isEditing ? (
-                      <input className="input-line" value={profile.fatherPhone} onChange={(e) => handleChange("fatherPhone", e.target.value)} />
-                    ) : profile.fatherPhone}</p>
+                    <p>
+                      <strong>Điện thoại:</strong>{" "}
+                      {isEditing ? (
+                        <input className="input-line" value={profile.phone} onChange={(e) => handleChange("phone", e.target.value)} />
+                      ) : (
+                        profile.phone
+                      )}
+                    </p>
                   </div>
-                  <div>
-                    <p><strong>Email:</strong> {isEditing ? (
-                      <input className="input-line" value={profile.email} onChange={(e) => handleChange("email", e.target.value)} />
-                    ) : profile.email}</p>
 
-                    <p><strong>Địa chỉ:</strong> {isEditing ? (
-                      <input className="input-line" value={profile.address} onChange={(e) => handleChange("address", e.target.value)} />
-                    ) : profile.address}</p>
+                  <div className="contact-right">
+                    <p>
+                      <strong>Email:</strong>{" "}
+                      {isEditing ? (
+                        <input className="input-line" value={profile.email} onChange={(e) => handleChange("email", e.target.value)} />
+                      ) : (
+                        profile.email
+                      )}
+                    </p>
+
+                    <p>
+                      <strong>Địa chỉ:</strong>{" "}
+                      {isEditing ? (
+                        <input className="input-line" value={profile.address} onChange={(e) => handleChange("address", e.target.value)} />
+                      ) : (
+                        profile.address
+                      )}
+                    </p>
                   </div>
                 </div>
                 <button className="home-button" style={{ marginTop: "20px" }} onClick={handleEditToggle}>

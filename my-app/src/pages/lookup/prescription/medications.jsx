@@ -1,20 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import "./Medications.css";
 import AvatarImg from "../../../image/hinhanh/avatar.png";
 import LogoImg from "../../../image/hinhanh/logoproject.png";
+import "./Medications.css"; // Dùng chung file CSS để giữ đồng bộ layout
 
 const Medications = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  console.log("🧭 location.state =", location.state); // 👈 Dòng debug này
-
-  const previousPage = location.state?.from || "/patient-search";
-
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [location.pathname]);
 
   const tabRoutes = {
     "/patient-search": "Thông tin cá nhân",
@@ -24,38 +16,28 @@ const Medications = () => {
   };
 
   const activeTab = tabRoutes[location.pathname] || "Đơn thuốc";
+  const [medications, setMedications] = useState([]);
+
+  // Gọi API lấy danh sách đơn thuốc
+  useEffect(() => {
+    fetch("http://localhost:8080/api/medication-submissions/my-submissions", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Không lấy được dữ liệu đơn thuốc.");
+        return res.json();
+      })
+      .then((data) => setMedications(data))
+      .catch((err) => console.error("❌ Lỗi fetch thuốc:", err));
+  }, []);
 
   const handleTabClick = (label) => {
     const path = Object.keys(tabRoutes).find((key) => tabRoutes[key] === label);
-    if (path && location.pathname !== path) navigate(path, { state: { from: location.pathname } });
-  };
-
-  const [medications, setMedications] = useState([
-    {
-      name: "Paracetamol",
-      dose: "500 mg",
-      timesPerDay: 3,
-      startDate: "10/05/2025",
-      note: "Hạ sốt"
+    if (path && location.pathname !== path) {
+      navigate(path);
     }
-  ]);
-
-  const handleAdd = () => {
-    const newMed = {
-      name: prompt("Tên thuốc:"),
-      dose: prompt("Liều dùng:"),
-      timesPerDay: prompt("Số lần/ngày:"),
-      startDate: prompt("Ngày bắt đầu:"),
-      note: prompt("Ghi chú:")
-    };
-    if (newMed.name) {
-      setMedications([...medications, newMed]);
-    }
-  };
-
-  const handleDelete = (index) => {
-    const updated = medications.filter((_, i) => i !== index);
-    setMedications(updated);
   };
 
   return (
@@ -70,10 +52,30 @@ const Medications = () => {
         </div>
 
         <nav className="sidebar-nav">
-          <button onClick={() => navigate("/patient-search")} className={location.pathname === "/patient-search" ? "active" : ""}>🏠 Trang chủ</button>
-          <button onClick={() => navigate("/medications")} className={location.pathname === "/medications" ? "active" : ""}>💊 Đơn thuốc</button>
-          <button onClick={() => navigate("/vaccinations")} className={location.pathname === "/vaccinations" ? "active" : ""}>💉 Sổ vaccine</button>
-          <button onClick={() => navigate("/health-record")} className={location.pathname === "/health-record" ? "active" : ""}>📁 Hồ sơ sức khỏe</button>
+          <button
+            onClick={() => navigate("/patient-search")}
+            className={location.pathname === "/patient-search" ? "active" : ""}
+          >
+            🏠 Trang chủ
+          </button>
+          <button
+            onClick={() => navigate("/medications")}
+            className={location.pathname === "/medications" ? "active" : ""}
+          >
+            💊 Đơn thuốc
+          </button>
+          <button
+            onClick={() => navigate("/vaccinations")}
+            className={location.pathname === "/vaccinations" ? "active" : ""}
+          >
+            💉 Sổ vaccine
+          </button>
+          <button
+            onClick={() => navigate("/health-record")}
+            className={location.pathname === "/health-record" ? "active" : ""}
+          >
+            📁 Hồ sơ sức khỏe
+          </button>
         </nav>
       </aside>
 
@@ -104,35 +106,38 @@ const Medications = () => {
           </div>
 
           <div className="profile-detail">
-            <div className="add-button-container">
-              <button className="add-button" onClick={handleAdd}>+ Thêm mới</button>
-            </div>
-            <table className="medications-table">
-              <thead>
-                <tr>
-                  <th>Tên thuốc</th>
-                  <th>Liều dùng</th>
-                  <th>Số lần/Ngày</th>
-                  <th>Ngày bắt đầu</th>
-                  <th>Ghi chú</th>
-                  <th>Hành động</th>
-                </tr>
-              </thead>
-              <tbody>
-                {medications.map((med, index) => (
-                  <tr key={index}>
-                    <td>{med.name}</td>
-                    <td>{med.dose}</td>
-                    <td>{med.timesPerDay}</td>
-                    <td>{med.startDate}</td>
-                    <td>{med.note}</td>
-                    <td>
-                      <button className="delete-button" onClick={() => handleDelete(index)}>Xóa</button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            {activeTab === "Đơn thuốc" ? (
+              medications.length > 0 ? (
+                <table className="medications-table">
+                  <thead>
+                    <tr>
+                      <th>Tên thuốc</th>
+                      <th>Liều dùng</th>
+                      <th>Tần suất</th>
+                      <th>Ngày bắt đầu</th>
+                      <th>Ngày kết thúc</th>
+                      <th>Trạng thái</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {medications.map((med) => (
+                      <tr key={med.medicationId}>
+                        <td>{med.medicationName}</td>
+                        <td>{med.dosage}</td>
+                        <td>{med.frequency}</td>
+                        <td>{med.startDate}</td>
+                        <td>{med.endDate}</td>
+                        <td>{med.status}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <p className="tab-placeholder">Chưa có đơn thuốc nào.</p>
+              )
+            ) : (
+              <p className="tab-placeholder">Hiện chưa có dữ liệu cho mục "{activeTab}".</p>
+            )}
           </div>
         </div>
       </main>

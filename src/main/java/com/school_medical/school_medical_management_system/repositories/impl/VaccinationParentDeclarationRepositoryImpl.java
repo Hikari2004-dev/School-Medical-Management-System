@@ -1,14 +1,19 @@
 package com.school_medical.school_medical_management_system.repositories.impl;
 
-import com.school_medical.school_medical_management_system.models.VaccinationParentDeclarationDTO;
-import com.school_medical.school_medical_management_system.repositories.IVaccinationParentDeclarationRepository;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import com.school_medical.school_medical_management_system.models.VaccinationParentDeclarationDTO;
+import com.school_medical.school_medical_management_system.repositories.IVaccinationParentDeclarationRepository;
 
 @Repository
 public class VaccinationParentDeclarationRepositoryImpl implements IVaccinationParentDeclarationRepository {
@@ -85,5 +90,19 @@ public class VaccinationParentDeclarationRepositoryImpl implements IVaccinationP
             throw new RuntimeException("Error saving vaccination declaration", e);
         }
     }
+
+    @Override
+public void deleteById(int id) {
+    String sql = "DELETE FROM vaccinationparentdeclaration WHERE id = ?";
+
+    try (Connection conn = dataSource.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setInt(1, id);
+        ps.executeUpdate();
+    } catch (SQLException e) {
+        throw new RuntimeException("Error deleting vaccination declaration", e);
+    }
+}
+
 
 }

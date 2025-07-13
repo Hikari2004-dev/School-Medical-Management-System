@@ -16,6 +16,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -46,6 +47,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .cors()
+                .and()
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
@@ -68,15 +71,21 @@ public class SecurityConfig {
                                 "/api/appointments/**",
                                 "/login/checkemail",
                                 "/api/payment/**",
-                                "/api/vaccination-history"
+                                "/api/vaccination-history"                                
                         ).permitAll()
+                        
                         // 🔒 Chặn nếu không có token cho parent-info
                         .requestMatchers("/api/parent-info/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                    .logout(logout -> logout
+                    .logoutUrl("/logout")
+                    .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler()) // Prevent redirection issues for REST clients
+                    .invalidateHttpSession(true)
+                    .deleteCookies("JSESSIONID") // Clear session cookies
+                );
         return http.build();
     }
 
