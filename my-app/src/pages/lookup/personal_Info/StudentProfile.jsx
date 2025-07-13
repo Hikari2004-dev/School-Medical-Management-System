@@ -16,6 +16,7 @@ const StudentProfile = () => {
   };
 
   const activeTab = tabRoutes[location.pathname] || "Thông tin cá nhân";
+<<<<<<< Updated upstream
   const [studentProfiles, setStudentProfiles] = useState([]);
 
   useEffect(() => {
@@ -24,6 +25,8 @@ const StudentProfile = () => {
       .then((data) => setStudentProfiles(data))
       .catch(() => setStudentProfiles([]));
   }, []);
+=======
+>>>>>>> Stashed changes
 
   return (
     <div className="student-profile-page">
@@ -99,6 +102,7 @@ const StudentProfile = () => {
 
             <div className="profile-detail">
               {activeTab === "Thông tin cá nhân" ? (
+<<<<<<< Updated upstream
                 <>
                   <div className="info-columns">
                     <div>
@@ -125,6 +129,17 @@ const StudentProfile = () => {
                     </div>
                   </div>
                 </>
+=======
+                <div className="info-columns">
+                  <div>
+                    <p><strong>Phụ huynh:</strong> {profile.mother} - {profile.motherPhone}</p>
+                  </div>
+                  <div>
+                    <p><strong>Email:</strong> {profile.email}</p>
+                    <p><strong>Địa chỉ:</strong> {profile.address}</p>
+                  </div>
+                </div>
+>>>>>>> Stashed changes
               ) : (
                 <p className="tab-placeholder">
                   Hiện chưa có dữ liệu cho mục "{activeTab}".
