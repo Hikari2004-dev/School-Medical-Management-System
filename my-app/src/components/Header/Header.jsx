@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import BannerImg from "../../image/hinhanh/backgroundyte.png";
 import logo from "../../image/hinhanh/logoproject.png";
@@ -8,6 +8,24 @@ import "./Header.css";
 export default function Header() {
   const location = useLocation();
   const userName = localStorage.getItem("userName");
+  const token = localStorage.getItem("token");
+  const [showDropdown, setShowDropdown] = useState(false);
+  const hideTimeout = useRef();
+
+  const handleLogout = () => {
+    localStorage.removeItem("userName");
+    localStorage.removeItem("token");
+    window.location.reload();
+  };
+
+  const handleDropdownEnter = () => {
+    clearTimeout(hideTimeout.current);
+    setShowDropdown(true);
+  };
+
+  const handleDropdownLeave = () => {
+    hideTimeout.current = setTimeout(() => setShowDropdown(false), 500); // 500ms delay
+  };
 
   return (
     <header className="homepage-header">
@@ -80,12 +98,23 @@ export default function Header() {
           </Link>
           <i className="fas fa-paper-plane action-icon"></i>
 
-          {/* ✅ Chuyển sang Link để hoạt động với react-router */}
-          {userName ? (
-            <span className="login-btn">
-              <i className="fas fa-user"></i>
-              Xin chào, {userName}
-            </span>
+          {(userName && token) ? (
+            <div
+              className="user-dropdown"
+              onMouseEnter={handleDropdownEnter}
+              onMouseLeave={handleDropdownLeave}
+            >
+              <span className="login-btn user-btn">
+                <i className="fas fa-user"></i>
+                Xin chào, {userName}
+              </span>
+              <div className="logout-dropdown" style={{ display: showDropdown ? "block" : "none" }}>
+                <button className="logout-btn" onClick={handleLogout}>
+                  <i className="fas fa-sign-out-alt"></i>
+                  Đăng xuất
+                </button>
+              </div>
+            </div>
           ) : (
             <Link to="/login" className="login-btn">
               <i className="fas fa-user"></i>

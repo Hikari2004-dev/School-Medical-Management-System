@@ -217,6 +217,96 @@
     object-fit: cover;
 }
 
+/* User Dropdown */
+.user-dropdown {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.user-btn {
+    cursor: pointer;
+    background: linear-gradient(90deg, #2563eb 60%, #60a5fa 100%);
+    border-radius: 999px;
+    padding: 0.32rem 0.9rem;
+    /* nhỏ lại */
+    font-size: 0.95rem;
+    /* nhỏ lại */
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    outline: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    /* nhỏ lại */
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.10);
+    transition: background 0.25s, color 0.2s, box-shadow 0.2s;
+}
+
+.user-btn:hover {
+    background: linear-gradient(90deg, #1e40af 60%, #3b82f6 100%);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(37, 99, 235, 0.18);
+}
+
+.logout-dropdown {
+    position: absolute;
+    top: 110%;
+    /* gần hơn */
+    right: 0;
+    min-width: 120px;
+    /* nhỏ lại */
+    display: none;
+    z-index: 100;
+    background: #fff;
+    border-radius: 10px;
+    /* nhỏ lại */
+    box-shadow: 0 4px 16px rgba(37, 99, 235, 0.13);
+    padding: 0.3rem 0.5rem;
+    /* nhỏ lại */
+    animation: fadeInDropdown 0.25s;
+}
+
+.user-dropdown:hover .logout-dropdown,
+.logout-dropdown:hover {
+    display: block;
+}
+
+@keyframes fadeInDropdown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.logout-btn {
+    width: 100%;
+    background: linear-gradient(90deg, #2563eb 60%, #60a5fa 100%);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    /* nhỏ lại */
+    padding: 0.4rem 0.7rem;
+    /* nhỏ lại */
+    font-size: 0.95rem;
+    /* nhỏ lại */
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.10);
+    transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    /* nhỏ lại */
+    margin: 0 auto;
+}
+
 /* === RESPONSIVE DESIGN === */
 @media (max-width: 768px) {
     .main-header {
