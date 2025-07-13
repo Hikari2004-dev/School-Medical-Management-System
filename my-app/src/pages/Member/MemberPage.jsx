@@ -5,7 +5,7 @@ import { CheckCircle, AlertCircle } from 'lucide-react';
 import MemberIllustration from '../../image/hinhanh/hoivien.png';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
-import VNPAYPaymentButton from './VNPAYPaymentButton'; // Thêm dòng này
+import VNPAYPaymentButton from './VNPAYPaymentButton';
 import './MemberPage.css';
 
 const plans = [
@@ -44,6 +44,7 @@ const plans = [
 export default function MemberPage() {
   const navigate = useNavigate();
 
+
   return (
     <div className="member-page">
       <Header />
@@ -53,17 +54,26 @@ export default function MemberPage() {
         <div className="hero-container">
           <div className="hero-content">
             <span className="breadcrumb">
-              <Link to="/" className="breadcrumb-link">Trang Chủ</Link> &gt; Hội Viên
+              <Link to="/" className="breadcrumb-link">
+                Trang Chủ
+              </Link>{' '}
+              &gt; Hội Viên
             </span>
             <h1 className="hero-title">
-              Gói đăng ký quản lý<br />sức khỏe học sinh
+              Gói đăng ký quản lý
+              <br />
+              sức khỏe học sinh
             </h1>
             <p className="hero-subtitle">
               Chọn gói phù hợp nhất với nhu cầu của trường bạn
             </p>
           </div>
           <div className="hero-image-container">
-            <img src={MemberIllustration} alt="Illustration" className="hero-image" />
+            <img
+              src={MemberIllustration}
+              alt="Illustration"
+              className="hero-image"
+            />
           </div>
         </div>
       </section>
@@ -76,25 +86,31 @@ export default function MemberPage() {
               <div className="package-header-content">
                 <div>
                   <h2 className="package-title">{plan.title}</h2>
-                  <span className="package-subtitle">{plan.subtitle}</span>
+                  <span className="package-subtitle">
+                    {plan.subtitle}
+                  </span>
                 </div>
                 <div className="package-price-container">
                   <div className="package-price">{plan.price}</div>
-                  <div className="package-period">{plan.period}</div>
+                  <div className="package-period">
+                    {plan.period}
+                  </div>
                 </div>
               </div>
             </div>
 
             <ul className="package-features">
               {plan.features.map((feat, i) => {
-                const isWarning = typeof feat === 'object' && feat.warning;
+                const isWarning =
+                  typeof feat === 'object' && feat.warning;
                 const text = typeof feat === 'object' ? feat.text : feat;
                 return (
                   <li key={i} className="feature-item">
-                    {isWarning
-                      ? <AlertCircle className="feature-icon feature-icon-warning" />
-                      : <CheckCircle className="feature-icon feature-icon-success" />
-                    }
+                    {isWarning ? (
+                      <AlertCircle className="feature-icon feature-icon-warning" />
+                    ) : (
+                      <CheckCircle className="feature-icon feature-icon-success" />
+                    )}
                     <span className="feature-text">{text}</span>
                   </li>
                 );
@@ -103,18 +119,8 @@ export default function MemberPage() {
 
             <div className="package-button-container">
               <VNPAYPaymentButton
-                amount={plan.type === 'basic' ? 550000000 : 1500000000}
-                orderInfo={
-                  `Đăng ký gói ${plan.title} - ${plan.subtitle}`
-                }
-                onSuccess={() => {
-                  // Handle successful payment here
-                  navigate('/success');
-                }}
-                onError={() => {
-                  // Handle payment error here
-                  navigate('/error');
-                }}
+                amount={Number(plan.price.replace(/\./g, ""))}
+                orderInfo={`Thanh toán gói ${plan.title}`}
                 className={`package-button package-button-${plan.type}`}
               />
             </div>
