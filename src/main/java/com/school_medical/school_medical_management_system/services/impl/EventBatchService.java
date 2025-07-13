@@ -32,4 +32,9 @@ public class EventBatchService implements IEventBatchService {
     public EventBatch getBatchById(Integer batchId) {
         return eventBatchRepository.getBatchById(batchId);
     }
+
+    @Override
+    public List<EventBatch> getTop3UpcomingEvents() {
+        return eventBatchRepository.findTop3UpcomingEvents();
+    }
 }

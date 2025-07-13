@@ -78,4 +78,10 @@ public class EventBatchController {
                     .body(new ApiResponse<>(false, "Phê duyệt thất bại: " + e.getMessage(), null));
         }
     }
+
+    @GetMapping("/upcoming")
+    public ResponseEntity<List<EventBatch>> getTop3UpcomingEvents() {
+        List<EventBatch> events = eventBatchService.getTop3UpcomingEvents();
+        return events.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(events);
+    }
 }

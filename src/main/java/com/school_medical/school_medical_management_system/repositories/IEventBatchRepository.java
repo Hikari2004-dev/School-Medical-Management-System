@@ -10,4 +10,5 @@ public interface IEventBatchRepository {
     void approveBatch(Integer batchId);
     List<EventBatch> getAllBatches();
     EventBatch getBatchById(Integer batchId);
+    List<EventBatch> findTop3UpcomingEvents();
 }

@@ -107,4 +107,29 @@ public class EventBatchRepository implements IEventBatchRepository {
         }
         return null;
     }
+
+    @Override
+    public List<EventBatch> findTop3UpcomingEvents() {
+        List<EventBatch> events = new ArrayList<>();
+        String sql = "SELECT * FROM eventbatch WHERE event_date >= CURRENT_DATE() ORDER BY event_date ASC LIMIT 3";
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                EventBatch event = new EventBatch();
+                event.setBatchId(rs.getLong("batch_id"));
+                event.setBatchType(rs.getString("batch_type"));
+                event.setTitle(rs.getString("title"));
+                event.setDescription(rs.getString("description"));
+                event.setEventDate(rs.getDate("event_date").toLocalDate());
+                event.setStatus(rs.getString("status"));
+                event.setCreatedBy(rs.getLong("created_by"));
+                events.add(event);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return events;
+    }
 }

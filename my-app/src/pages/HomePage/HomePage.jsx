@@ -98,7 +98,16 @@ function NewsSection() {
 
 // Event component
 function Event() {
-  const events = [
+  const [events, setEvents] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:8080/api/event-batches/upcoming")
+      .then((res) => res.json())
+      .then((data) => setEvents(data))
+      .catch((err) => console.error("Error fetching events:", err));
+  }, []);
+
+  const colors = [
     { bgColor: "bg-red-500", overlayColor: "bg-red-700" },
     { bgColor: "bg-blue-500", overlayColor: "bg-blue-700" },
     { bgColor: "bg-green-500", overlayColor: "bg-green-700" },
@@ -106,30 +115,30 @@ function Event() {
 
   return (
     <section className="event-section">
-      {/* Section title */}
       <h2 className="event-title">Sự Kiện SchoMed</h2>
 
-      {/* Event cards */}
       <div className="event-container">
-        {events.map((evt, idx) => (
-          <div key={idx} className="event-card">
-            {/* Background block */}
-            <div
-              className={`event-bg event-${evt.bgColor.split("-")[1]}-${
-                evt.bgColor.split("-")[2]
-              }`}
-            />
+        {events.map((event, idx) => {
+          const color = colors[idx % colors.length];
 
-            {/* Overlay "thời gian" block */}
-            <div
-              className={`event-overlay event-overlay-${
-                evt.overlayColor.split("-")[1]
-              }-${evt.overlayColor.split("-")[2]}`}
-            >
-              <span className="event-time-text">thời gian</span>
+          return (
+            <div key={event.batchId} className="event-card relative rounded-lg overflow-hidden w-full max-w-sm h-48 text-white">
+              {/* Màu nền chính */}
+              <div className={`${color.bgColor} absolute inset-0`} />
+
+              {/* Ngày diễn ra */}
+              <div className="absolute top-4 left-4 bg-black/40 px-4 py-2 rounded text-lg font-bold shadow-md">
+                {event.eventDate}
+              </div>
+
+              {/* Mô tả nội dung */}
+              <div className="relative z-10 h-full flex items-end p-5">
+                <p className="text-xl font-bold drop-shadow-md leading-snug">{event.description}</p>
+              </div>
             </div>
-          </div>
-        ))}
+
+          );
+        })}
       </div>
     </section>
   );

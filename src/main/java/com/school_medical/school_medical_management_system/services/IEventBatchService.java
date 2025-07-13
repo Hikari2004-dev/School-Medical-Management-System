@@ -9,4 +9,5 @@ public interface IEventBatchService {
     void approveBatch(Integer batchId);
     List<EventBatch> getAllBatches();
     EventBatch getBatchById(Integer batchId);
+    List<EventBatch> getTop3UpcomingEvents();
 }
