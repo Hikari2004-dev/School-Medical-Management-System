@@ -5,5 +5,5 @@ import com.school_medical.school_medical_management_system.repositories.entites.
 import java.util.List;
 
 public interface IStudentParent {
-    public List<StudentParent> getStudentsByParentId(int parentUserId);
+    List<StudentParent> findByParentId(int parentId);
 }

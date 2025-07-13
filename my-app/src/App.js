@@ -1,23 +1,34 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 import HomePage from './pages/HomePage/HomePage';
 import MemberPage from './pages/Member/MemberPage';
 import News from './pages/News/News';
 import NewsDetail from './pages/NewsDetail/NewsDetail';
 import NewsTestPage from './pages/NewsTestPage';
+
 import OurServices from './pages/Service/OurServices';
+import HealthCheck from './pages/Service/HealthCheck';
+import OnlineConsultationPage from './pages/Service/OnlineConsultationPage';
+import SendPrescription from './pages/Service/SendPrescription';
+import VaccineForm from './pages/Service/VaccineForm';
+
 import StudentProfile from './pages/lookup/personal_Info/StudentProfile'; 
-import Medications from './pages/lookup/prescription/Medications.jsx';
-import Vaccination from './pages/lookup/vaccinehistory/vaccination.jsx';
+import Medications from './pages/lookup/prescription/Medications';
+import Vaccination from './pages/lookup/vaccinehistory/vaccination';
 import StudentHealthProfile from './pages/lookup/info/StudentHealthProfile';
+
 import ChatBot from './components/chat/ChatBot';
-import Notification from "./pages/notification/Notification.jsx";
-import Login from './auth/Login/Login.jsx';
-import OtpSuccess from './auth/OtpSuccess/OtpSuccess.jsx';
-import ForgetPassword from './auth/ForgetPassword/ForgetPassword.jsx';
-import OtpVerification from './auth/OtpVerification/OtpVerification.jsx';
-import Register from './auth/Register/Register.jsx';
-import ResetPassword from './auth/ResetPassword/ResetPassword.jsx';
+import Notification from "./pages/notification/Notification";
+
+import Login from './auth/Login/Login';
+import OtpSuccess from './auth/OtpSuccess/OtpSuccess';
+import ForgetPassword from './auth/ForgetPassword/ForgetPassword';
+import OtpVerification from './auth/OtpVerification/OtpVerification';
+import Register from './auth/Register/Register';
+import ResetPassword from './auth/ResetPassword/ResetPassword';
+
+import VNPAYPaymentButton from './pages/Member/VNPAYPaymentButton';
 
 function App() {
   return (
@@ -29,27 +40,44 @@ function App() {
           <Route path="/news" element={<News />} />
           <Route path="/news/test" element={<NewsTestPage />} />
           <Route path="/news/:id" element={<NewsDetail />} />
+
+          {/* Service pages */}
           <Route path="/services" element={<OurServices />} />
+          <Route path="/health-check" element={<HealthCheck />} />
+          <Route path="/online-consultation" element={<OnlineConsultationPage />} />
+          <Route path="/send-prescription" element={<SendPrescription />} />
+          <Route path="/vaccine-form" element={<VaccineForm />} />
+
+          {/* Lookup */}
           <Route path="/patient-search" element={<StudentProfile />} />
           <Route path="/medications" element={<Medications />} />
           <Route path="/vaccinations" element={<Vaccination />} />
           <Route path="/health-record" element={<StudentHealthProfile />} />
           <Route path="/student-profile" element={<StudentProfile />} />
+
           <Route path="/notification" element={<Notification />} />
+
+          {/* Auth */}
           <Route path="/login" element={<Login />} />
           <Route path="/otp-success" element={<OtpSuccess />} />
           <Route path="/forget-password" element={<ForgetPassword />} />
           <Route path="/otp-verification" element={<OtpVerification />} />
           <Route path="/register" element={<Register />} />
           <Route path="/reset-password" element={<ResetPassword />} />
-          {/* Add more routes as needed */}
+
+          {/* Payment */}
+          <Route path="/payment/vnpay" element={<VNPAYPaymentButton />} />
+
+          {/* Thêm các route khác nếu cần */}
         </Routes>
         <ChatBot />
       </div>
     </Router>
   );
 }
+
 export default App;
+
 
 
 // import React, { useState } from 'react';
