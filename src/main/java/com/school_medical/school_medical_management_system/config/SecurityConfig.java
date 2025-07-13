@@ -55,7 +55,7 @@ public class SecurityConfig {
                                 "/api/medication-submissions/**",
                                 "/api/medical-checkups/**",
                                 "/login/checkemail",
-                                "/api/healthinfo/**",  // ✅ sửa từ "/" thành "/**" để khớp cả /{id}
+                                "/api/healthinfo/**",
                                 "/api/medical-events/**",
                                 "/api/event-batches/**",
                                 "/api/vaccinations/**",
@@ -66,9 +66,10 @@ public class SecurityConfig {
                                 "/api/event-supplies/**",
                                 "/api/medicalsupply/**",
                                 "/api/appointments/**",
-                                "/login/checkemail",
-                                "/api/parent-info"
+                                "/api/vaccination-history"
                         ).permitAll()
+                        // 🔒 Chặn nếu không có token cho parent-info
+                        .requestMatchers("/api/parent-info/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())
@@ -79,7 +80,7 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
+        // ❗ Chỉ dùng NoOpPasswordEncoder khi phát triển
         return org.springframework.security.crypto.password.NoOpPasswordEncoder.getInstance();
     }
 
@@ -92,7 +93,7 @@ public class SecurityConfig {
                         .allowedOrigins("http://localhost:3000")
                         .allowedMethods("*")
                         .allowedHeaders("*")
-                        .allowCredentials(true); // ❗ BẮT BUỘC PHẢI CÓ
+                        .allowCredentials(true); // BẮT BUỘC nếu gửi token từ frontend
             }
         };
     }
