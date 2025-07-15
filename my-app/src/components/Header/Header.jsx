@@ -4,7 +4,6 @@ import BannerImg from "../../image/hinhanh/backgroundyte.png";
 import logo from "../../image/hinhanh/logoproject.png";
 import "./Header.css";
 
-
 export default function Header() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -25,7 +24,7 @@ export default function Header() {
   };
 
   const handleDropdownLeave = () => {
-    hideTimeout.current = setTimeout(() => setShowDropdown(false), 500); // 500ms delay
+    hideTimeout.current = setTimeout(() => setShowDropdown(false), 500);
   };
 
   return (
@@ -46,17 +45,38 @@ export default function Header() {
             <span>Gmail</span>
           </span>
         </div>
+
         <div className="social-links">
-          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="social-link">
+          <a
+            href="https://facebook.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="social-link"
+          >
             <i className="fab fa-facebook-f"></i>
           </a>
-          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="social-link">
+          <a
+            href="https://instagram.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="social-link"
+          >
             <i className="fab fa-instagram"></i>
           </a>
-          <a href="https://telegram.org" target="_blank" rel="noopener noreferrer" className="social-link">
+          <a
+            href="https://telegram.org"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="social-link"
+          >
             <i className="fab fa-telegram-plane"></i>
           </a>
-          <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="social-link">
+          <a
+            href="https://youtube.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="social-link"
+          >
             <i className="fab fa-youtube"></i>
           </a>
         </div>
@@ -67,11 +87,7 @@ export default function Header() {
         {/* Logo */}
         <div className="logo-section">
           <Link to="/">
-            <img
-              src={logo}
-              alt="Schomed Logo"
-              className="logo-img"
-            />
+            <img src={logo} alt="Schomed Logo" className="logo-img" />
           </Link>
           <div>
             <h1 className="logo-title">Schomed</h1>
@@ -97,9 +113,10 @@ export default function Header() {
             <i className="fas fa-bell action-icon"></i>
             <span className="notification-dot"></span>
           </Link>
+
           <i className="fas fa-paper-plane action-icon"></i>
 
-          {(userName && token) ? (
+          {userName && token ? (
             <div
               className="user-dropdown"
               onMouseEnter={handleDropdownEnter}
@@ -109,7 +126,10 @@ export default function Header() {
                 <i className="fas fa-user"></i>
                 Xin chào, {userName}
               </span>
-              <div className="logout-dropdown" style={{ display: showDropdown ? "block" : "none" }}>
+              <div
+                className="logout-dropdown"
+                style={{ display: showDropdown ? "block" : "none" }}
+              >
                 <button className="logout-btn" onClick={handleLogout}>
                   <i className="fas fa-sign-out-alt"></i>
                   Đăng xuất
@@ -119,7 +139,8 @@ export default function Header() {
           ) : (
             <Link to="/login" className="login-btn">
               <i className="fas fa-user"></i>
-              <span>Log in </span> <span>/ Sign up</span>
+              <span>Log in </span>
+              <span>/ Sign up</span>
             </Link>
           )}
         </div>
@@ -135,6 +156,7 @@ export default function Header() {
             <i className="fas fa-home"></i>
             <span>Trang chủ</span>
           </Link>
+
           <Link
             to="/member"
             className={`nav-link ${location.pathname === '/member' ? 'active' : ''}`}
@@ -142,6 +164,7 @@ export default function Header() {
             <i className="fas fa-user-friends"></i>
             <span>Hội viên</span>
           </Link>
+
           <Link
             to="/news"
             className={`nav-link ${location.pathname === '/news' ? 'active' : ''}`}
@@ -149,6 +172,7 @@ export default function Header() {
             <i className="fas fa-newspaper"></i>
             <span>Tin Tức</span>
           </Link>
+
           <Link
             to="/services"
             className={`nav-link ${location.pathname === '/services' ? 'active' : ''}`}
@@ -156,6 +180,7 @@ export default function Header() {
             <i className="fas fa-stethoscope"></i>
             <span>Dịch vụ</span>
           </Link>
+
           <Link
             to="/student-profile"
             className={`nav-link ${location.pathname === '/student-profile' ? 'active' : ''}`}
@@ -177,11 +202,7 @@ export default function Header() {
 
       {/* 4. Banner Image dưới Navbar */}
       <div className="banner-container">
-        <img
-          src={BannerImg}
-          alt="Banner"
-          className="banner-img"
-        />
+        <img src={BannerImg} alt="Banner" className="banner-img" />
       </div>
     </header>
   );
