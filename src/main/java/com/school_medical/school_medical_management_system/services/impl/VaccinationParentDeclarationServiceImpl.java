@@ -27,14 +27,17 @@ public class VaccinationParentDeclarationServiceImpl implements IVaccinationPare
     @Override
     public void save(VaccinationParentDeclarationDTO dto) {
         try {
-            // Lấy parent_id từ user_id (nếu cần thiết)
+            // Lấy parent_id từ user_id
             Integer parentId = jdbcTemplate.queryForObject(
-                "SELECT parent_id FROM parent WHERE user_id = ?",
-                Integer.class,
-                dto.getParentId() // user_id
+                    "SELECT parent_id FROM parent WHERE user_id = ?",
+                    Integer.class,
+                    dto.getParentId()  // Giả sử bạn truyền user_id từ người đăng nhập
             );
 
+            // Gán vào DTO
             dto.setParentId(parentId);
+
+            // Gọi xuống repository để lưu
             repository.save(dto);
 
         } catch (Exception e) {
@@ -42,8 +45,9 @@ public class VaccinationParentDeclarationServiceImpl implements IVaccinationPare
         }
     }
 
-    @Override
-    public void deleteById(int id) {
-        repository.deleteById(id);
-    }
+    @   Override
+public void deleteById(int id) {
+    repository.deleteById(id);
+}
+
 }
