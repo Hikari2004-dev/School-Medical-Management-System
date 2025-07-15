@@ -1,4 +1,3 @@
-// src/Manager/Dashboard.jsx
 import React, { useState, useEffect } from "react";
 import {
   FaDollarSign,
@@ -30,6 +29,7 @@ const StatCard = ({ icon, title, value, description, color }) => (
 );
 
 export default function Dashboard() {
+  const [user, setUser] = useState(null);
   const [summary, setSummary] = useState({});
   const [activeUsers, setActiveUsers] = useState(null);
   const [prescriptions, setPrescriptions] = useState(null);
@@ -37,6 +37,8 @@ export default function Dashboard() {
   const [reportText, setReportText] = useState("");
 
   useEffect(() => {
+    fetch("/api/account/me")
+      .then((r) => r.json()).then(setUser).catch(() => setUser({ name: "Người dùng" }));
     fetch("/api/dashboard/summary")
       .then((r) => r.json()).then(setSummary).catch(() => {});
     fetch("/api/dashboard/active-users")
@@ -56,7 +58,7 @@ export default function Dashboard() {
       {/* Welcome banner */}
       <section className="max-w-5xl mx-auto text-center">
         <h1 className="text-4xl font-extrabold text-gray-800">
-          Chào mừng quay lại, Quản lý!
+          Chào mừng quay lại, {user?.name || "..."}!
         </h1>
         <div className="mx-auto mt-2 w-24 h-1 bg-blue-600 rounded-full" />
         <p className="mt-4 text-gray-600">

@@ -1,4 +1,3 @@
-// src/Manager/Performance.jsx
 import React from "react";
 import {
   BarChart,
@@ -9,7 +8,12 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { FaChartBar, FaProjectDiagram, FaUsers, FaUser } from "react-icons/fa";
+
+// Icon image imports
+import iconChart from "../image/icon/tiendo.png";
+import iconProject from "../image/icon/tangtruong.png";
+import iconUsers from "../image/icon/user.png";
+import iconUser from "../image/icon/user2.png";
 
 const data = [
   { thang: "T1", giaTri: 40 },
@@ -34,7 +38,7 @@ export default function Performance() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 mb-10">
         <div className="bg-white p-6 rounded-lg shadow flex flex-col">
           <div className="flex items-center mb-2">
-            <FaChartBar className="text-indigo-500 mr-2" size={24} />
+            <img src={iconChart} alt="chart" className="w-6 h-6 mr-2" />
             <span className="font-medium">Tháng này</span>
           </div>
           <div className="text-3xl font-bold">92%</div>
@@ -45,7 +49,7 @@ export default function Performance() {
 
         <div className="bg-white p-6 rounded-lg shadow flex flex-col">
           <div className="flex items-center mb-2">
-            <FaProjectDiagram className="text-green-500 mr-2" size={24} />
+            <img src={iconProject} alt="project" className="w-6 h-6 mr-2" />
             <span className="font-medium">Tiến độ Dự án</span>
           </div>
           <div className="text-3xl font-bold">Đúng tiến độ</div>
@@ -54,7 +58,7 @@ export default function Performance() {
 
         <div className="bg-white p-6 rounded-lg shadow flex flex-col">
           <div className="flex items-center mb-2">
-            <FaUsers className="text-purple-500 mr-2" size={24} />
+            <img src={iconUsers} alt="users" className="w-6 h-6 mr-2" />
             <span className="font-medium">Số lượt truy cập</span>
           </div>
           <div className="text-3xl font-bold">25.267</div>
@@ -63,7 +67,7 @@ export default function Performance() {
 
         <div className="bg-white p-6 rounded-lg shadow flex flex-col">
           <div className="flex items-center mb-2">
-            <FaUser className="text-blue-500 mr-2" size={24} />
+            <img src={iconUser} alt="user" className="w-6 h-6 mr-2" />
             <span className="font-medium">Số người dùng</span>
           </div>
           <div className="text-3xl font-bold">8.643</div>

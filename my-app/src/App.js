@@ -80,16 +80,10 @@ export default App;
 
 
 
-// import React, { useState } from 'react';
+// import React, { useState, useEffect } from 'react';
+// import axios from 'axios';
 // import {
 //   FaBars,
-//   FaChartPie,
-//   FaHome,
-//   FaChartBar,
-//   FaEnvelope,
-//   FaCalendarAlt,
-//   FaHospital,
-//   FaUserFriends,
 //   FaSignOutAlt,
 //   FaBell,
 //   FaCog,
@@ -101,24 +95,44 @@ export default App;
 // import MedicalEvents from './Manager/MedicalEvents';
 // import Notifications from './Manager/Notifications';
 // import ConsultationAppointments from './Manager/ConsultationAppointments';
-// import logo from './image/hinhanh/cvv.png';
+// import MainPage from './Manager/MainPage';
+
+// import logo from './image/hinhanh/logoproject.png';
+
+// // Icon images
+// import iconDashboard from './image/icon/dashboard.png';
+// import iconHome from './image/icon/house3.png';
+// import iconPerformance from './image/icon/hieusuat.png';
+// import iconNotification from './image/icon/thu.png';
+// import iconAppointment from './image/icon/lichhen.png';
+// import iconMedical from './image/icon/medicalevent.png';
+// import iconUsers from './image/icon/user3.png';
+
 // import './index.css';
 
 // function App() {
-//   // Hard-coded user để test giao diện
-//   const user = { name: 'Minh Khuê', role: 'Quản lý' };
-
+//   const [user, setUser] = useState(null);
 //   const [page, setPage] = useState('dashboard');
 //   const [sidebarOpen, setSidebarOpen] = useState(true);
 
+//   useEffect(() => {
+//     axios
+//       .get('/api/account/me')
+//       .then(response => setUser(response.data))
+//       .catch(error => {
+//         console.error('Lỗi khi lấy thông tin người dùng:', error);
+//         setUser({ name: 'Không rõ', role: 'Không rõ' });
+//       });
+//   }, []);
+
 //   const navItems = [
-//     { key: 'dashboard',    icon: <FaChartPie />,    label: 'Bảng điều khiển' },
-//     { key: 'home',         icon: <FaHome />,        label: 'Trang chủ' },
-//     { key: 'performance',  icon: <FaChartBar />,    label: 'Hiệu suất' },
-//     { key: 'notification', icon: <FaEnvelope />,    label: 'Thông báo' },
-//     { key: 'appointment',  icon: <FaCalendarAlt />, label: 'Lịch hẹn' },
-//     { key: 'medical',      icon: <FaHospital />,    label: 'Sự kiện y tế' },
-//     { key: 'users',        icon: <FaUserFriends />, label: 'Quản lí danh sách lớp' },
+//     { key: 'dashboard',    icon: iconDashboard,    label: 'Bảng điều khiển' },
+//     { key: 'home',         icon: iconHome,         label: 'Trang chủ' },
+//     { key: 'performance',  icon: iconPerformance,  label: 'Hiệu suất' },
+//     { key: 'notification', icon: iconNotification, label: 'Thông báo' },
+//     { key: 'appointment',  icon: iconAppointment,  label: 'Lịch hẹn' },
+//     { key: 'medical',      icon: iconMedical,      label: 'Sự kiện y tế' },
+//     { key: 'users',        icon: iconUsers,        label: 'Quản lí danh sách lớp' },
 //   ];
 
 //   const getInitials = name =>
@@ -161,7 +175,7 @@ export default App;
 //               }`}
 //               onClick={() => setPage(key)}
 //             >
-//               <span className="text-xl">{icon}</span>
+//               <img src={icon} alt={label} className="w-6 h-6" />
 //               {sidebarOpen && (
 //                 <span className="ml-4 text-sm font-medium">{label}</span>
 //               )}
@@ -174,7 +188,7 @@ export default App;
 //           <button
 //             className="p-2 bg-red-500 rounded-full hover:bg-red-600 transition-colors"
 //             onClick={() => {
-//               /* TODO: logout logic */
+//               // TODO: logout logic
 //             }}
 //           >
 //             <FaSignOutAlt className="text-white text-xl" />
@@ -188,23 +202,21 @@ export default App;
 //         {/* Header */}
 //         <header className="flex items-center justify-end bg-white border-b px-6 py-3">
 //           <div className="flex items-center space-x-4">
-//             <FaBell
-//               className="text-gray-600 text-xl cursor-pointer"
-//               title="Thông báo"
-//             />
-//             <FaCog
-//               className="text-gray-600 text-xl cursor-pointer"
-//               title="Cài đặt"
-//             />
-//             <div className="flex items-center space-x-2">
-//               <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
-//                 {getInitials(user.name)}
+//             <FaBell className="text-gray-600 text-xl cursor-pointer" title="Thông báo" />
+//             <FaCog className="text-gray-600 text-xl cursor-pointer" title="Cài đặt" />
+//             {!user ? (
+//               <div className="text-gray-500 text-sm">Đang tải...</div>
+//             ) : (
+//               <div className="flex items-center space-x-2">
+//                 <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
+//                   {getInitials(user.name)}
+//                 </div>
+//                 <div className="text-right">
+//                   <p className="font-medium">{user.name}</p>
+//                   <p className="text-sm text-gray-500">{user.role}</p>
+//                 </div>
 //               </div>
-//               <div className="text-right">
-//                 <p className="font-medium">{user.name}</p>
-//                 <p className="text-sm text-gray-500">{user.role}</p>
-//               </div>
-//             </div>
+//             )}
 //           </div>
 //         </header>
 
@@ -216,17 +228,16 @@ export default App;
 //           {page === 'appointment'  && <ConsultationAppointments />}
 //           {page === 'users'        && <ClassManagement />}
 //           {page === 'medical'      && <MedicalEvents />}
-//           {['home'].includes(page) && (
-//             <div className="p-8 text-gray-600">
-//               Trang “{navItems.find(i => i.key === page).label}” đang phát triển…
-//             </div>
-//           )}
+//           {page === 'home'         && <MainPage />}
 //         </main>
 //       </div>
 //     </div>
 //   );
 // }
+
 // export default App;
+
+
 
 
 
