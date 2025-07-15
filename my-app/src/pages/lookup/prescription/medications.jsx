@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+
 import AvatarImg from "../../../image/hinhanh/avatar.png";
 import LogoImg from "../../../image/hinhanh/logoproject.png";
 import "./Medications.css"; // Dùng chung file CSS để giữ đồng bộ layout
@@ -42,6 +43,7 @@ const Medications = () => {
 
   return (
     <div className="student-profile-page">
+      {/* Sidebar */}
       <aside className="sidebar">
         <div className="brand-box">
           <img src={LogoImg} alt="Logo" className="brand-icon" />
@@ -79,12 +81,14 @@ const Medications = () => {
         </nav>
       </aside>
 
+      {/* Main content */}
       <main className="profile-main">
         <button className="home-button" onClick={() => navigate("/")}>
           ⬅ Quay về trang chính
         </button>
 
         <div className="profile-card">
+          {/* Header */}
           <div className="profile-overview">
             <img src={AvatarImg} alt="avatar" className="avatar" />
             <div className="info-text">
@@ -93,6 +97,7 @@ const Medications = () => {
             </div>
           </div>
 
+          {/* Tabs */}
           <div className="profile-tabs">
             {Object.values(tabRoutes).map((label) => (
               <span
@@ -105,6 +110,7 @@ const Medications = () => {
             ))}
           </div>
 
+          {/* Chi tiết đơn thuốc */}
           <div className="profile-detail">
             {activeTab === "Đơn thuốc" ? (
               medications.length > 0 ? (

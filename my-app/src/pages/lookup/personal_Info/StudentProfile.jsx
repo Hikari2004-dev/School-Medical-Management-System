@@ -16,6 +16,15 @@ const StudentProfile = () => {
     address: "",
   });
 
+  const tabRoutes = {
+    "/patient-search": "Thông tin cá nhân",
+    "/medications": "Đơn thuốc",
+    "/vaccinations": "Lịch sử tiêm chủng",
+    "/health-record": "Hồ sơ sức khỏe",
+  };
+
+  const activeTab = tabRoutes[location.pathname] || "Thông tin cá nhân";
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -45,16 +54,9 @@ const StudentProfile = () => {
     setProfile((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleEditToggle = () => setIsEditing(!isEditing);
-
-  const tabRoutes = {
-    "/patient-search": "Thông tin cá nhân",
-    "/medications": "Đơn thuốc",
-    "/vaccinations": "Lịch sử tiêm chủng",
-    "/health-record": "Hồ sơ sức khỏe",
+  const handleEditToggle = () => {
+    setIsEditing(!isEditing);
   };
-
-  const activeTab = tabRoutes[location.pathname] || "Thông tin cá nhân";
 
   const handleTabClick = (label) => {
     const path = Object.keys(tabRoutes).find((key) => tabRoutes[key] === label);
@@ -65,6 +67,7 @@ const StudentProfile = () => {
 
   return (
     <div className="student-profile-page">
+      {/* Sidebar */}
       <aside className="sidebar">
         <div className="brand-box">
           <img src={LogoImg} alt="Logo" className="brand-icon" />
@@ -73,28 +76,43 @@ const StudentProfile = () => {
             <p>School Medical</p>
           </div>
         </div>
+
         <nav className="sidebar-nav">
-          <button onClick={() => navigate("/patient-search")} className={location.pathname === "/patient-search" ? "active" : ""}>
+          <button
+            onClick={() => navigate("/patient-search")}
+            className={location.pathname === "/patient-search" ? "active" : ""}
+          >
             🏠 Trang chủ
           </button>
-          <button onClick={() => navigate("/medications")} className={location.pathname === "/medications" ? "active" : ""}>
+          <button
+            onClick={() => navigate("/medications")}
+            className={location.pathname === "/medications" ? "active" : ""}
+          >
             💊 Đơn thuốc
           </button>
-          <button onClick={() => navigate("/vaccinations")} className={location.pathname === "/vaccinations" ? "active" : ""}>
+          <button
+            onClick={() => navigate("/vaccinations")}
+            className={location.pathname === "/vaccinations" ? "active" : ""}
+          >
             💉 Sổ vaccine
           </button>
-          <button onClick={() => navigate("/health-record")} className={location.pathname === "/health-record" ? "active" : ""}>
+          <button
+            onClick={() => navigate("/health-record")}
+            className={location.pathname === "/health-record" ? "active" : ""}
+          >
             📁 Hồ sơ sức khỏe
           </button>
         </nav>
       </aside>
 
+      {/* Main Content */}
       <main className="profile-main">
         <button className="home-button" onClick={() => navigate("/")}>
           ⬅ Quay về trang chính
         </button>
 
         <div className="profile-card">
+          {/* Thông tin học sinh */}
           <div className="profile-overview">
             <img src={AvatarImg} alt="avatar" className="avatar" />
             <div className="info-text">
@@ -105,6 +123,7 @@ const StudentProfile = () => {
             </div>
           </div>
 
+          {/* Tabs */}
           <div className="profile-tabs">
             {Object.values(tabRoutes).map((label) => (
               <span
@@ -117,6 +136,7 @@ const StudentProfile = () => {
             ))}
           </div>
 
+          {/* Chi tiết tab */}
           <div className="profile-detail">
             {activeTab === "Thông tin cá nhân" ? (
               <>
@@ -125,7 +145,11 @@ const StudentProfile = () => {
                     <p>
                       <strong>Phụ huynh:</strong>{" "}
                       {isEditing ? (
-                        <input className="input-line" value={profile.fullName} onChange={(e) => handleChange("fullName", e.target.value)} />
+                        <input
+                          className="input-line"
+                          value={profile.fullName}
+                          onChange={(e) => handleChange("fullName", e.target.value)}
+                        />
                       ) : (
                         profile.fullName
                       )}
@@ -134,7 +158,11 @@ const StudentProfile = () => {
                     <p>
                       <strong>Điện thoại:</strong>{" "}
                       {isEditing ? (
-                        <input className="input-line" value={profile.phone} onChange={(e) => handleChange("phone", e.target.value)} />
+                        <input
+                          className="input-line"
+                          value={profile.phone}
+                          onChange={(e) => handleChange("phone", e.target.value)}
+                        />
                       ) : (
                         profile.phone
                       )}
@@ -145,7 +173,11 @@ const StudentProfile = () => {
                     <p>
                       <strong>Email:</strong>{" "}
                       {isEditing ? (
-                        <input className="input-line" value={profile.email} onChange={(e) => handleChange("email", e.target.value)} />
+                        <input
+                          className="input-line"
+                          value={profile.email}
+                          onChange={(e) => handleChange("email", e.target.value)}
+                        />
                       ) : (
                         profile.email
                       )}
@@ -154,19 +186,30 @@ const StudentProfile = () => {
                     <p>
                       <strong>Địa chỉ:</strong>{" "}
                       {isEditing ? (
-                        <input className="input-line" value={profile.address} onChange={(e) => handleChange("address", e.target.value)} />
+                        <input
+                          className="input-line"
+                          value={profile.address}
+                          onChange={(e) => handleChange("address", e.target.value)}
+                        />
                       ) : (
                         profile.address
                       )}
                     </p>
                   </div>
                 </div>
-                <button className="home-button" style={{ marginTop: "20px" }} onClick={handleEditToggle}>
+
+                <button
+                  className="home-button"
+                  style={{ marginTop: "20px" }}
+                  onClick={handleEditToggle}
+                >
                   {isEditing ? "💾 Lưu lại" : "✏️ Chỉnh sửa"}
                 </button>
               </>
             ) : (
-              <p className="tab-placeholder">Hiện chưa có dữ liệu cho mục "{activeTab}".</p>
+              <p className="tab-placeholder">
+                Hiện chưa có dữ liệu cho mục "{activeTab}".
+              </p>
             )}
           </div>
         </div>

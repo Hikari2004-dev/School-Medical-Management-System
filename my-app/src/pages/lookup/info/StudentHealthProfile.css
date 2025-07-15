@@ -12,7 +12,7 @@
   font-family: "Segoe UI", sans-serif;
 }
 
-/* Sidebar */
+/* ========== Sidebar ========== */
 .sidebar {
   width: 240px;
   background-color: #5e50e6;
@@ -88,7 +88,7 @@
   font-weight: bold;
 }
 
-/* Nội dung chính */
+/* ========== Nội dung chính ========== */
 .profile-main {
   flex: 1;
   padding: 40px;
@@ -120,7 +120,7 @@
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
 }
 
-/* Header */
+/* ========== Header profile ========== */
 .profile-overview {
   display: flex;
   align-items: center;
@@ -149,7 +149,7 @@
   margin-bottom: 4px;
 }
 
-/* Tabs */
+/* ========== Tabs ========== */
 .profile-tabs {
   display: flex;
   margin-top: 24px;
@@ -171,14 +171,14 @@
   border-bottom: 3px solid #5e50e6;
 }
 
-/* Nội dung */
+/* ========== Nội dung chi tiết ========== */
 .profile-detail {
   margin-top: 30px;
   font-size: 16px;
   color: #333;
 }
 
-/* Bảng */
+/* ========== Bảng dữ liệu ========== */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -193,7 +193,6 @@ td {
   padding: 12px 16px;
   border-bottom: 1px solid #eee;
   text-align: left;
-
 }
 
 th {
@@ -206,7 +205,7 @@ tr:hover {
   background-color: #f1f1f1;
 }
 
-/* Cards chỉ số */
+/* ========== Cards chỉ số ========== */
 .cards {
   display: flex;
   gap: 20px;
@@ -233,7 +232,7 @@ tr:hover {
 .card.green { background-color: #4ec68b; }
 .card.orange { background-color: #ffa726; }
 
-/* Badge trạng thái */
+/* ========== Badge trạng thái ========== */
 .badge {
   padding: 4px 10px;
   border-radius: 8px;
@@ -242,11 +241,12 @@ tr:hover {
   text-transform: capitalize;
 }
 
-.badge.green { background-color: #4caf50; }
+.badge.green  { background-color: #4caf50; }
 .badge.yellow { background-color: #ffc107; color: black; }
-.badge.red { background-color: #f44336; }
-.badge.gray { background-color: #999; }
+.badge.red    { background-color: #f44336; }
+.badge.gray   { background-color: #999; }
 
+/* ========== Responsive ========== */
 @media screen and (max-width: 768px) {
   .profile-overview {
     flex-direction: column;

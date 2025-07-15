@@ -8,21 +8,20 @@ const StudentHealthProfile = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const activeTab =
-    {
-      "/patient-search": "Thông tin cá nhân",
-      "/medications": "Đơn thuốc",
-      "/vaccinations": "Lịch sử tiêm chủng",
-      "/health-record": "Hồ sơ sức khỏe",
-    }[location.pathname] || "Hồ sơ sức khỏe";
+  const activeTab = {
+    "/patient-search": "Thông tin cá nhân",
+    "/medications": "Đơn thuốc",
+    "/vaccinations": "Lịch sử tiêm chủng",
+    "/health-record": "Hồ sơ sức khỏe",
+  }[location.pathname] || "Hồ sơ sức khỏe";
 
   const [isEditing, setIsEditing] = useState(false);
   const [profile, setProfile] = useState({
     allergy: "",
     chronicDisease: "",
+    medicalHistory: "",
     vision: "",
     hearing: "",
-    medicalHistory: "",
     height: "",
     weight: "",
     bmi: "",
@@ -101,45 +100,57 @@ const StudentHealthProfile = () => {
         <div className="brand-box">
           <img src={LogoImg} alt="Logo" className="brand-icon" />
           <div className="brand-text">
-            <h1>SchoMed</h1>
+            <h1>Schomed</h1>
             <p>School Medical</p>
           </div>
         </div>
 
         <nav className="sidebar-nav">
-          <button onClick={() => goTo("/patient-search")} className={location.pathname === "/patient-search" ? "active" : ""}>
+          <button
+            onClick={() => goTo("/patient-search")}
+            className={location.pathname === "/patient-search" ? "active" : ""}
+          >
             🏠 Trang chủ
           </button>
-          <button onClick={() => goTo("/medications")} className={location.pathname === "/medications" ? "active" : ""}>
+          <button
+            onClick={() => goTo("/medications")}
+            className={location.pathname === "/medications" ? "active" : ""}
+          >
             💊 Đơn thuốc
           </button>
-          <button onClick={() => goTo("/vaccinations")} className={location.pathname === "/vaccinations" ? "active" : ""}>
+          <button
+            onClick={() => goTo("/vaccinations")}
+            className={location.pathname === "/vaccinations" ? "active" : ""}
+          >
             💉 Sổ vaccine
           </button>
-          <button onClick={() => goTo("/health-record")} className={location.pathname === "/health-record" ? "active" : ""}>
+          <button
+            onClick={() => goTo("/health-record")}
+            className={location.pathname === "/health-record" ? "active" : ""}
+          >
             📁 Hồ sơ sức khỏe
           </button>
         </nav>
       </aside>
 
       <main className="profile-main">
-        <button className="home-button" onClick={() => navigate("/")}>
-          ⬅ Quay về trang chính
+        <button onClick={() => navigate("/")} className="home-button">
+          ⬅️ Quay lại trang chủ
         </button>
 
         <div className="profile-card">
           <div className="profile-overview">
             <img src={AvatarImg} alt="avatar" className="avatar" />
             <div className="info-text">
-              <h2>Nguyễn Đoàn Duy Khánh</h2>
-              <p>Lớp 12A1 | GVCN: Lâm Phương Thúy</p>
-              <p>Chiều cao: {profile.height}cm | Cân nặng: {profile.weight}kg</p>
-              <p>BMI: {profile.bmi} | Giới tính: Nam/Nữ</p>
+              <h2>Thông tin hồ sơ sức khỏe</h2>
+              <p>Thông tin chi tiết về tình trạng sức khỏe học sinh</p>
             </div>
           </div>
 
           <div className="profile-tabs">
-            <span className={`tab ${activeTab === "Hồ sơ sức khỏe" ? "active" : ""}`}>Hồ sơ sức khỏe</span>
+            <span className={`tab ${activeTab === "Hồ sơ sức khỏe" ? "active" : ""}`}>
+              Hồ sơ sức khỏe
+            </span>
           </div>
 
           <div className="profile-detail">
@@ -147,34 +158,68 @@ const StudentHealthProfile = () => {
               <div className="contact-left">
                 <label><strong>Dị ứng:</strong></label>
                 {isEditing ? (
-                  <input className="input-line" value={profile.allergy} onChange={(e) => handleChange("allergy", e.target.value)} />
-                ) : <p>{profile.allergy}</p>}
+                  <input
+                    className="input-line"
+                    value={profile.allergy}
+                    onChange={(e) => handleChange("allergy", e.target.value)}
+                  />
+                ) : (
+                  <p>{profile.allergy}</p>
+                )}
 
                 <label><strong>Bệnh mãn tính:</strong></label>
                 {isEditing ? (
-                  <input className="input-line" value={profile.chronicDisease} onChange={(e) => handleChange("chronicDisease", e.target.value)} />
-                ) : <p>{profile.chronicDisease}</p>}
+                  <input
+                    className="input-line"
+                    value={profile.chronicDisease}
+                    onChange={(e) => handleChange("chronicDisease", e.target.value)}
+                  />
+                ) : (
+                  <p>{profile.chronicDisease}</p>
+                )}
 
                 <label><strong>Lịch sử bệnh:</strong></label>
                 {isEditing ? (
-                  <input className="input-line" value={profile.medicalHistory} onChange={(e) => handleChange("medicalHistory", e.target.value)} />
-                ) : <p>{profile.medicalHistory}</p>}
+                  <input
+                    className="input-line"
+                    value={profile.medicalHistory}
+                    onChange={(e) => handleChange("medicalHistory", e.target.value)}
+                  />
+                ) : (
+                  <p>{profile.medicalHistory}</p>
+                )}
               </div>
-              
+
               <div className="contact-right">
                 <label><strong>Thị lực:</strong></label>
                 {isEditing ? (
-                  <input className="input-line" value={profile.vision} onChange={(e) => handleChange("vision", e.target.value)} />
-                ) : <p>{profile.vision}</p>}
+                  <input
+                    className="input-line"
+                    value={profile.vision}
+                    onChange={(e) => handleChange("vision", e.target.value)}
+                  />
+                ) : (
+                  <p>{profile.vision}</p>
+                )}
 
                 <label><strong>Thính lực:</strong></label>
                 {isEditing ? (
-                  <input className="input-line" value={profile.hearing} onChange={(e) => handleChange("hearing", e.target.value)} />
-                ) : <p>{profile.hearing}</p>}
+                  <input
+                    className="input-line"
+                    value={profile.hearing}
+                    onChange={(e) => handleChange("hearing", e.target.value)}
+                  />
+                ) : (
+                  <p>{profile.hearing}</p>
+                )}
               </div>
             </div>
 
-            <button onClick={handleEditToggle} className="home-button" style={{ marginTop: "20px" }}>
+            <button
+              onClick={handleEditToggle}
+              className="home-button"
+              style={{ marginTop: "20px" }}
+            >
               {isEditing ? "💾 Lưu lại" : "✏️ Chỉnh sửa"}
             </button>
           </div>

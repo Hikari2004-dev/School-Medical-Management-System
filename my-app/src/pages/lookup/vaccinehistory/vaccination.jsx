@@ -10,6 +10,7 @@ const Vaccination = () => {
 
   const [vaccines, setVaccines] = useState([]);
 
+  // Fetch vaccine data on mount
   useEffect(() => {
     fetchVaccines();
   }, []);
@@ -40,7 +41,6 @@ const Vaccination = () => {
       })
         .then((res) => {
           if (!res.ok) throw new Error("Xoá thất bại");
-          // Cập nhật danh sách sau khi xoá
           setVaccines((prev) => prev.filter((v) => v.id !== id));
         })
         .catch((err) => alert("❌ Xoá thất bại: " + err.message));
@@ -65,6 +65,7 @@ const Vaccination = () => {
 
   return (
     <div className="student-profile-page">
+      {/* Sidebar */}
       <aside className="sidebar">
         <div className="brand-box">
           <img src={LogoImg} alt="Logo" className="brand-icon" />
@@ -73,20 +74,43 @@ const Vaccination = () => {
             <p>School Medical</p>
           </div>
         </div>
+
         <nav className="sidebar-nav">
-          <button onClick={() => navigate("/patient-search")} className={location.pathname === "/patient-search" ? "active" : ""}>🏠 Trang chủ</button>
-          <button onClick={() => navigate("/medications")} className={location.pathname === "/medications" ? "active" : ""}>💊 Đơn thuốc</button>
-          <button onClick={() => navigate("/vaccinations")} className={location.pathname === "/vaccinations" ? "active" : ""}>💉 Sổ vaccine</button>
-          <button onClick={() => navigate("/health-record")} className={location.pathname === "/health-record" ? "active" : ""}>📁 Hồ sơ sức khỏe</button>
+          <button
+            onClick={() => navigate("/patient-search")}
+            className={location.pathname === "/patient-search" ? "active" : ""}
+          >
+            🏠 Trang chủ
+          </button>
+          <button
+            onClick={() => navigate("/medications")}
+            className={location.pathname === "/medications" ? "active" : ""}
+          >
+            💊 Đơn thuốc
+          </button>
+          <button
+            onClick={() => navigate("/vaccinations")}
+            className={location.pathname === "/vaccinations" ? "active" : ""}
+          >
+            💉 Sổ vaccine
+          </button>
+          <button
+            onClick={() => navigate("/health-record")}
+            className={location.pathname === "/health-record" ? "active" : ""}
+          >
+            📁 Hồ sơ sức khỏe
+          </button>
         </nav>
       </aside>
 
+      {/* Main content */}
       <main className="profile-main">
         <button className="home-button" onClick={() => navigate("/")}>
           ⬅ Quay về trang chính
         </button>
 
         <div className="profile-card">
+          {/* Header */}
           <div className="profile-overview">
             <img src={AvatarImg} alt="avatar" className="avatar" />
             <div className="info-text">
@@ -97,6 +121,7 @@ const Vaccination = () => {
             </div>
           </div>
 
+          {/* Tabs */}
           <div className="profile-tabs">
             {Object.values(tabRoutes).map((label) => (
               <span
@@ -109,6 +134,7 @@ const Vaccination = () => {
             ))}
           </div>
 
+          {/* Vaccine Table */}
           <div className="profile-detail">
             <table className="medications-table">
               <thead>
@@ -134,7 +160,12 @@ const Vaccination = () => {
                     <td>{v.status}</td>
                     <td>{v.vaccineLot}</td>
                     <td>
-                      <button className="delete-button" onClick={() => handleDelete(v.id)}>🗑 Xoá</button>
+                      <button
+                        className="delete-button"
+                        onClick={() => handleDelete(v.id)}
+                      >
+                        🗑 Xoá
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -142,7 +173,9 @@ const Vaccination = () => {
             </table>
 
             {vaccines.length === 0 && (
-              <p style={{ padding: "12px", color: "gray" }}>Không có dữ liệu tiêm chủng.</p>
+              <p style={{ padding: "12px", color: "gray" }}>
+                Không có dữ liệu tiêm chủng.
+              </p>
             )}
           </div>
         </div>
