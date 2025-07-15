@@ -21,9 +21,21 @@ public class OtpController {
     @Autowired
     private OTPService otpService;
 
+    // Endpoint gửi OTP
     @PostMapping("/generate")
     public ResponseEntity<String> generateOtp(@RequestParam String email) {
         String responseMessage = otpService.generateOtp(email);
+        return ResponseEntity.ok(responseMessage);
+    }
+
+    // Endpoint thay đổi mật khẩu sau khi xác thực OTP
+    @PostMapping("/change-password")
+    public ResponseEntity<String> changePassword(
+            @RequestParam String email,
+            @RequestParam String otp,
+            @RequestParam String newPassword) {
+
+        String responseMessage = otpService.changePassword(email, otp, newPassword);
         return ResponseEntity.ok(responseMessage);
     }
 }
