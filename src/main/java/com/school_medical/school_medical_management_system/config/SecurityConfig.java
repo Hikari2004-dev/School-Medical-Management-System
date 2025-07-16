@@ -74,7 +74,8 @@ public class SecurityConfig {
                                 "/generate-otp",  // OTP generation
                                 "/api/otp/**",
                                 "/api/students/**",
-                                "/api/reports"
+                                "/api/reports/**",
+                                "/api/orders/**"
                         ).permitAll()  // Permit all the above public endpoints
 
                         .requestMatchers("/api/parent-info/**").authenticated()  // Require authentication for parent-info
