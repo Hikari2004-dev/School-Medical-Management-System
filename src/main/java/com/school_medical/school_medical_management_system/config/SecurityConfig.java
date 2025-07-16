@@ -47,47 +47,51 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .cors()
+                .cors()  // Enable CORS if required (make sure you have a CORS configuration)
                 .and()
-                .csrf(csrf -> csrf.disable())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .csrf(csrf -> csrf.disable())  // Disable CSRF for stateless APIs
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))  // Statless session management
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/login",
-                                "/api/auth/**",
-                                "/api/medication-submissions/**",
-                                "/api/medical-checkups/**",
-                                "/login/checkemail",
-                                "/api/healthinfo/**",
-                                "/api/medical-events/**",
-                                "/api/event-batches/**",
-                                "/api/vaccinations/**",
-                                "/my-children",
-                                "/api/notifications/send-batch/**",
-                                "/api/notifications/consent/**",
-                                "/api/notifications/parent",
-                                "/api/event-supplies/**",
-                                "/api/medicalsupply/**",
-                                "/api/appointments/**",
-                                "/login/checkemail",
-                                "/api/payment/**",
-                                "/api/vaccination-history"                                
-                        ).permitAll()
-                        
-                        // 🔒 Chặn nếu không có token cho parent-info
-                        .requestMatchers("/api/parent-info/**").authenticated()
-                        .anyRequest().authenticated()
+                                "/login",  // Public login endpoint
+                                "/api/auth/**",  // Public auth API
+                                "/api/medication-submissions/**",  // Medication submissions
+                                "/api/medical-checkups/**",  // Medical checkups
+                                "/login/checkemail",  // Email check
+                                "/api/healthinfo/**",  // Health information
+                                "/api/medical-events/**",  // Medical events
+                                "/api/event-batches/**",  // Event batches
+                                "/api/vaccinations/**",  // Vaccinations
+                                "/my-children",  // Parent's children info
+                                "/api/notifications/send-batch/**",  // Notifications batch sending
+                                "/api/notifications/consent/**",  // Notifications consent
+                                "/api/notifications/parent",  // Parent notifications
+                                "/api/event-supplies/**",  // Event supplies
+                                "/api/medicalsupply/**",  // Medical supplies
+                                "/api/appointments/**",  // Appointments
+                                "/api/payment/**",  // Payment
+                                "/api/vaccination-history",  // Vaccination history
+                                "/generate-otp",  // OTP generation
+                                "/api/otp/**",
+                                "/api/students/**",
+                                "/api/reports/**",
+                                "/api/orders/**"
+                        ).permitAll()  // Permit all the above public endpoints
+
+                        .requestMatchers("/api/parent-info/**").authenticated()  // Require authentication for parent-info
+                        .anyRequest().authenticated()  // Any other request needs to be authenticated
                 )
-                .authenticationProvider(authenticationProvider())
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-                    .logout(logout -> logout
-                    .logoutUrl("/logout")
-                    .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler()) // Prevent redirection issues for REST clients
-                    .invalidateHttpSession(true)
-                    .deleteCookies("JSESSIONID") // Clear session cookies
+                .authenticationProvider(authenticationProvider())  // Custom Authentication Provider
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)  // Add JWT filter before UsernamePasswordAuthenticationFilter
+                .logout(logout -> logout
+                        .logoutUrl("/logout")  // Logout URL
+                        .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler())  // Return status 200 instead of redirecting
+                        .invalidateHttpSession(true)  // Invalidate session on logout
+                        .deleteCookies("JSESSIONID")  // Clear session cookies
                 );
         return http.build();
     }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {

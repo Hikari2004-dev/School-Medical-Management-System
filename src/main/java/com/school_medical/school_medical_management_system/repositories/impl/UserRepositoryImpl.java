@@ -11,6 +11,8 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Optional;
 
 @Repository
 public class UserRepositoryImpl implements IUserRepository {
@@ -70,5 +72,32 @@ public class UserRepositoryImpl implements IUserRepository {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public Optional<Appuser> findByAccountNumber(String accountNumber) {
+        String sql = "SELECT * FROM appuser WHERE user_id = ?"; // giả sử accountNumber = user_id
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, accountNumber);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                Appuser user = new Appuser();
+                user.setId(rs.getInt("user_id"));
+                user.setFirstName(rs.getString("first_name"));
+                user.setLastName(rs.getString("last_name"));
+                user.setEmail(rs.getString("email"));
+                user.setPhone(rs.getString("phone"));
+                user.setAddress(rs.getString("address"));
+                return Optional.of(user);
+            }
+
+            return Optional.empty();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error querying user by account number", e);
+        }
     }
 }

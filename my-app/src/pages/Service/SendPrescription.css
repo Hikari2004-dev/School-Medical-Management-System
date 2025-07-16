@@ -184,3 +184,42 @@
 .btn-confirm:hover {
   background: #eab308;
 }
+/* ===== Dropdown “Tên học sinh” đẹp hơn ===== */
+.field > select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border: 1px solid #d1d5db;       /* gray-300 */
+  border-radius: 0.5rem;           /* bo góc */
+  background-color: #fff;
+  appearance: none;                /* tắt mũi tên mặc định */
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2210%22%20height%3D%226%22%20viewBox%3D%220%200%2010%206%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cpath%20d%3D%22M0%200l5%206%205-6z%22%20fill%3D%22%236b7280%22/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.field > select:focus {
+  outline: none;
+  border-color: #3b82f6;           /* blue-500 */
+}
+.status-alert {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  font-weight: 500;
+}
+.status-alert.success {
+  background-color: #e6ffed;
+  color: #2d662d;
+  border: 1px solid #a3e4a3;
+}
+.status-alert.error {
+  background-color: #ffe6e6;
+  color: #992d2d;
+  border: 1px solid #e4a3a3;
+}
+
+/* Nếu bạn dùng class riêng, ví dụ .select-field select, thì thay selector cho phù hợp */
