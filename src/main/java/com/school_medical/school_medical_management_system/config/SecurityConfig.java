@@ -72,7 +72,9 @@ public class SecurityConfig {
                                 "/api/payment/**",  // Payment
                                 "/api/vaccination-history",  // Vaccination history
                                 "/generate-otp",  // OTP generation
-                                "/api/otp/**"
+                                "/api/otp/**",
+                                "/api/students/**",
+                                "/api/reports"
                         ).permitAll()  // Permit all the above public endpoints
 
                         .requestMatchers("/api/parent-info/**").authenticated()  // Require authentication for parent-info
