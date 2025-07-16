@@ -12,6 +12,18 @@ export default function Header() {
   const [showDropdown, setShowDropdown] = useState(false);
   const hideTimeout = useRef();
 
+  // Thêm state cho giỏ hàng
+  const [cartCount, setCartCount] = useState(() => {
+    // Lấy số lượng sản phẩm từ localStorage (nếu có)
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    return cart.length;
+  });
+
+  // Khi click vào icon giỏ hàng
+  const handleCartClick = () => {
+    navigate("/order"); // Chuyển hướng tới trang order
+  };
+
   const handleLogout = () => {
     localStorage.removeItem("userName");
     localStorage.removeItem("token");
@@ -114,6 +126,18 @@ export default function Header() {
             <span className="notification-dot"></span>
           </Link>
 
+          {/* Icon giỏ hàng */}
+          <span
+            className="cart-link"
+            onClick={handleCartClick}
+            style={{ cursor: "pointer", position: "relative" }}
+          >
+            <i className="fas fa-shopping-cart action-icon"></i>
+            {cartCount > 0 && (
+              <span className="cart-count-badge">{cartCount}</span>
+            )}
+          </span>
+
           <i className="fas fa-paper-plane action-icon"></i>
 
           {userName && token ? (
@@ -151,7 +175,8 @@ export default function Header() {
         <div className="nav-content">
           <Link
             to="/"
-            className={`nav-link ${location.pathname === '/' ? 'active' : ''}`}
+            className={`nav-link ${location.pathname === "/" ? "active" : ""
+              }`}
           >
             <i className="fas fa-home"></i>
             <span>Trang chủ</span>
@@ -159,7 +184,8 @@ export default function Header() {
 
           <Link
             to="/member"
-            className={`nav-link ${location.pathname === '/member' ? 'active' : ''}`}
+            className={`nav-link ${location.pathname === "/member" ? "active" : ""
+              }`}
           >
             <i className="fas fa-user-friends"></i>
             <span>Hội viên</span>
@@ -167,7 +193,8 @@ export default function Header() {
 
           <Link
             to="/news"
-            className={`nav-link ${location.pathname === '/news' ? 'active' : ''}`}
+            className={`nav-link ${location.pathname === "/news" ? "active" : ""
+              }`}
           >
             <i className="fas fa-newspaper"></i>
             <span>Tin Tức</span>
@@ -175,7 +202,8 @@ export default function Header() {
 
           <Link
             to="/services"
-            className={`nav-link ${location.pathname === '/services' ? 'active' : ''}`}
+            className={`nav-link ${location.pathname === "/services" ? "active" : ""
+              }`}
           >
             <i className="fas fa-stethoscope"></i>
             <span>Dịch vụ</span>
@@ -183,12 +211,30 @@ export default function Header() {
 
           <Link
             to="/student-profile"
-            className={`nav-link ${location.pathname === '/student-profile' ? 'active' : ''}`}
-            onClick={(e) => {
+            className={`nav-link ${location.pathname === "/student-profile" ? "active" : ""
+              }`}
+            onClick={async (e) => {
               e.preventDefault();
               const token = localStorage.getItem("token");
               if (token) {
-                navigate("/student-profile");
+                try {
+                  const res = await fetch(
+                    "http://localhost:8080/api/vaccination-history/my-children",
+                    {
+                      headers: { Authorization: `Bearer ${token}` },
+                    }
+                  );
+                  if (!res.ok) throw new Error();
+                  const data = await res.json();
+                  // Giả sử dữ liệu rỗng là null hoặc object không có thuộc tính chính
+                  if (!data || Object.keys(data).length === 0) {
+                    navigate("/health-form");
+                  } else {
+                    navigate("/student-profile");
+                  }
+                } catch {
+                  navigate("/health-form");
+                }
               } else {
                 navigate("/login");
               }
