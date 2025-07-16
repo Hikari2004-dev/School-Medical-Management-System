@@ -37,16 +37,27 @@ export default function Dashboard() {
   const [reportText, setReportText] = useState("");
 
   useEffect(() => {
+    // Lấy tên người dùng, fallback từ localStorage nếu API lỗi
     fetch("/api/account/me")
-      .then((r) => r.json()).then(setUser).catch(() => setUser({ name: "Người dùng" }));
+      .then((r) => r.json())
+      .then(setUser)
+      .catch(() => {
+        const fallbackName = localStorage.getItem("userName") || "Người dùng";
+        setUser({ name: fallbackName });
+      });
+
     fetch("/api/dashboard/summary")
       .then((r) => r.json()).then(setSummary).catch(() => {});
+
     fetch("/api/dashboard/active-users")
       .then((r) => r.json()).then((d) => setActiveUsers(d.count)).catch(() => {});
+
     fetch("/api/dashboard/prescriptions")
       .then((r) => r.json()).then((d) => setPrescriptions(d.count)).catch(() => {});
+
     fetch("/api/dashboard/users-list")
       .then((r) => r.json()).then((d) => setUserList(d.users.length)).catch(() => {});
+
     fetch("/api/dashboard/report")
       .then((r) => r.json()).then((d) => setReportText(d.text)).catch(() => {});
   }, []);
@@ -58,7 +69,7 @@ export default function Dashboard() {
       {/* Welcome banner */}
       <section className="max-w-5xl mx-auto text-center">
         <h1 className="text-4xl font-extrabold text-gray-800">
-          Chào mừng quay lại, {user?.name || "..."}!
+          Chào mừng quay lại, {user?.name || "..." }!
         </h1>
         <div className="mx-auto mt-2 w-24 h-1 bg-blue-600 rounded-full" />
         <p className="mt-4 text-gray-600">

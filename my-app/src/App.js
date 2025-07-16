@@ -1,82 +1,82 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+// import React from 'react';
+// import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import HomePage from './pages/HomePage/HomePage';
-import MemberPage from './pages/Member/MemberPage';
-import News from './pages/News/News';
-import NewsDetail from './pages/NewsDetail/NewsDetail';
-import NewsTestPage from './pages/NewsTestPage';
+// import HomePage from './pages/HomePage/HomePage';
+// import MemberPage from './pages/Member/MemberPage';
+// import News from './pages/News/News';
+// import NewsDetail from './pages/NewsDetail/NewsDetail';
+// import NewsTestPage from './pages/NewsTestPage';
 
-import OurServices from './pages/Service/OurServices';
-import HealthCheck from './pages/Service/HealthCheck';
-import OnlineConsultationPage from './pages/Service/OnlineConsultationPage';
-import SendPrescription from './pages/Service/SendPrescription';
-import VaccineForm from './pages/Service/VaccineForm';
+// import OurServices from './pages/Service/OurServices';
+// import HealthCheck from './pages/Service/HealthCheck';
+// import OnlineConsultationPage from './pages/Service/OnlineConsultationPage';
+// import SendPrescription from './pages/Service/SendPrescription';
+// import VaccineForm from './pages/Service/VaccineForm';
 
-import StudentProfile from './pages/lookup/personal_Info/StudentProfile'; 
-import Medications from './pages/lookup/prescription/Medications';
-import Vaccination from './pages/lookup/vaccinehistory/vaccination';
-import StudentHealthProfile from './pages/lookup/info/StudentHealthProfile';
+// import StudentProfile from './pages/lookup/personal_Info/StudentProfile'; 
+// import Medications from './pages/lookup/prescription/Medications';
+// import Vaccination from './pages/lookup/vaccinehistory/vaccination';
+// import StudentHealthProfile from './pages/lookup/info/StudentHealthProfile';
 
-import ChatBot from './components/chat/ChatBot';
-import Notification from "./pages/notification/Notification";
+// import ChatBot from './components/chat/ChatBot';
+// import Notification from "./pages/notification/Notification";
 
-import Login from './auth/Login/Login';
-import OtpSuccess from './auth/OtpSuccess/OtpSuccess';
-import ForgetPassword from './auth/ForgetPassword/ForgetPassword';
-import OtpVerification from './auth/OtpVerification/OtpVerification';
-import Register from './auth/Register/Register';
-import ResetPassword from './auth/ResetPassword/ResetPassword';
+// import Login from './auth/Login/Login';
+// import OtpSuccess from './auth/OtpSuccess/OtpSuccess';
+// import ForgetPassword from './auth/ForgetPassword/ForgetPassword';
+// import OtpVerification from './auth/OtpVerification/OtpVerification';
+// import Register from './auth/Register/Register';
+// import ResetPassword from './auth/ResetPassword/ResetPassword';
 
-import VNPAYPaymentButton from './pages/Member/VNPAYPaymentButton';
+// import VNPAYPaymentButton from './pages/Member/VNPAYPaymentButton';
 
-function App() {
-  return (
-    <Router>
-      <div>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/member" element={<MemberPage />} />
-          <Route path="/news" element={<News />} />
-          <Route path="/news/test" element={<NewsTestPage />} />
-          <Route path="/news/:id" element={<NewsDetail />} />
+// function App() {
+//   return (
+//     <Router>
+//       <div>
+//         <Routes>
+//           <Route path="/" element={<HomePage />} />
+//           <Route path="/member" element={<MemberPage />} />
+//           <Route path="/news" element={<News />} />
+//           <Route path="/news/test" element={<NewsTestPage />} />
+//           <Route path="/news/:id" element={<NewsDetail />} />
 
-          {/* Service pages */}
-          <Route path="/services" element={<OurServices />} />
-          <Route path="/health-check" element={<HealthCheck />} />
-          <Route path="/online-consultation" element={<OnlineConsultationPage />} />
-          <Route path="/send-prescription" element={<SendPrescription />} />
-          <Route path="/vaccine-form" element={<VaccineForm />} />
+//           {/* Service pages */}
+//           <Route path="/services" element={<OurServices />} />
+//           <Route path="/health-check" element={<HealthCheck />} />
+//           <Route path="/online-consultation" element={<OnlineConsultationPage />} />
+//           <Route path="/send-prescription" element={<SendPrescription />} />
+//           <Route path="/vaccine-form" element={<VaccineForm />} />
 
-          {/* Lookup */}
-          <Route path="/patient-search" element={<StudentProfile />} />
-          <Route path="/medications" element={<Medications />} />
-          <Route path="/vaccinations" element={<Vaccination />} />
-          <Route path="/health-record" element={<StudentHealthProfile />} />
-          <Route path="/student-profile" element={<StudentProfile />} />
+//           {/* Lookup */}
+//           <Route path="/patient-search" element={<StudentProfile />} />
+//           <Route path="/medications" element={<Medications />} />
+//           <Route path="/vaccinations" element={<Vaccination />} />
+//           <Route path="/health-record" element={<StudentHealthProfile />} />
+//           <Route path="/student-profile" element={<StudentProfile />} />
 
-          <Route path="/notification" element={<Notification />} />
+//           <Route path="/notification" element={<Notification />} />
 
-          {/* Auth */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/otp-success" element={<OtpSuccess />} />
-          <Route path="/forget-password" element={<ForgetPassword />} />
-          <Route path="/otp-verification" element={<OtpVerification />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
+//           {/* Auth */}
+//           <Route path="/login" element={<Login />} />
+//           <Route path="/otp-success" element={<OtpSuccess />} />
+//           <Route path="/forget-password" element={<ForgetPassword />} />
+//           <Route path="/otp-verification" element={<OtpVerification />} />
+//           <Route path="/register" element={<Register />} />
+//           <Route path="/reset-password" element={<ResetPassword />} />
 
-          {/* Payment */}
-          <Route path="/payment/vnpay" element={<VNPAYPaymentButton />} />
+//           {/* Payment */}
+//           <Route path="/payment/vnpay" element={<VNPAYPaymentButton />} />
 
-          {/* Thêm các route khác nếu cần */}
-        </Routes>
-        <ChatBot />
-      </div>
-    </Router>
-  );
-}
+//           {/* Thêm các route khác nếu cần */}
+//         </Routes>
+//         <ChatBot />
+//       </div>
+//     </Router>
+//   );
+// }
 
-export default App;
+// export default App;
 
 
 
@@ -236,6 +236,44 @@ export default App;
 // }
 
 // export default App;
+
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+import Login from './auth/Login/Login';
+import Register from './auth/Register/Register';
+import ForgetPassword from './auth/ForgetPassword/ForgetPassword';
+import ResetPassword from './auth/ResetPassword/ResetPassword';
+import OtpSuccess from './auth/OtpSuccess/OtpSuccess';
+import OtpVerification from './auth/OtpVerification/OtpVerification';
+
+import AdminApp from './AdminApp';
+import UserApp from './UserApp';
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        {/* Auth routes */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/forget-password" element={<ForgetPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/otp-success" element={<OtpSuccess />} />
+        <Route path="/otp-verification" element={<OtpVerification />} />
+
+        {/* Role-based entry points */}
+        <Route path="/admin/*" element={<AdminApp />} />
+        <Route path="/*" element={<UserApp />} />
+      </Routes>
+    </Router>
+  );
+}
+
+export default App;
+
+
+
 
 
 
