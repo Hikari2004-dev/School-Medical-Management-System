@@ -22,8 +22,6 @@ public class ReportController {
     @PostMapping("/add")
     public ResponseEntity<String> addReport(@RequestBody Report report) {
         reportService.saveReport(report);
-        // In ra thông báo khi thêm báo cáo thành công
-        System.out.println("Report added successfully: " + report.getReportId());
         return ResponseEntity.status(201).body("Report added successfully");
     }
 
@@ -31,7 +29,6 @@ public class ReportController {
     @PutMapping("/update")
     public ResponseEntity<String> updateReport(@RequestBody Report report) {
         try {
-            // Kiểm tra xem báo cáo có tồn tại không
             reportService.modifyReport(report);
             return ResponseEntity.ok("Report updated successfully");
         } catch (EmptyResultDataAccessException e) {
@@ -39,10 +36,10 @@ public class ReportController {
         }
     }
 
+    // Xóa báo cáo
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteReport(@PathVariable int id) {
         try {
-            // Kiểm tra xem báo cáo có tồn tại không
             reportService.removeReport(id);
             return ResponseEntity.ok("Report deleted successfully");
         } catch (EmptyResultDataAccessException e) {
@@ -50,16 +47,18 @@ public class ReportController {
         }
     }
 
+    // Lấy báo cáo theo ID
     @GetMapping("/{id}")
-    public ResponseEntity<String> getReport(@PathVariable int id) {
+    public ResponseEntity<?> getReport(@PathVariable int id) {
         Report report = reportService.getReport(id);
 
         if (report == null) {
-            // Trả về thông báo nếu không tìm thấy báo cáo
-            return ResponseEntity.status(404).body("Report not found for ID: " + id);
+            // Nếu không tìm thấy báo cáo, trả về thông báo không tìm thấy với mã lỗi 404
+            return ResponseEntity.status(404).body("Report with ID " + id + " not found");
         }
 
-        // Trả về thông báo và báo cáo nếu tìm thấy
-        return ResponseEntity.ok("Report found for ID: " + id + " - " + report);
+        // Trả về đối tượng báo cáo nếu tìm thấy
+        return ResponseEntity.ok(report);
     }
+
 }
