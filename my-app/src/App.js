@@ -29,6 +29,7 @@ import Register from './auth/Register/Register';
 import ResetPassword from './auth/ResetPassword/ResetPassword';
 
 import VNPAYPaymentButton from './pages/Member/VNPAYPaymentButton';
+import ReportPage from './pages/ReportPage/ReportPage';
 
 function App() {
   return (
@@ -56,6 +57,7 @@ function App() {
           <Route path="/student-profile" element={<StudentProfile />} />
 
           <Route path="/notification" element={<Notification />} />
+          <Route path="/report" element={<ReportPage />} />
 
           {/* Auth */}
           <Route path="/login" element={<Login />} />
