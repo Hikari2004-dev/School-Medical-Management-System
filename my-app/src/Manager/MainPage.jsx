@@ -14,13 +14,14 @@ export default function MainPage() {
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
-    // Lấy thông tin người dùng
+    // Lấy thông tin người dùng, fallback nếu API lỗi
     axios
       .get("/api/account/me")
       .then((res) => setUser(res.data))
       .catch((err) => {
         console.error("Không thể tải user:", err);
-        setUser({ name: "Người dùng", role: "..." });
+        const fallbackName = localStorage.getItem("userName") || "Người dùng";
+        setUser({ name: fallbackName, role: "..." });
       });
 
     // Lấy tổng quan

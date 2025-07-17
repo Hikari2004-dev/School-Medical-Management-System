@@ -13,7 +13,7 @@ import OnlineConsultationPage from './pages/Service/OnlineConsultationPage';
 import SendPrescription from './pages/Service/SendPrescription';
 import VaccineForm from './pages/Service/VaccineForm';
 
-import StudentProfile from './pages/lookup/personal_Info/StudentProfile'; 
+import StudentProfile from './pages/lookup/personal_Info/StudentProfile';
 import Medications from './pages/lookup/prescription/Medications';
 import Vaccination from './pages/lookup/vaccinehistory/vaccination';
 import StudentHealthProfile from './pages/lookup/info/StudentHealthProfile';
@@ -28,8 +28,11 @@ import OtpVerification from './auth/OtpVerification/OtpVerification';
 import Register from './auth/Register/Register';
 import ResetPassword from './auth/ResetPassword/ResetPassword';
 
+import HealthFormApp from './pages/form/healthForm';
+import vaccine from './pages/form/vaccineForm';
+
 import VNPAYPaymentButton from './pages/Member/VNPAYPaymentButton';
-import ReportPage from './pages/ReportPage/ReportPage';
+import Order from './pages/order/order';
 
 function App() {
   return (
@@ -57,7 +60,6 @@ function App() {
           <Route path="/student-profile" element={<StudentProfile />} />
 
           <Route path="/notification" element={<Notification />} />
-          <Route path="/report" element={<ReportPage />} />
 
           {/* Auth */}
           <Route path="/login" element={<Login />} />
@@ -69,6 +71,9 @@ function App() {
 
           {/* Payment */}
           <Route path="/payment/vnpay" element={<VNPAYPaymentButton />} />
+          <Route path="/health-form" element={<HealthFormApp />} />
+          <Route path="/vaccine" element={<vaccine />} />
+          <Route path="/order" element={<Order />} />
 
           {/* Thêm các route khác nếu cần */}
         </Routes>
