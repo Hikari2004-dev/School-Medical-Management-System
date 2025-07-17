@@ -6,4 +6,5 @@ import com.school_medical.school_medical_management_system.repositories.entites.
 public interface IStudentRepository {
     int saveStudent(Student student);
     int saveHealthInfo(Healthinfo healthInfo);
+    void saveParentStudent(int parentUserId, int studentId);
 }
