@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import "./VaccineApp.css";
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
+import "./vaccineForm.css";
+import Header from '../../components/Header/Header';
+import Footer from '../../components/Footer/Footer';
 
 const VaccineApp = () => {
     const [personalInfo, setPersonalInfo] = useState({

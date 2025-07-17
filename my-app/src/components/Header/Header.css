@@ -307,6 +307,18 @@
     margin: 0 auto;
 }
 
+/* Cart Icon Badge */
+.cart-count-badge {
+    position: absolute;
+    top: -5px;
+    right: -8px;
+    background: red;
+    color: white;
+    border-radius: 50%;
+    font-size: 12px;
+    padding: 2px 6px;
+}
+
 /* === RESPONSIVE DESIGN === */
 @media (max-width: 768px) {
     .main-header {

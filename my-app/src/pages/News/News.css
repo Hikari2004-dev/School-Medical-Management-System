@@ -67,7 +67,7 @@
 }
 
 .breadcrumb a {
-    color: #007bff;
+    color: #f3f3f3;
     text-decoration: none;
 }
 
@@ -867,7 +867,7 @@ html {
     .highlight-content h2,
     .news-card h3,
     .sidebar-content h4 {
-        color: #f9fafb;
+        color: #030303;
     }
 }
 

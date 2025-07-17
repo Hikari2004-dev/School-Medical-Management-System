@@ -8,12 +8,14 @@ const StudentHealthProfile = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const activeTab = {
+  const tabRoutes = {
     "/patient-search": "Thông tin cá nhân",
     "/medications": "Đơn thuốc",
     "/vaccinations": "Lịch sử tiêm chủng",
     "/health-record": "Hồ sơ sức khỏe",
-  }[location.pathname] || "Hồ sơ sức khỏe";
+  };
+
+  const activeTab = tabRoutes[location.pathname] || "Hồ sơ sức khỏe";
 
   const [isEditing, setIsEditing] = useState(false);
   const [profile, setProfile] = useState({
@@ -90,8 +92,11 @@ const StudentHealthProfile = () => {
     setProfile(updated);
   };
 
-  const goTo = (path) => {
-    if (location.pathname !== path) navigate(path);
+  const handleTabClick = (label) => {
+    const path = Object.keys(tabRoutes).find((key) => tabRoutes[key] === label);
+    if (path && location.pathname !== path) {
+      navigate(path);
+    }
   };
 
   return (
@@ -100,32 +105,32 @@ const StudentHealthProfile = () => {
         <div className="brand-box">
           <img src={LogoImg} alt="Logo" className="brand-icon" />
           <div className="brand-text">
-            <h1>Schomed</h1>
+            <h1>SchoMed</h1>
             <p>School Medical</p>
           </div>
         </div>
 
         <nav className="sidebar-nav">
           <button
-            onClick={() => goTo("/patient-search")}
+            onClick={() => navigate("/patient-search")}
             className={location.pathname === "/patient-search" ? "active" : ""}
           >
             🏠 Trang chủ
           </button>
           <button
-            onClick={() => goTo("/medications")}
+            onClick={() => navigate("/medications")}
             className={location.pathname === "/medications" ? "active" : ""}
           >
             💊 Đơn thuốc
           </button>
           <button
-            onClick={() => goTo("/vaccinations")}
+            onClick={() => navigate("/vaccinations")}
             className={location.pathname === "/vaccinations" ? "active" : ""}
           >
             💉 Sổ vaccine
           </button>
           <button
-            onClick={() => goTo("/health-record")}
+            onClick={() => navigate("/health-record")}
             className={location.pathname === "/health-record" ? "active" : ""}
           >
             📁 Hồ sơ sức khỏe
@@ -135,7 +140,7 @@ const StudentHealthProfile = () => {
 
       <main className="profile-main">
         <button onClick={() => navigate("/")} className="home-button">
-          ⬅️ Quay lại trang chủ
+           ⬅ Quay về trang chính
         </button>
 
         <div className="profile-card">
@@ -147,10 +152,17 @@ const StudentHealthProfile = () => {
             </div>
           </div>
 
+          {/* 👉 Đây là phần tab bạn yêu cầu thêm */}
           <div className="profile-tabs">
-            <span className={`tab ${activeTab === "Hồ sơ sức khỏe" ? "active" : ""}`}>
-              Hồ sơ sức khỏe
-            </span>
+            {Object.values(tabRoutes).map((label) => (
+              <span
+                key={label}
+                className={`tab ${activeTab === label ? "active" : ""}`}
+                onClick={() => handleTabClick(label)}
+              >
+                {label}
+              </span>
+            ))}
           </div>
 
           <div className="profile-detail">
