@@ -20,6 +20,7 @@ import StudentHealthProfile from './pages/lookup/info/StudentHealthProfile';
 
 import ChatBot from './components/chat/ChatBot';
 import Notification from "./pages/notification/Notification";
+import ReportPage from './pages/ReportPage/ReportPage';
 
 import Login from './auth/Login/Login';
 import OtpSuccess from './auth/OtpSuccess/OtpSuccess';
@@ -60,6 +61,7 @@ function App() {
           <Route path="/student-profile" element={<StudentProfile />} />
 
           <Route path="/notification" element={<Notification />} />
+          <Route path="/report" element={<ReportPage />} />
 
           {/* Auth */}
           <Route path="/login" element={<Login />} />
