@@ -28,7 +28,7 @@
 // import Register from './auth/Register/Register';
 // import ResetPassword from './auth/ResetPassword/ResetPassword';
 
-// import VNPAYPaymentButton from './pages/Member/VNPAYPaymentButton';
+
 
 // function App() {
 //   return (
@@ -55,7 +55,7 @@
 //           <Route path="/health-record" element={<StudentHealthProfile />} />
 //           <Route path="/student-profile" element={<StudentProfile />} />
 
-//           <Route path="/notification" element={<Notification />} />
+          
 
 //           {/* Auth */}
 //           <Route path="/login" element={<Login />} />
@@ -246,7 +246,9 @@ import ForgetPassword from './auth/ForgetPassword/ForgetPassword';
 import ResetPassword from './auth/ResetPassword/ResetPassword';
 import OtpSuccess from './auth/OtpSuccess/OtpSuccess';
 import OtpVerification from './auth/OtpVerification/OtpVerification';
-
+import VNPAYPaymentButton from './pages/Member/VNPAYPaymentButton';
+import ReportPage from './pages/ReportPage/ReportPage';
+import Notification from "./pages/notification/Notification";
 import AdminApp from './AdminApp';
 import UserApp from './UserApp';
 
@@ -261,7 +263,8 @@ function App() {
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/otp-success" element={<OtpSuccess />} />
         <Route path="/otp-verification" element={<OtpVerification />} />
-
+        <Route path="/notification" element={<Notification />} />
+        <Route path="/report" element={<ReportPage />} />
         {/* Role-based entry points */}
         <Route path="/admin/*" element={<AdminApp />} />
         <Route path="/*" element={<UserApp />} />

@@ -114,7 +114,9 @@ export default function Header() {
             <span className="notification-dot"></span>
           </Link>
 
-          <i className="fas fa-paper-plane action-icon"></i>
+          <Link to="/report" className="action-link">
+            <i className="fas fa-paper-plane action-icon"></i>
+          </Link>
 
           {userName && token ? (
             <div
