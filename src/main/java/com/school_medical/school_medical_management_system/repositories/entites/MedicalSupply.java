@@ -9,14 +9,7 @@ public class MedicalSupply {
     private String description;
     private Date lastCheckedDate;
     private Integer status;
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
+    private Date expirationDate; // ✅ Thêm mới
 
     public Integer getSupplyId() {
         return supplyId;
@@ -56,5 +49,21 @@ public class MedicalSupply {
 
     public void setLastCheckedDate(Date lastCheckedDate) {
         this.lastCheckedDate = lastCheckedDate;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Date getExpirationDate() {
+        return expirationDate;
+    }
+
+    public void setExpirationDate(Date expirationDate) {
+        this.expirationDate = expirationDate;
     }
 }
