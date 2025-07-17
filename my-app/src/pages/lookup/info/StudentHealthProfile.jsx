@@ -105,7 +105,7 @@ const StudentHealthProfile = () => {
         <div className="brand-box">
           <img src={LogoImg} alt="Logo" className="brand-icon" />
           <div className="brand-text">
-            <h1>Schomed</h1>
+            <h1>SchoMed</h1>
             <p>School Medical</p>
           </div>
         </div>
@@ -140,7 +140,7 @@ const StudentHealthProfile = () => {
 
       <main className="profile-main">
         <button onClick={() => navigate("/")} className="home-button">
-          ⬅️ Quay lại trang chủ
+           ⬅ Quay về trang chính
         </button>
 
         <div className="profile-card">
