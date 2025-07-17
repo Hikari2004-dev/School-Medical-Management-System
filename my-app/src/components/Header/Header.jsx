@@ -138,7 +138,11 @@ export default function Header() {
             )}
           </span>
 
-          <i className="fas fa-paper-plane action-icon"></i>
+          <i
+            className="fas fa-paper-plane action-icon"
+            onClick={() => navigate("/report")}
+            style={{ cursor: "pointer" }}
+          ></i>
 
           {userName && token ? (
             <div

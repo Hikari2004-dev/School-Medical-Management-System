@@ -272,6 +272,7 @@ function App() {
         <Route path="/otp-verification" element={<OtpVerification />} />
         <Route path="/notification" element={<Notification />} />
         <Route path="/report" element={<ReportPage />} />
+        
         {/* Role-based entry points */}
         <Route path="/admin/*" element={<AdminApp />} />
         <Route path="/*" element={<UserApp />} />
