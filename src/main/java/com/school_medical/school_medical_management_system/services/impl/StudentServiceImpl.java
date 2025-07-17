@@ -30,4 +30,13 @@ public class StudentServiceImpl implements IStudentService {
         // Lưu thông tin sức khỏe
         studentRepository.saveHealthInfo(healthinfo);
     }
+
+    @Override
+    @Transactional
+    public void saveStudentWithHealthInfoAndLinkParent(Student student, Healthinfo healthinfo, int parentUserId) {
+        int studentId = studentRepository.saveStudent(student);
+        healthinfo.setStudentId(studentId);
+        studentRepository.saveHealthInfo(healthinfo);
+        studentRepository.saveParentStudent(parentUserId, studentId); // Gắn học sinh với phụ huynh
+    }
 }

@@ -34,4 +34,11 @@ public class StudentRepositoryImpl implements IStudentRepository {
                 healthInfo.getVision(), healthInfo.getHearing(), healthInfo.getMedicalHistory(),
                 healthInfo.getHeight(), healthInfo.getWeight(), healthInfo.getBmi());
     }
+
+    @Override
+    public void saveParentStudent(int parentUserId, int studentId) {
+        String sql = "INSERT INTO parentstudent (parent_user_id, student_id, relationship) VALUES (?, ?, ?)";
+        jdbcTemplate.update(sql, parentUserId, studentId, "Father"); // hoặc "Mother", nếu muốn linh hoạt, bạn có thể truyền vào
+    }
+
 }
