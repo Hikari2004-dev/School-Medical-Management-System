@@ -32,6 +32,10 @@ import ResetPassword from './auth/ResetPassword/ResetPassword';
 import HealthFormApp from './pages/form/healthForm';
 import vaccine from './pages/form/vaccineForm';
 
+
+import AdminApp from './AdminApp';
+import UserApp from './UserApp';
+
 import VNPAYPaymentButton from './pages/Member/VNPAYPaymentButton';
 import Order from './pages/order/order';
 
@@ -77,7 +81,10 @@ function App() {
           <Route path="/vaccine" element={<vaccine />} />
           <Route path="/order" element={<Order />} />
 
-          {/* Thêm các route khác nếu cần */}
+          {/* Admin*/}
+          <Route path="/admin/*" element={<AdminApp />} />
+          <Route path="/*" element={<UserApp />} />
+
         </Routes>
         <ChatBot />
       </div>
@@ -245,6 +252,50 @@ export default App;
 // }
 
 // export default App;
+
+// import React from 'react';
+// import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+// import Login from './auth/Login/Login';
+// import Register from './auth/Register/Register';
+// import ForgetPassword from './auth/ForgetPassword/ForgetPassword';
+// import ResetPassword from './auth/ResetPassword/ResetPassword';
+// import OtpSuccess from './auth/OtpSuccess/OtpSuccess';
+// import OtpVerification from './auth/OtpVerification/OtpVerification';
+// import VNPAYPaymentButton from './pages/Member/VNPAYPaymentButton';
+// import ReportPage from './pages/ReportPage/ReportPage';
+// import Notification from "./pages/notification/Notification";
+// import AdminApp from './AdminApp';
+// import UserApp from './UserApp';
+// import UnifiedDashboard from './pages/order/order';
+
+// function App() {
+//   return (
+//     <Router>
+//       <Routes>
+//         {/* Auth routes */}
+//         <Route path="/login" element={<Login />} />
+//         <Route path="/register" element={<Register />} />
+//         <Route path="/forget-password" element={<ForgetPassword />} />
+//         <Route path="/reset-password" element={<ResetPassword />} />
+//         <Route path="/otp-success" element={<OtpSuccess />} />
+//         <Route path="/otp-verification" element={<OtpVerification />} />
+//         <Route path="/notification" element={<Notification />} />
+//         <Route path="/report" element={<ReportPage />} />
+//         {/* Role-based entry points */}
+//         <Route path="/payment/vnpay" element={<VNPAYPaymentButton />} />
+//         <Route path="/order" element={<UnifiedDashboard />} />
+//         <Route path="/admin/*" element={<AdminApp />} />
+//         <Route path="/*" element={<UserApp />} />
+//       </Routes>
+//     </Router>
+//   );
+// }
+
+// export default App;
+
+
+
 
 
 

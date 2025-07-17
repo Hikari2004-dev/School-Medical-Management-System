@@ -36,54 +36,45 @@ public class CheckoutController {
     @GetMapping("/vnpay-return")
     public RedirectView vnpayReturn(@RequestParam Map<String, String> params) {
         logger.info("VNPAY return with parameters: {}", params);
-
         try {
             boolean isValid = checkoutService.verifyPayment(params);
             logger.info("Verification result: {}", isValid);
 
-            if (isValid) {
-                String txnRef = params.get("vnp_TxnRef");
-                String responseCode = params.get("vnp_ResponseCode");
+            String txnRef = params.get("vnp_TxnRef");
+            String responseCode = params.get("vnp_ResponseCode");
+            String vnpTransactionNo = params.get("vnp_TransactionNo");
 
+            logger.info("VNPAY response:");
+            logger.info("  txnRef: {}", txnRef);
+            logger.info("  responseCode: {}", responseCode);
+            logger.info("  vnpTransactionNo: {}", vnpTransactionNo);
+
+            if (isValid) {
                 Optional<Order> orderOpt = orderRepository.findByTxnRef(txnRef);
                 if (orderOpt.isPresent()) {
                     Order order = orderOpt.get();
                     if ("00".equals(responseCode)) {
                         order.setStatus("SUCCESS");
-                        order.setVnpTransactionNo(params.get("vnp_TransactionNo"));
-                        orderRepository.save(order);
-
-                        String redirectUrl = String.format(
-                                "http://localhost:3000/payment/result?success=true&txnRef=%s&amount=%s&orderInfo=%s",
-                                params.get("vnp_TxnRef"),
-                                params.get("vnp_Amount"),
-                                params.get("vnp_OrderInfo"));
-                        return new RedirectView(redirectUrl);
+                        order.setVnpTransactionNo(vnpTransactionNo);
                     } else {
-                        order.setStatus("FAIL");
-                        orderRepository.save(order);
-
-                        String redirectUrl = String.format(
-                                "http://localhost:3000/payment/result?success=false&txnRef=%s",
-                                params.get("vnp_TxnRef"));
-                        return new RedirectView(redirectUrl);
+                        order.setStatus("FAILED");
                     }
+                    orderRepository.save(order);
+                    logger.info("Order updated: status={}, vnpTransactionNo={}", order.getStatus(),
+                            order.getVnpTransactionNo());
+                    return new RedirectView("http://localhost:3000/payment/result?success=true");
+                } else {
+                    logger.error("Order not found for txnRef: {}", txnRef);
+                    return new RedirectView("http://localhost:3000/payment/result?success=false&error=order_not_found");
                 }
+            } else {
+                logger.error("Payment verification failed");
+                return new RedirectView("http://localhost:3000/payment/result?success=false&error=verification_failed");
             }
-
-            return new RedirectView("http://localhost:3000/payment/result?success=false&error=invalid");
         } catch (Exception e) {
             logger.error("Error processing VNPAY return: ", e);
             return new RedirectView("http://localhost:3000/payment/result?success=false&error=exception");
         }
-    }
-
-    @GetMapping("/test")
-    public ResponseEntity<Map<String, Object>> testEndpoint() {
-        return ResponseEntity.ok(Map.of(
-                "success", true,
-                "message", "Payment API is working",
-                "timestamp", new Date()));
     }
 
     @GetMapping("/user/{userId}/orders")
@@ -103,4 +94,5 @@ public class CheckoutController {
             return ResponseEntity.ok(Map.of("success", false, "message", "Error: " + e.getMessage()));
         }
     }
+
 }
