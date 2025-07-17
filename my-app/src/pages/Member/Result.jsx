@@ -8,22 +8,28 @@ export default function PaymentResult() {
     const [message, setMessage] = useState('Đang xử lý kết quả thanh toán...');
 
     useEffect(() => {
-        const success = searchParams.get('success');
-        const error = searchParams.get('error');
-        const txnRef = searchParams.get('txnRef');
-        const amount = searchParams.get('amount');
-        const orderInfo = searchParams.get('orderInfo');
-
-        if (success === 'true') {
-            setStatus('success');
-            setMessage(`Thanh toán thành công!\nMã giao dịch: ${txnRef}\nSố tiền: ${parseInt(amount) / 100} VND\nNội dung: ${orderInfo}`);
-        } else if (success === 'false') {
-            setStatus('failed');
-            setMessage(`Thanh toán thất bại!\nMã giao dịch: ${txnRef}\nLỗi: ${error || 'Không xác định'}`);
-        } else {
-            setStatus('error');
-            setMessage('Có lỗi xảy ra khi xử lý kết quả thanh toán!');
+        // Lấy toàn bộ params từ URL
+        const params = {};
+        for (const [key, value] of searchParams.entries()) {
+            params[key] = value;
         }
+
+        // Gửi sang backend để xác thực
+        fetch(`http://localhost:8080/api/payment/vnpay-return?${searchParams.toString()}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    setStatus('success');
+                    setMessage(`Thanh toán thành công!\nMã giao dịch: ${data.txnRef}\nSố tiền: ${parseInt(data.amount) / 100} VND\nNội dung: ${data.orderInfo}`);
+                } else {
+                    setStatus('failed');
+                    setMessage(`Thanh toán thất bại!\nMã giao dịch: ${data.txnRef}\nLỗi: ${data.error || 'Không xác định'}`);
+                }
+            })
+            .catch(() => {
+                setStatus('error');
+                setMessage('Có lỗi xảy ra khi xử lý kết quả thanh toán!');
+            });
 
         // Auto redirect after 5 seconds
         const timer = setTimeout(() => {

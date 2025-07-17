@@ -10,5 +10,4 @@ public interface INotificationService {
     void updateConsent(Long notificationId, Boolean consentStatus);
     List<Notification> getNotificationsByParentId();
     void sendNotificationToParent(String email, String notificationContent) throws MessagingException;
-    List getEmailOfParent;
 }

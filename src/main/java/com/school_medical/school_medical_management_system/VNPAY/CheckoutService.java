@@ -9,9 +9,13 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.time.LocalDateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class CheckoutService {
+
+    private static final Logger logger = LoggerFactory.getLogger(CheckoutService.class);
 
     @Autowired
     private OrderRepository orderRepository;
@@ -36,6 +40,7 @@ public class CheckoutService {
         order.setExpiryDate(LocalDateTime.now().plusYears(1));
 
         orderRepository.save(order);
+        logger.info("Created order with txnRef: {}", txnRef);
 
         // Tạo parameters cho VNPAY
         Map<String, String> vnpParams = new HashMap<>();
@@ -53,22 +58,35 @@ public class CheckoutService {
 
         Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
-        vnpParams.put("vnp_CreateDate", formatter.format(cld.getTime()));
+        String createDate = formatter.format(cld.getTime());
+        vnpParams.put("vnp_CreateDate", createDate);
 
         cld.add(Calendar.MINUTE, 15);
-        vnpParams.put("vnp_ExpireDate", formatter.format(cld.getTime()));
+        String expireDate = formatter.format(cld.getTime());
+        vnpParams.put("vnp_ExpireDate", expireDate);
+
+        // Log tất cả parameters gửi đi
+        logger.info("=== VNPAY REQUEST PARAMETERS ===");
+        for (Map.Entry<String, String> entry : vnpParams.entrySet()) {
+            logger.info("REQUEST PARAM: {} = [{}]", entry.getKey(), entry.getValue());
+        }
+        logger.info("=== END REQUEST PARAMETERS ===");
 
         // Tạo query string và secure hash
         String queryUrl = buildQuery(vnpParams);
         String vnpSecureHash = hmacSHA512(vnPayConfig.getHashSecret(), queryUrl);
         queryUrl += "&vnp_SecureHash=" + vnpSecureHash;
 
-        return vnPayConfig.getPayUrl() + "?" + queryUrl;
+        String finalUrl = vnPayConfig.getPayUrl() + "?" + queryUrl;
+        logger.info("Generated payment URL: {}", finalUrl);
+        
+        return finalUrl;
     }
 
     public boolean verifyPayment(Map<String, String> params) {
         String vnpSecureHash = params.get("vnp_SecureHash");
         if (vnpSecureHash == null) {
+            logger.error("No vnp_SecureHash in response");
             return false;
         }
 
@@ -79,6 +97,10 @@ public class CheckoutService {
 
         String queryUrl = buildQuery(verifyParams);
         String calculatedHash = hmacSHA512(vnPayConfig.getHashSecret(), queryUrl);
+
+        logger.info("Received hash: {}", vnpSecureHash);
+        logger.info("Calculated hash: {}", calculatedHash);
+        logger.info("Hash verification: {}", vnpSecureHash.equals(calculatedHash));
 
         return vnpSecureHash.equals(calculatedHash);
     }
@@ -101,16 +123,19 @@ public class CheckoutService {
                 }
             }
         }
-        return hashData.toString();
+        
+        String result = hashData.toString();
+        logger.debug("Built query string: {}", result);
+        return result;
     }
 
     private String hmacSHA512(String key, String data) {
         try {
             if (key == null || data == null) {
-                throw new NullPointerException();
+                throw new NullPointerException("Key or data is null");
             }
             final Mac hmac512 = Mac.getInstance("HmacSHA512");
-            byte[] hmacKeyBytes = key.getBytes();
+            byte[] hmacKeyBytes = key.getBytes(StandardCharsets.UTF_8);
             final SecretKeySpec secretKey = new SecretKeySpec(hmacKeyBytes, "HmacSHA512");
             hmac512.init(secretKey);
             byte[] dataBytes = data.getBytes(StandardCharsets.UTF_8);
@@ -121,6 +146,7 @@ public class CheckoutService {
             }
             return sb.toString();
         } catch (Exception ex) {
+            logger.error("Error generating HMAC SHA512: ", ex);
             return "";
         }
     }

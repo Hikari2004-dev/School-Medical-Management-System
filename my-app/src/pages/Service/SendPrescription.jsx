@@ -20,14 +20,20 @@ export default function SendPrescription() {
   useEffect(() => {
     const token = getToken();
     if (!token) return;
-    fetch("http://localhost:8080/api/me", {
+
+    fetch("http://localhost:8080/api/notifications/parent", {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((r) => (r.ok ? r.json() : Promise.reject()))
       .then((me) => {
-        setUser({ name: me.name, id: me.id });
-        localStorage.setItem("userName", me.name);
-        localStorage.setItem("userId", me.id.toString());
+        const userId = me.user_id || me.userId || me.id;
+        // Lấy tên từ localStorage, không lấy từ API
+        const userName = localStorage.getItem("userName") || "Phụ huynh";
+        setUser({
+          name: userName,
+          id: userId,
+        });
+        localStorage.setItem("userId", userId?.toString() || "");
       })
       .catch(console.error);
   }, []);
@@ -158,24 +164,33 @@ export default function SendPrescription() {
       navigate("/login");
       return;
     }
+
     try {
-      const res = await fetch(
-        "http://localhost:8080/api/medication-submissions",
-        {
+      // Gửi từng item một
+      const promises = items.map((item) => {
+        console.log("Sending item:", item); // Thêm dòng này
+        return fetch("http://localhost:8080/api/medication-submissions", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify(items),
-        }
-      );
-      const text = await res.text();
-      if (res.ok) {
+          body: JSON.stringify(item),
+        });
+      });
+
+      const responses = await Promise.all(promises);
+
+      // Kiểm tra tất cả response
+      const allSuccess = responses.every((res) => res.ok);
+
+      if (allSuccess) {
         setItems([]);
-        setStatusMessage(text || "Gửi đơn thuốc thành công!");
+        setStatusMessage("Gửi đơn thuốc thành công!");
       } else {
-        setStatusMessage(`Error ${res.status}: ${text}`);
+        const firstError = responses.find((res) => !res.ok);
+        const errorText = await firstError.text();
+        setStatusMessage(`Error ${firstError.status}: ${errorText}`);
       }
     } catch (err) {
       console.error("Lỗi gửi thuốc:", err);
@@ -204,7 +219,7 @@ export default function SendPrescription() {
               >
                 <option value="">-- Chọn học sinh --</option>
                 {students.map((s, i) => (
-                  <option key={s.studentId} value={String(i)}>
+                  <option key={s.studentId || i} value={String(i)}>
                     {s.studentName}
                   </option>
                 ))}
@@ -317,11 +332,10 @@ export default function SendPrescription() {
             {/* Thông báo kết quả */}
             {statusMessage && (
               <div
-                className={`status-alert ${
-                  statusMessage.startsWith("Error") || statusMessage.startsWith("❌")
-                    ? "error"
-                    : "success"
-                }`}
+                className={`status-alert ${statusMessage.startsWith("Error") || statusMessage.startsWith("❌")
+                  ? "error"
+                  : "success"
+                  }`}
               >
                 {statusMessage}
               </div>

@@ -133,33 +133,46 @@ export default function Notification() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    fetch("http://localhost:8080/api/notifications/parent", {
-      headers: {
-        "Authorization": `Bearer ${token}`,
-      }
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error(res.status);
-        return res.json();
+    Promise.all([
+      fetch("http://localhost:8080/api/event-batches", {
+        headers: {
+          "Authorization": `Bearer ${token}`,
+        }
       })
-      .then((notifications) => {
+        .then((res) => {
+          if (!res.ok) throw new Error(res.status);
+          return res.json();
+        }),
+      fetch("http://localhost:8080/api/notifications/parent", {
+        headers: {
+          "Authorization": `Bearer ${token}`,
+        }
+      })
+        .then((res) => {
+          if (!res.ok) throw new Error(res.status);
+          return res.json();
+        })
+    ])
+      .then(([announcementBatches, notifications]) => {
+        console.log('event-batches:', announcementBatches);
+        console.log('notifications/parent:', notifications);
         setData({
-          announcements: notifications
-            .filter(n => n.type === "Vaccine")
-            .map(n => ({
+          announcements: Array.isArray(announcementBatches.data)
+            ? announcementBatches.data.map(batch => ({
+              id: batch.batchId,
+              title: batch.title || "📢 Thông báo",
+              content: batch.description || "",
+              date: batch.eventDate || "",
+            }))
+            : [],
+          events: Array.isArray(notifications)
+            ? notifications.filter(n => n.type === "Vaccine").map(n => ({
               id: n.notificationId,
               title: "💉 Tiêm chủng",
               content: n.content,
               date: n.dateSent,
-            })),
-          events: notifications
-            .filter(n => n.type === "Event")
-            .map(n => ({
-              id: n.notificationId,
-              title: "📅 Sự kiện",
-              content: n.content,
-              date: n.dateSent,
-            })),
+            }))
+            : [],
         });
       })
       .catch((e) => {
@@ -182,14 +195,36 @@ export default function Notification() {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [toastMessage, setToastMessage] = useState("");
 
-  const handleResponse = (choice) => {
-    const msg =
-      choice === "accepted"
-        ? "✅ Bạn đã đồng ý tham gia"
-        : "❌ Bạn đã từ chối tham gia";
-    setSelectedEvent(null);
-    setToastMessage(msg);
-    setTimeout(() => setToastMessage(""), 6000);
+  const handleResponse = async (choice) => {
+    if (!selectedEvent) return;
+    const consentStatus = choice === "accepted";
+    try {
+      const res = await fetch(
+        `http://localhost:8080/api/notifications/consent/${selectedEvent.id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({
+            consentStatus: consentStatus,
+            // Nếu cần truyền thêm parentUserId, studentId thì bổ sung ở đây
+          }),
+        }
+      );
+      if (!res.ok) throw new Error("Không thể xác nhận");
+      setSelectedEvent(null);
+      setToastMessage(
+        consentStatus
+          ? "✅ Bạn đã đồng ý tham gia"
+          : "❌ Bạn đã từ chối tham gia"
+      );
+      setTimeout(() => setToastMessage(""), 6000);
+    } catch (e) {
+      setToastMessage("Có lỗi khi gửi phản hồi, vui lòng thử lại.");
+      setTimeout(() => setToastMessage(""), 6000);
+    }
   };
 
   return (
@@ -210,7 +245,7 @@ export default function Notification() {
             <div className="icon-scale">
               <NavIcons.Campaign />
             </div>
-            <h2 className="notification-section-title">📢 Thông báo</h2>
+            <h2 className="notification-section-title">📅 Sự kiện</h2>
           </div>
           <NavigationControls
             currentPage={annPage}
@@ -237,7 +272,7 @@ export default function Notification() {
             <div className="icon-scale">
               <NavIcons.Calendar />
             </div>
-            <h2 className="notification-section-title">📅 Sự kiện</h2>
+            <h2 className="notification-section-title">📢 Thông báo</h2>
           </div>
           <NavigationControls
             currentPage={evPage}

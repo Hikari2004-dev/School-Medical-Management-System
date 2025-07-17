@@ -10,32 +10,54 @@ const UnifiedDashboard = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchUserData();
+    fetchUserIdAndData();
   }, []);
 
-  const fetchUserData = async () => {
+  const fetchUserIdAndData = async () => {
     try {
-      const userId = getCurrentUserId();
-      if (!userId) {
-        console.error('User not logged in');
+      // Lấy userId và token từ localStorage
+      const token = localStorage.getItem('token');
+      const userId = localStorage.getItem('userId');
+      if (!token || !userId) {
+        console.error('Không tìm thấy token hoặc userId trong localStorage');
         setLoading(false);
         return;
       }
 
       // Fetch packages
-      const packagesResponse = await fetch(`http://localhost:8080/api/payment/user/${userId}/orders`);
-      const packagesData = await packagesResponse.json();
-
-      // Fetch statistics  
-      const statsResponse = await fetch(`http://localhost:8080/api/payment/user/${userId}/statistics`);
-      const statsData = await statsResponse.json();
-
-      if (packagesData.success) {
-        setPackages(packagesData.packages);
+      const packagesResponse = await fetch(`http://localhost:8080/api/payment/user/${userId}/orders`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        }
+      });
+      let packagesData = {};
+      if (packagesResponse.ok) {
+        packagesData = await packagesResponse.json();
+        if (packagesData.success && Array.isArray(packagesData.packages)) {
+          setPackages(packagesData.packages);
+        } else {
+          setPackages([]); // Đảm bảo luôn là mảng
+        }
+      } else {
+        setPackages([]); // Đảm bảo luôn là mảng
+        console.error('Không lấy được dữ liệu packages');
       }
 
-      if (statsData.success) {
-        setStatistics(statsData);
+      // XÓA hoặc COMMENT đoạn này nếu không có API statistics
+      // Fetch statistics
+      const statsResponse = await fetch(`http://localhost:8080/api/payment/user/${userId}/statistics`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        }
+      });
+      let statsData = {};
+      if (statsResponse.ok) {
+        statsData = await statsResponse.json();
+        if (statsData.success) {
+          setStatistics(statsData);
+        }
+      } else {
+        console.error('Không lấy được dữ liệu statistics');
       }
 
     } catch (error) {
@@ -45,18 +67,7 @@ const UnifiedDashboard = () => {
     }
   };
 
-  const getCurrentUserId = () => {
-    const userStr = localStorage.getItem('user');
-    if (userStr) {
-      try {
-        const user = JSON.parse(userStr);
-        return user.id;
-      } catch (e) {
-        console.error('Error parsing user data:', e);
-      }
-    }
-    return null;
-  };
+  // Đã lấy userId từ API nên không cần hàm này nữa
 
   const formatCurrency = (amount) =>
     new Intl.NumberFormat("vi-VN", {
@@ -103,17 +114,23 @@ const UnifiedDashboard = () => {
     );
   }
 
-  // Calculate statistics
-  const totalTransactions = statistics.totalTransactions || 0;
-  const totalPackagesSold = statistics.totalPackagesSold || 0;
-  const activePackages = statistics.activePackages || 0;
-  const totalRevenue = statistics.totalRevenue || 0;
+  // Tính toán thống kê từ mảng packages
+  const totalTransactions = Array.isArray(packages) ? packages.length : 0;
+  const totalPackagesSold = Array.isArray(packages) ? packages.length : 0;
+  const activePackages = Array.isArray(packages)
+    ? packages.filter(pkg => pkg.status === "active" || pkg.status === "SUCCESS").length
+    : 0;
+  const totalRevenue = Array.isArray(packages)
+    ? packages.reduce((sum, pkg) => sum + (pkg.amount || 0), 0)
+    : 0;
 
-  const filteredPackages = packages.filter(pkg => {
-    const matchesFilter = filter === 'all' || pkg.status === filter;
-    const matchesSearch = pkg.packageName.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesFilter && matchesSearch;
-  });
+  const filteredPackages = Array.isArray(packages)
+    ? packages.filter(pkg => {
+      const matchesFilter = filter === 'all' || pkg.status === filter;
+      const matchesSearch = pkg.packageName?.toLowerCase().includes(searchTerm.toLowerCase());
+      return matchesFilter && matchesSearch;
+    })
+    : [];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -201,50 +218,52 @@ const UnifiedDashboard = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredPackages.map((pkg) => (
-            <div key={pkg.id} className="bg-white rounded-lg shadow p-6">
-              <div className="flex justify-between items-start mb-4">
-                <div>
-                  <h3 className="text-lg font-bold">{pkg.packageName}</h3>
-                  <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
-                    {pkg.packageType}
+          {Array.isArray(filteredPackages) && filteredPackages.length > 0 ? (
+            filteredPackages.map((pkg) => (
+              <div key={pkg.id} className="bg-white rounded-lg shadow p-6">
+                <div className="flex justify-between items-start mb-4">
+                  <div>
+                    <h3 className="text-lg font-bold">{pkg.packageName}</h3>
+                    <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
+                      {pkg.packageId}
+                    </span>
+                  </div>
+                  <span className={`text-xs px-2 py-1 rounded-full font-medium ${getStatusColor(pkg.status)}`}>
+                    {getStatusText(pkg.status)}
                   </span>
                 </div>
-                <span className={`text-xs px-2 py-1 rounded-full font-medium ${getStatusColor(pkg.status)}`}>
-                  {getStatusText(pkg.status)}
-                </span>
-              </div>
 
-              <div className="text-sm bg-gray-50 p-3 rounded mb-4">
-                <p><strong>Khách hàng:</strong> {pkg.customerName}</p>
-                <p><strong>SĐT:</strong> {pkg.customerPhone}</p>
-              </div>
+                <div className="text-sm bg-gray-50 p-3 rounded mb-4">
+                  <p><strong>Mã giao dịch:</strong> {pkg.txnRef}</p>
+                  <p><strong>Mã VNPay:</strong> {pkg.vnpTransactionNo}</p>
+                </div>
 
-              <div className="text-sm space-y-1 mb-4">
-                <p><strong>Thời gian:</strong> {pkg.duration}</p>
-                <p><strong>Ngày mua:</strong> {pkg.purchaseDate}</p>
-                <p><strong>Hết hạn:</strong> {pkg.expiryDate}</p>
-              </div>
+                <div className="text-sm space-y-1 mb-4">
+                  <p><strong>Ngày mua:</strong> {pkg.createdAt}</p>
+                  <p><strong>Hết hạn:</strong> {pkg.expiryDate}</p>
+                  <p><strong>Thông tin đơn hàng:</strong> {pkg.orderInfo}</p>
+                </div>
 
-              <div className="mb-4">
-                <p className="font-medium mb-1">Dịch vụ bao gồm:</p>
-                <div className="flex flex-wrap gap-1">
-                  {pkg.features.map((f, i) => (
-                    <span key={i} className="text-xs px-2 py-1 bg-gray-100 rounded border">
-                      {f}
+                <div className="mb-4">
+                  <p className="font-medium mb-1">Giá trị gói:</p>
+                  <div className="flex flex-wrap gap-1">
+                    <span className="text-xs px-2 py-1 bg-gray-100 rounded border">
+                      {formatCurrency(pkg.amount)}
                     </span>
-                  ))}
+                  </div>
+                </div>
+
+                <div className="flex justify-between items-center border-t pt-4">
+                  <span className="text-lg font-bold text-blue-600">{formatCurrency(pkg.amount)}</span>
+                  <button className="bg-blue-600 text-white text-sm px-4 py-2 rounded hover:bg-blue-700 transition-colors">
+                    Xem chi tiết
+                  </button>
                 </div>
               </div>
-
-              <div className="flex justify-between items-center border-t pt-4">
-                <span className="text-lg font-bold text-blue-600">{formatCurrency(pkg.price)}</span>
-                <button className="bg-blue-600 text-white text-sm px-4 py-2 rounded hover:bg-blue-700 transition-colors">
-                  Xem chi tiết
-                </button>
-              </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            <div className="col-span-3 text-center text-gray-500 py-8">Không có gói dịch vụ nào.</div>
+          )}
         </div>
       </main>
 
