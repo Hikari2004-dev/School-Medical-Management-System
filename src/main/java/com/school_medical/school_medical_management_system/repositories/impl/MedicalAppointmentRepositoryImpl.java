@@ -70,7 +70,7 @@ public class MedicalAppointmentRepositoryImpl implements IMedicalAppointmentRepo
     }
 
     @Override
-    public List<MedicalAppointment> getAllAppointments() {  // Phương thức mới
+    public List<MedicalAppointment> getAllAppointments() {
         String sql = "SELECT * FROM medicalappointment";
         List<MedicalAppointment> list = new ArrayList<>();
         try (Connection conn = dataSource.getConnection();
@@ -90,5 +90,23 @@ public class MedicalAppointmentRepositoryImpl implements IMedicalAppointmentRepo
             throw new RuntimeException("Error fetching all appointments", e);
         }
         return list;
+    }
+
+    // Thêm phương thức update
+    @Override
+    public void updateAppointment(MedicalAppointment appointment) {
+        String sql = "UPDATE medicalappointment SET student_id = ?, nurse_id = ?, appointment_date = ?, reason = ?, status = ? WHERE appointment_id = ?";
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, appointment.getStudentId());
+            stmt.setInt(2, appointment.getNurseId());
+            stmt.setTimestamp(3, Timestamp.valueOf(appointment.getAppointmentDate()));
+            stmt.setString(4, appointment.getReason());
+            stmt.setString(5, appointment.getStatus());
+            stmt.setInt(6, appointment.getAppointmentId());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error updating appointment", e);
+        }
     }
 }

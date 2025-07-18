@@ -73,4 +73,16 @@ public class MedicalAppointmentController {
         }
     }
 
+    /**
+     * Cập nhật cuộc hẹn
+     */
+    @PutMapping("/update")
+    public ResponseEntity<?> updateAppointment(@RequestBody MedicalAppointment appointment) {
+        try {
+            service.updateAppointment(appointment);
+            return ResponseEntity.ok("Appointment updated successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error: " + e.getMessage());
+        }
+    }
 }

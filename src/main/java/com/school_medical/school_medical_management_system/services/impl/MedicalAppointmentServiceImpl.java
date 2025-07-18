@@ -30,7 +30,12 @@ public class MedicalAppointmentServiceImpl implements IMedicalAppointmentService
     }
 
     @Override
-    public List<MedicalAppointment> getAllAppointments() {  // Phương thức mới
-        return repository.getAllAppointments();  // Gọi từ repository
+    public List<MedicalAppointment> getAllAppointments() {
+        return repository.getAllAppointments();
+    }
+
+    @Override
+    public void updateAppointment(MedicalAppointment appointment) {
+        repository.updateAppointment(appointment);
     }
 }
