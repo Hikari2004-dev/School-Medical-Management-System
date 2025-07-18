@@ -78,18 +78,17 @@
 
 // export default Login;
 
-
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import "./Login.css";
-import LogoImg from '../../image/hinhanh/logoproject.png';
-import GoogleLogo from '../../image/icon/LogoGoogle.png';
-import Background from '../../image/hinhanh/backgroundauth.png';
+import LogoImg from "../../image/hinhanh/logoproject.png";
+import GoogleLogo from "../../image/icon/LogoGoogle.png";
+import Background from "../../image/hinhanh/backgroundauth.png";
 
 function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -122,7 +121,10 @@ function Login() {
   };
 
   return (
-    <div className="login-wrapper" style={{ backgroundImage: `url(${Background})` }}>
+    <div
+      className="login-wrapper"
+      style={{ backgroundImage: `url(${Background})` }}
+    >
       <div className="login-box">
         <img src={LogoImg} alt="Logo" className="login-logo" />
         <h2 className="login-title">Đăng nhập</h2>
@@ -130,12 +132,26 @@ function Login() {
         <form className="login-form" onSubmit={handleSubmit}>
           <div>
             <label className="login-label">Email</label>
-            <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" className="input-custom" required />
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Email"
+              className="input-custom"
+              required
+            />
           </div>
 
           <div>
             <label className="login-label">Mật khẩu</label>
-            <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Mật khẩu" className="input-custom" required />
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Mật khẩu"
+              className="input-custom"
+              required
+            />
           </div>
 
           <div className="checkbox-links">
@@ -149,7 +165,9 @@ function Login() {
             </div>
           </div>
 
-          <button type="submit" className="btn-submit">Continue</button>
+          <button type="submit" className="btn-submit">
+            Continue
+          </button>
 
           <div className="or-separator">
             <hr className="dividerLine" />
@@ -168,4 +186,3 @@ function Login() {
 }
 
 export default Login;
-
