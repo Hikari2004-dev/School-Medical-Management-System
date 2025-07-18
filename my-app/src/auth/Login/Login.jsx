@@ -24,6 +24,7 @@ function Login() {
       localStorage.setItem("userName", data.name);
       localStorage.setItem("role", data.role);
       localStorage.setItem("userId", data.userId);
+      redirectByRole(data.role);
     } else {
       alert("Đăng nhập thất bại!");
     }
