@@ -37,4 +37,10 @@ public class EventBatchService implements IEventBatchService {
     public List<EventBatch> getTop3UpcomingEvents() {
         return eventBatchRepository.findTop3UpcomingEvents();
     }
+
+    @Override
+    public void resendBatch(Integer batchId) {
+        eventBatchRepository.resendBatch(batchId);  // Gọi phương thức resend trong repository
+    }
+
 }

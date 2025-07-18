@@ -132,4 +132,18 @@ public class EventBatchRepository implements IEventBatchRepository {
         }
         return events;
     }
+
+    @Override
+    public void resendBatch(Integer batchId) {
+        String sql = "UPDATE EventBatch SET status = 'Repending' WHERE batch_id = ? AND status = 'Approved'";  // Đảm bảo chỉ cập nhật những batch có trạng thái là 'Approved'
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, batchId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error changing batch status to Repending", e);
+        }
+    }
+
 }

@@ -79,6 +79,20 @@ public class EventBatchController {
         }
     }
 
+    /**
+     * Chuyển trạng thái Event Batch từ 'Approved' sang 'Resending'
+     */
+    @PostMapping("/{id}/resend")
+    public ResponseEntity<ApiResponse<String>> resendEventBatch(@PathVariable Integer id) {
+        try {
+            eventBatchService.resendBatch(id);
+            return ResponseEntity.ok(new ApiResponse<>(true, "Event batch đã chuyển trạng thái sang Repending", "Batch ID " + id + " đã được chuyển sang trạng thái Repending"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiResponse<>(false, "Chuyển trạng thái thất bại: " + e.getMessage(), null));
+        }
+    }
+
     @GetMapping("/upcoming")
     public ResponseEntity<List<EventBatch>> getTop3UpcomingEvents() {
         List<EventBatch> events = eventBatchService.getTop3UpcomingEvents();
