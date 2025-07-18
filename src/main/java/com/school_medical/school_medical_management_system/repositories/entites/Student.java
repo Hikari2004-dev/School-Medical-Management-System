@@ -13,15 +13,16 @@ public class Student {
     private LocalDate dateOfBirth;
     private String gender;
     private String grade;
+    private Integer classId;  // Thêm classId vào lớp Student
 
-    private Studentclass classField;
+    
 
-    public Studentclass getClassField() {
-        return classField;
+    public Integer getClassId() {
+        return classId;
     }
 
-    public void setClassField(Studentclass classField) {
-        this.classField = classField;
+    public void setClassId(Integer classId) {
+        this.classId = classId;
     }
 
     public LocalDate getDateOfBirth() {

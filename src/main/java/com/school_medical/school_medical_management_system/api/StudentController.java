@@ -47,9 +47,8 @@ public class StudentController {
         student.setGender(request.getGender());
         student.setGrade(request.getGrade());
 
-        Studentclass studentClass = new Studentclass();
-        studentClass.setId(request.getClassId());
-        student.setClassField(studentClass);
+        // Sử dụng classId từ request thay vì classField
+        student.setClassId(request.getClassId());
 
         // 4. Tạo Healthinfo object
         Healthinfo healthinfo = new Healthinfo();
@@ -67,6 +66,7 @@ public class StudentController {
 
         return "✅ Học sinh và thông tin sức khỏe đã được lưu và liên kết với phụ huynh!";
     }
+
 
     /**
      * Lấy tất cả học sinh
