@@ -258,6 +258,8 @@ import ReportPage from './pages/ReportPage/ReportPage';
 import Notification from "./pages/notification/Notification";
 import AdminApp from './AdminApp';
 import UserApp from './UserApp';
+import Order from './pages/order/order';
+
 
 function App() {
   return (
@@ -272,10 +274,11 @@ function App() {
         <Route path="/otp-verification" element={<OtpVerification />} />
         <Route path="/notification" element={<Notification />} />
         <Route path="/report" element={<ReportPage />} />
-        
+        <Route path="/order" element={<Order />} />
         {/* Role-based entry points */}
         <Route path="/admin/*" element={<AdminApp />} />
         <Route path="/*" element={<UserApp />} />
+        
       </Routes>
     </Router>
   );
