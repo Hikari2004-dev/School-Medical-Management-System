@@ -39,6 +39,7 @@ import UserApp from './UserApp';
 import VNPAYPaymentButton from './pages/Member/VNPAYPaymentButton';
 import Order from './pages/order/order';
 
+
 function App() {
   return (
     <Router>
@@ -74,6 +75,7 @@ function App() {
           <Route path="/otp-verification" element={<OtpVerification />} />
           <Route path="/register" element={<Register />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+          
 
           {/* Payment */}
           <Route path="/payment/vnpay" element={<VNPAYPaymentButton />} />
