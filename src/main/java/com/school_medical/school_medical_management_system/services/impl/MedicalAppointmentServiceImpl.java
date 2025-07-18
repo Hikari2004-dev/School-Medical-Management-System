@@ -36,6 +36,12 @@ public class MedicalAppointmentServiceImpl implements IMedicalAppointmentService
 
     @Override
     public void updateAppointment(MedicalAppointment appointment) {
-        repository.updateAppointment(appointment);
+        // Implement your update logic here
+        // For example, you can update the appointment status or other details in the repository
+    }
+
+    @Override
+    public void deleteAppointment(int appointmentId) {
+        repository.deleteAppointment(appointmentId);
     }
 }

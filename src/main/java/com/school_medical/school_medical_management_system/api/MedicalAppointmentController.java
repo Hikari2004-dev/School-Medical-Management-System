@@ -63,11 +63,9 @@ public class MedicalAppointmentController {
     public ResponseEntity<ApiResponse<List<MedicalAppointment>>> viewAllAppointments() {
         try {
             List<MedicalAppointment> allAppointments = service.getAllAppointments();
-            // Trả về dữ liệu với thông báo thành công
             ApiResponse<List<MedicalAppointment>> response = new ApiResponse<>(true, "Lấy tất cả cuộc hẹn thành công", allAppointments);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            // Trả về thông báo lỗi với chi tiết exception
             ApiResponse<List<MedicalAppointment>> response = new ApiResponse<>(false, "Lỗi khi lấy tất cả cuộc hẹn: " + e.getMessage(), null);
             return ResponseEntity.status(500).body(response);
         }
@@ -81,6 +79,19 @@ public class MedicalAppointmentController {
         try {
             service.updateAppointment(appointment);
             return ResponseEntity.ok("Appointment updated successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Xóa cuộc hẹn
+     */
+    @DeleteMapping("/delete/{appointmentId}")
+    public ResponseEntity<?> deleteAppointment(@PathVariable int appointmentId) {
+        try {
+            service.deleteAppointment(appointmentId);
+            return ResponseEntity.ok("Appointment deleted successfully");
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Error: " + e.getMessage());
         }

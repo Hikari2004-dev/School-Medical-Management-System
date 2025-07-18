@@ -109,4 +109,16 @@ public class MedicalAppointmentRepositoryImpl implements IMedicalAppointmentRepo
             throw new RuntimeException("Error updating appointment", e);
         }
     }
+
+    @Override
+    public void deleteAppointment(int appointmentId) {
+        String sql = "DELETE FROM medicalappointment WHERE appointment_id = ?";
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, appointmentId);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error deleting appointment", e);
+        }
+    }
 }

@@ -7,6 +7,7 @@ public interface IMedicalAppointmentService {
     void createAppointment(MedicalAppointment appointment);
     List<MedicalAppointment> getAppointmentsByStudentId(int studentId);
     void approveAppointment(int appointmentId, String status);
-    List<MedicalAppointment> getAllAppointments();  // Lấy tất cả cuộc hẹn
-    void updateAppointment(MedicalAppointment appointment);  // Cập nhật cuộc hẹn
+    List<MedicalAppointment> getAllAppointments();
+    void updateAppointment(MedicalAppointment appointment);  // Thêm phương thức cập nhật
+    void deleteAppointment(int appointmentId);  // Thêm phương thức xóa
 }
