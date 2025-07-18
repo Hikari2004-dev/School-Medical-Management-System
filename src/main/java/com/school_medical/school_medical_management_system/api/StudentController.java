@@ -12,6 +12,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/students")
 public class StudentController {
@@ -64,5 +66,13 @@ public class StudentController {
         studentService.saveStudentWithHealthInfoAndLinkParent(student, healthinfo, parentUserId);
 
         return "✅ Học sinh và thông tin sức khỏe đã được lưu và liên kết với phụ huynh!";
+    }
+
+    /**
+     * Lấy tất cả học sinh
+     */
+    @GetMapping("/all")
+    public List<Student> getAllStudents() {
+        return studentService.getAllStudents();
     }
 }

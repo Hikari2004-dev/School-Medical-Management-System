@@ -6,6 +6,8 @@ import com.school_medical.school_medical_management_system.repositories.entites.
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class StudentRepositoryImpl implements IStudentRepository {
 
@@ -39,6 +41,32 @@ public class StudentRepositoryImpl implements IStudentRepository {
     public void saveParentStudent(int parentUserId, int studentId) {
         String sql = "INSERT INTO parentstudent (parent_user_id, student_id, relationship) VALUES (?, ?, ?)";
         jdbcTemplate.update(sql, parentUserId, studentId, "Father"); // hoặc "Mother", nếu muốn linh hoạt, bạn có thể truyền vào
+    }
+
+    @Override
+    public List<Student> getAllStudents() {
+        String sql = "SELECT * FROM student";
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
+            Student student = new Student();
+            student.setId(rs.getInt("student_id"));
+            student.setName(rs.getString("name"));
+
+            // Lấy giá trị date_of_birth từ ResultSet
+            java.sql.Date sqlDate = rs.getDate("date_of_birth");  // Dùng rs.getDate() để lấy java.sql.Date
+
+            // Chuyển java.sql.Date thành LocalDate
+            if (sqlDate != null) {
+                student.setDateOfBirth(sqlDate.toLocalDate());  // Chuyển đổi thành LocalDate
+            } else {
+                student.setDateOfBirth(null);  // Nếu giá trị là null
+            }
+
+            student.setGender(rs.getString("gender"));
+            student.setGrade(rs.getString("grade"));
+
+            // Thêm các trường khác tùy theo schema của bảng student
+            return student;
+        });
     }
 
 }
