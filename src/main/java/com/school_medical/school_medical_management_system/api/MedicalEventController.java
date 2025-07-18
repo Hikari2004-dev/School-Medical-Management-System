@@ -74,4 +74,23 @@ public class MedicalEventController {
                     .body(new ApiResponse<>(false, "Phê duyệt thất bại: " + e.getMessage(), null));
         }
     }
+
+    /**
+     * Xem chi tiết sự kiện y tế theo ID
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<MedicalEvent>> getMedicalEventById(@PathVariable Long id) {
+        try {
+            MedicalEvent event = medicalEventService.getEventById(id);
+            if (event != null) {
+                return ResponseEntity.ok(new ApiResponse<>(true, "Lấy sự kiện thành công", event));
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ApiResponse<>(false, "Sự kiện không tồn tại", null));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse<>(false, "Lỗi hệ thống: " + e.getMessage(), null));
+        }
+    }
 }
