@@ -29,4 +29,8 @@ public class MedicalAppointmentServiceImpl implements IMedicalAppointmentService
         repository.approveAppointment(appointmentId, status);
     }
 
+    @Override
+    public List<MedicalAppointment> getAllAppointments() {  // Phương thức mới
+        return repository.getAllAppointments();  // Gọi từ repository
+    }
 }
