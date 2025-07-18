@@ -10,4 +10,5 @@ public interface IMedicalEventService {
     MedicalEvent createEvent(MedicalEvent eventDTO);
     MedicalEvent updateEvent(Long id, MedicalEvent eventDTO);
     MedicalEvent approveEvent(Long id, ApprovalRequest approvalRequest);
+    MedicalEvent getEventById(Long id); // Phương thức mới để lấy sự kiện y tế theo ID
 }

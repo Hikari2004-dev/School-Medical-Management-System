@@ -8,8 +8,11 @@ public class EventBatch {
     private String title;
     private String description;
     private LocalDate eventDate;
+    private LocalDate endDate;  // Thêm trường endDate
     private String status;
     private Long createdBy;
+
+    // Getters and setters
 
     public Long getBatchId() {
         return batchId;
@@ -49,6 +52,14 @@ public class EventBatch {
 
     public void setEventDate(LocalDate eventDate) {
         this.eventDate = eventDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
     }
 
     public String getStatus() {

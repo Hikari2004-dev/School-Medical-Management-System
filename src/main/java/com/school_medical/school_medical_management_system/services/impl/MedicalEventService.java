@@ -47,4 +47,9 @@ public class MedicalEventService implements IMedicalEventService {
         dto.setApprovedBy(appUserService.getUserByEmail(AuthUtils.getCurrentUserEmail()).getId());
         return dto;
     }
+
+    @Override
+    public MedicalEvent getEventById(Long id) {
+        return medicalEventRepository.getEventById(id); // Lấy sự kiện y tế theo ID
+    }
 }

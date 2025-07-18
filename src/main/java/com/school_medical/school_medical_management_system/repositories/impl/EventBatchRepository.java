@@ -19,7 +19,8 @@ public class EventBatchRepository implements IEventBatchRepository {
 
     @Override
     public void createBatch(EventBatch batch) {
-        String sql = "INSERT INTO EventBatch (batch_type, title, description, event_date, status, created_by) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO EventBatch (batch_type, title, description, event_date, status, created_by, end_date) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -30,6 +31,7 @@ public class EventBatchRepository implements IEventBatchRepository {
             ps.setDate(4, Date.valueOf(batch.getEventDate()));
             ps.setString(5, batch.getStatus());
             ps.setLong(6, batch.getCreatedBy());
+            ps.setDate(7, batch.getEndDate() != null ? Date.valueOf(batch.getEndDate()) : null);
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Error creating event batch", e);
@@ -54,7 +56,7 @@ public class EventBatchRepository implements IEventBatchRepository {
     @Override
     public List<EventBatch> getAllBatches() {
         List<EventBatch> batches = new ArrayList<>();
-        String sql = "SELECT * FROM EventBatch";
+        String sql = "SELECT * FROM EventBatch WHERE status != 'Deleted'";  // Lọc bỏ những batch có trạng thái 'Deleted'
 
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
@@ -98,6 +100,7 @@ public class EventBatchRepository implements IEventBatchRepository {
                     batch.setEventDate(rs.getDate("event_date").toLocalDate());
                     batch.setStatus(rs.getString("status"));
                     batch.setCreatedBy(rs.getLong("created_by"));
+                    batch.setEndDate(rs.getDate("end_date") != null ? rs.getDate("end_date").toLocalDate() : null);
                     return batch;
                 }
             }
@@ -145,5 +148,18 @@ public class EventBatchRepository implements IEventBatchRepository {
             throw new RuntimeException("Error changing batch status to Repending", e);
         }
     }
+
+    @Override
+    public void deleteBatch(Integer batchId) {
+        String sql = "UPDATE EventBatch SET status = 'Deleted' WHERE batch_id = ? AND status != 'Deleted'";  // Cập nhật trạng thái là 'Deleted'
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, batchId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error changing batch status to Deleted", e);
+        }
+    }
+
 
 }
