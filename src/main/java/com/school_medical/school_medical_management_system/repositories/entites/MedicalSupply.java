@@ -9,8 +9,10 @@ public class MedicalSupply {
     private String description;
     private Date lastCheckedDate;
     private Integer status;
-    private Date expirationDate; // ✅ Thêm mới
+    private Date expirationDate;
+    private String unit;  // Đã thêm unit vào model
 
+    // Getters và setters cho các thuộc tính
     public Integer getSupplyId() {
         return supplyId;
     }
@@ -65,5 +67,13 @@ public class MedicalSupply {
 
     public void setExpirationDate(Date expirationDate) {
         this.expirationDate = expirationDate;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
 }

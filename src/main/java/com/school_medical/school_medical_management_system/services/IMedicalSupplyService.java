@@ -7,6 +7,6 @@ public interface IMedicalSupplyService {
     void createSupply(MedicalSupply supply);
     List<MedicalSupply> getAllSupplies();
     MedicalSupply findById(Integer id);
-    void updateSupply(MedicalSupply supply);  // Thêm phương thức cập nhật
+    void updateSupply(MedicalSupply supply);
     void deleteSupply(Integer id);
 }

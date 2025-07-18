@@ -18,7 +18,7 @@ public class MedicalSupplyRepository implements IMedicalSupplyRepository {
 
     @Override
     public void createSupply(MedicalSupply supply) {
-        String sql = "INSERT INTO medicalsupply (name, quantity, description, last_checked_date, status, expiration_date) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO medicalsupply (name, quantity, description, last_checked_date, status, expiration_date, unit) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -28,6 +28,7 @@ public class MedicalSupplyRepository implements IMedicalSupplyRepository {
             stmt.setDate(4, supply.getLastCheckedDate() != null ? new java.sql.Date(supply.getLastCheckedDate().getTime()) : null);
             stmt.setInt(5, 1); // Default status
             stmt.setDate(6, supply.getExpirationDate() != null ? new java.sql.Date(supply.getExpirationDate().getTime()) : null);
+            stmt.setString(7, supply.getUnit());  // Đảm bảo thêm unit vào khi tạo
 
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -52,6 +53,7 @@ public class MedicalSupplyRepository implements IMedicalSupplyRepository {
                 supply.setLastCheckedDate(rs.getDate("last_checked_date"));
                 supply.setStatus(rs.getInt("status"));
                 supply.setExpirationDate(rs.getDate("expiration_date"));
+                supply.setUnit(rs.getString("unit"));  // Đọc unit
                 supplies.add(supply);
             }
         } catch (SQLException e) {
@@ -77,6 +79,7 @@ public class MedicalSupplyRepository implements IMedicalSupplyRepository {
                     supply.setLastCheckedDate(rs.getDate("last_checked_date"));
                     supply.setStatus(rs.getInt("status"));
                     supply.setExpirationDate(rs.getDate("expiration_date"));
+                    supply.setUnit(rs.getString("unit"));  // Đọc unit
                     return supply;
                 }
             }
@@ -88,7 +91,7 @@ public class MedicalSupplyRepository implements IMedicalSupplyRepository {
 
     @Override
     public void updateSupply(MedicalSupply supply) {
-        String sql = "UPDATE medicalsupply SET name = ?, quantity = ?, description = ?, last_checked_date = ?, status = ?, expiration_date = ? WHERE supply_id = ?";
+        String sql = "UPDATE medicalsupply SET name = ?, quantity = ?, description = ?, last_checked_date = ?, status = ?, expiration_date = ?, unit = ? WHERE supply_id = ?";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -98,7 +101,8 @@ public class MedicalSupplyRepository implements IMedicalSupplyRepository {
             stmt.setDate(4, supply.getLastCheckedDate() != null ? new java.sql.Date(supply.getLastCheckedDate().getTime()) : null);
             stmt.setInt(5, supply.getStatus() != null ? supply.getStatus() : 1);  // Default status if null
             stmt.setDate(6, supply.getExpirationDate() != null ? new java.sql.Date(supply.getExpirationDate().getTime()) : null);
-            stmt.setInt(7, supply.getSupplyId());
+            stmt.setString(7, supply.getUnit());  // Cập nhật unit
+            stmt.setInt(8, supply.getSupplyId());
 
             stmt.executeUpdate();
         } catch (SQLException e) {
