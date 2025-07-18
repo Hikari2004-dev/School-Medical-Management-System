@@ -21,13 +21,12 @@ public class StudentRepositoryImpl implements IStudentRepository {
     public int saveStudent(Student student) {
         String sql = "INSERT INTO student (name, date_of_birth, gender, grade, class_id) VALUES (?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql, student.getName(), student.getDateOfBirth(), student.getGender(),
-                student.getGrade(), student.getClassField().getId());
+                student.getGrade(), student.getClassId());  // Thêm classId vào câu lệnh
 
         // Lấy student_id của học sinh vừa được tạo ra
         String getLastIdSql = "SELECT LAST_INSERT_ID()";
         return jdbcTemplate.queryForObject(getLastIdSql, Integer.class); // Lấy student_id mới
     }
-
 
     @Override
     public int saveHealthInfo(Healthinfo healthInfo) {
@@ -45,27 +44,34 @@ public class StudentRepositoryImpl implements IStudentRepository {
 
     @Override
     public List<Student> getAllStudents() {
-        String sql = "SELECT * FROM student";
+        String sql = "SELECT * FROM student";  // SQL query để lấy tất cả học sinh
         return jdbcTemplate.query(sql, (rs, rowNum) -> {
             Student student = new Student();
+
+            // Lấy student_id từ ResultSet và gán vào đối tượng Student
             student.setId(rs.getInt("student_id"));
+
+            // Lấy tên học sinh từ ResultSet và gán vào đối tượng Student
             student.setName(rs.getString("name"));
 
-            // Lấy giá trị date_of_birth từ ResultSet
-            java.sql.Date sqlDate = rs.getDate("date_of_birth");  // Dùng rs.getDate() để lấy java.sql.Date
-
-            // Chuyển java.sql.Date thành LocalDate
+            // Lấy ngày sinh từ ResultSet và chuyển từ java.sql.Date thành LocalDate
+            java.sql.Date sqlDate = rs.getDate("date_of_birth");
             if (sqlDate != null) {
-                student.setDateOfBirth(sqlDate.toLocalDate());  // Chuyển đổi thành LocalDate
+                student.setDateOfBirth(sqlDate.toLocalDate());
             } else {
-                student.setDateOfBirth(null);  // Nếu giá trị là null
+                student.setDateOfBirth(null);  // Nếu ngày sinh là null, gán là null
             }
 
+            // Lấy giới tính từ ResultSet và gán vào đối tượng Student
             student.setGender(rs.getString("gender"));
+
+            // Lấy lớp học từ ResultSet và gán vào đối tượng Student
             student.setGrade(rs.getString("grade"));
 
-            // Thêm các trường khác tùy theo schema của bảng student
-            return student;
+            // Lấy class_id từ ResultSet và gán vào đối tượng Student
+            student.setClassId(rs.getInt("class_id"));
+
+            return student;  // Trả về đối tượng Student đã được gán thông tin
         });
     }
 
