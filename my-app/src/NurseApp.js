@@ -3,37 +3,41 @@ import {
   FaBars, FaSignOutAlt, FaBell, FaCog
 } from 'react-icons/fa';
 
+import Dashboard from './Manager/Dashboard';
+import Performance from './Manager/Performance';
+import ClassManagement from './Manager/ClassManagement';
 import MedicalEvents from './Manager/MedicalEvents';
+import Notifications from './Manager/Notifications';
+import ConsultationAppointments from './Manager/ConsultationAppointments';
+import MainPage from './Manager/MainPage';
 import FallAccident from './Manager/FallAccident';
 import DrugManagement from './Manager/DrugManagement';
 import DrugStorage from './Manager/DrugStorage';
-import Notifications from './Manager/Notifications';
-import StudentList from './Manager/StudentList';
-import EventBatchManager from './Manager/EventBatchManager';
-
 import logo from './image/hinhanh/logoproject.png';
 
-import iconMedical from './image/icon/medicalevent.png';
-import iconIncident from './image/hinhanh/incident.png';
-import iconReport from './image/hinhanh/drugs.png';
-import iconStorage from './image/hinhanh/pharmacy.png';
+import iconDashboard from './image/icon/dashboard.png';
+import iconHome from './image/icon/house3.png';
+import iconPerformance from './image/icon/hieusuat.png';
 import iconNotification from './image/icon/thu.png';
+import iconAppointment from './image/icon/lichhen.png';
+import iconMedical from './image/icon/medicalevent.png';
 import iconUsers from './image/icon/user3.png';
-import iconBatch from './image/icon/user3.png';
-
+import iconIncident from './image/hinhanh/incident.png';
+import iconReport from './image/hinhanh/drugs.png'; // icon mục mới
+import a from './image/hinhanh/pharmacy.png'; // icon kho thuốc
 import './index.css';
 
-function AdminApp() {
+function NurseApp() {
   const [user, setUser] = useState(null);
-  const [page, setPage] = useState('medical');
+  const [page, setPage] = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   useEffect(() => {
     const role = localStorage.getItem("role");
     const name = localStorage.getItem("userName");
 
-    // Chỉ cho phép Admin truy cập
-    if (role !== "Admin") {
+    // Chỉ cho phép SchoolNurse truy cập
+    if (role !== "SchoolNurse") {
       window.location.href = "/";
     }
 
@@ -41,13 +45,16 @@ function AdminApp() {
   }, []);
 
   const navItems = [
+    { key: 'dashboard', icon: iconDashboard, label: 'Bảng điều khiển' },
+    { key: 'home', icon: iconHome, label: 'Trang chủ' },
+    { key: 'performance', icon: iconPerformance, label: 'Hiệu suất' },
+    { key: 'notification', icon: iconNotification, label: 'Thông báo' },
+    { key: 'appointment', icon: iconAppointment, label: 'Lịch hẹn' },
     { key: 'medical', icon: iconMedical, label: 'Sự kiện y tế' },
+    { key: 'users', icon: iconUsers, label: 'Quản lí danh sách lớp' },
     { key: 'fallincident', icon: iconIncident, label: 'Ghi nhận sự cố' },
     { key: 'drugmanagement', icon: iconReport, label: 'Quản lý thuốc' },
-    { key: 'drugstorage', icon: iconStorage, label: 'Kho thuốc' },
-    { key: 'notification', icon: iconNotification, label: 'Thông báo' },
-    { key: 'students', icon: iconUsers, label: 'Danh sách học sinh' },
-    { key: 'eventbatch', icon: iconBatch, label: 'Batch sự kiện' },
+    { key: 'drugstorage', icon: a, label: 'Kho thuốc' },
   ];
 
   const getInitials = name =>
@@ -118,17 +125,20 @@ function AdminApp() {
         </header>
 
         <main className="flex-1 bg-gray-50 overflow-auto">
+          {page === 'dashboard' && <Dashboard />}
+          {page === 'performance' && <Performance />}
+          {page === 'notification' && <Notifications />}
+          {page === 'appointment' && <ConsultationAppointments />}
+          {page === 'users' && <ClassManagement />}
           {page === 'medical' && <MedicalEvents />}
+          {page === 'home' && <MainPage />}
           {page === 'fallincident' && <FallAccident />}
           {page === 'drugmanagement' && <DrugManagement />}
           {page === 'drugstorage' && <DrugStorage />}
-          {page === 'notification' && <Notifications />}
-          {page === 'students' && <StudentList />}
-          {page === 'eventbatch' && <EventBatchManager />}
         </main>
       </div>
     </div>
   );
 }
 
-export default AdminApp;
+export default NurseApp;
