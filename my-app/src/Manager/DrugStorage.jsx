@@ -104,67 +104,52 @@ const DrugStorage = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Gán dữ liệu giả lập
-    const mockDrugs = [
-      {
-        name: "Paracetamol",
-        type: "Thuốc giảm đau",
-        amount: 120,
-        unit: "viên",
-        expiryDate: "2026-03-15",
-        status: "Còn hạn",
-      },
-      {
-        name: "Amoxicillin",
-        type: "Kháng sinh",
-        amount: 80,
-        unit: "viên",
-        expiryDate: "2025-10-01",
-        status: "Còn hạn",
-      },
-      {
-        name: "Vitamin C",
-        type: "Vitamin",
-        amount: 200,
-        unit: "viên",
-        expiryDate: "2025-08-22",
-        status: "Còn hạn",
-      },
-      {
-        name: "Ibuprofen",
-        type: "Thuốc chống viêm",
-        amount: 60,
-        unit: "viên",
-        expiryDate: "2025-12-05",
-        status: "Còn hạn",
-      },
-      {
-        name: "Salonpas",
-        type: "Dán giảm đau",
-        amount: 30,
-        unit: "miếng",
-        expiryDate: "2024-11-30",
-        status: "Gần hết hạn",
-      },
-      {
-        name: "ORS Gói",
-        type: "Bù nước",
-        amount: 50,
-        unit: "gói",
-        expiryDate: "2026-01-10",
-        status: "Còn hạn",
-      },
-    ];
+    const fetchDrugs = async () => {
+      try {
+        const response = await fetch("http://localhost:8080/api/medicalsupply/all");
+        if (!response.ok) throw new Error("Không thể lấy dữ liệu thuốc");
+        const data = await response.json();
 
-    setTimeout(() => {
-      setDrugList(mockDrugs);
-      setLoading(false);
-    }, 500); // Giả lập thời gian tải
+        // Bỏ lọc trùng, hiển thị tất cả bản ghi
+        setDrugList(data);
+      } catch (error) {
+        console.error("Lỗi khi tải danh sách thuốc:", error);
+        setDrugList([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDrugs();
   }, []);
 
   const filteredDrugs = drugList.filter((d) =>
     d.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const handleDelete = async (supplyId) => {
+    if (!window.confirm("Bạn có chắc muốn xoá vật tư này?")) return;
+    setLoading(true);
+    try {
+      const response = await fetch(`http://localhost:8080/api/medicalsupply/${supplyId}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) throw new Error("Xoá thất bại");
+      // Xoá khỏi danh sách hiện tại
+      setDrugList((prev) => prev.filter((item) => item.supplyId !== supplyId));
+    } catch (error) {
+      alert("Xoá thất bại!");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Hàm kiểm tra hết hạn
+  const isExpired = (expirationDate) => {
+    const today = new Date();
+    const expDate = new Date(expirationDate);
+    return expDate < today;
+  };
 
   return (
     <div className="p-6">
@@ -190,10 +175,10 @@ const DrugStorage = () => {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-gray-200 text-sm text-gray-700">
-                <th className="px-4 py-2">Tên thuốc</th>
-                <th className="px-4 py-2">Loại</th>
+                <th className="px-4 py-2">Tên vật tư</th>
                 <th className="px-4 py-2">Số lượng</th>
-                <th className="px-4 py-2">Đơn vị</th>
+                <th className="px-4 py-2">Mô tả</th>
+                <th className="px-4 py-2">Ngày kiểm tra</th>
                 <th className="px-4 py-2">Ngày hết hạn</th>
                 <th className="px-4 py-2">Trạng thái</th>
                 <th className="px-4 py-2">Thao tác</th>
@@ -207,23 +192,31 @@ const DrugStorage = () => {
                   </td>
                 </tr>
               ) : filteredDrugs.length > 0 ? (
-                filteredDrugs.map((drug, index) => (
-                  <tr key={index} className="border-t text-sm">
-                    <td className="px-4 py-2">{drug.name}</td>
-                    <td className="px-4 py-2">{drug.type}</td>
-                    <td className="px-4 py-2">{drug.amount}</td>
-                    <td className="px-4 py-2">{drug.unit}</td>
-                    <td className="px-4 py-2">{drug.expiryDate}</td>
-                    <td className="px-4 py-2">{drug.status}</td>
+                filteredDrugs.map((supply, index) => (
+                  <tr key={supply.supplyId} className="border-t text-sm">
+                    <td className="px-4 py-2">{supply.name}</td>
+                    <td className="px-4 py-2">{supply.quantity}</td>
+                    <td className="px-4 py-2">{supply.description}</td>
+                    <td className="px-4 py-2">{supply.lastCheckedDate}</td>
+                    <td className="px-4 py-2">{supply.expirationDate}</td>
+                    <td className="px-4 py-2">
+                      {isExpired(supply.expirationDate) ? "Hết hạn" : "Còn hạn"}
+                    </td>
                     <td className="px-4 py-2 text-blue-600 cursor-pointer hover:underline">
-                      Sửa / Xoá
+                      Sửa /{" "}
+                      <span
+                        className="text-red-600 cursor-pointer hover:underline"
+                        onClick={() => handleDelete(supply.supplyId)}
+                      >
+                        Xoá
+                      </span>
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
                   <td className="px-4 py-4 text-center text-gray-500" colSpan={7}>
-                    Không có thuốc phù hợp.
+                    Không có vật tư phù hợp.
                   </td>
                 </tr>
               )}
