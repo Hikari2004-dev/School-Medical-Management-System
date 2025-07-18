@@ -1,78 +1,39 @@
 package com.school_medical.school_medical_management_system.repositories.entites;
 
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import java.time.LocalDateTime;
 
 public class Appuser {
     private Integer id;
-
     private String firstName;
-
     private String lastName;
-
     private String email;
-
-
     private String phone;
-
     private String address;
-
     private String roleName;
+    private LocalDateTime createdAt; // ✅ Thêm mới
 
-    public String getAddress() {
-        return address;
-    }
+    // --- Getters và Setters ---
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
+    public String getFirstName() { return firstName; }
+    public void setFirstName(String firstName) { this.firstName = firstName; }
 
-    public String getEmail() {
-        return email;
-    }
+    public String getLastName() { return lastName; }
+    public void setLastName(String lastName) { this.lastName = lastName; }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public String getFirstName() {
-        return firstName;
-    }
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
+    public String getAddress() { return address; }
+    public void setAddress(String address) { this.address = address; }
 
-    public Integer getId() {
-        return id;
-    }
+    public String getRoleName() { return roleName; }
+    public void setRoleName(String roleName) { this.roleName = roleName; }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getRoleName() {
-        return roleName;
-    }
-
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
-    }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }

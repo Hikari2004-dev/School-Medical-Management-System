@@ -31,7 +31,7 @@ public class MedicalSupplyService implements IMedicalSupplyService {
 
     @Override
     public void updateSupply(MedicalSupply supply) {
-        repository.updateSupply(supply);
+        repository.updateSupply(supply);  // Gọi phương thức cập nhật trong repository
     }
 
     @Override
