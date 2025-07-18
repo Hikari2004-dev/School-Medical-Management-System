@@ -106,12 +106,13 @@ function Login() {
       localStorage.setItem("token", data.jwt);
       localStorage.setItem("userName", data.name);
       localStorage.setItem("role", data.role);
-      localStorage.setItem("userId", data.userId);
 
-      if (data.role === "Admin" || data.role === "SchoolNurse") {
+      if (data.role === "Admin") {
         navigate("/admin");
       } else if (data.role === "Parent") {
         navigate("/");
+      } else if (data.role === "SchoolNurse") {
+        navigate("/nurse");
       } else {
         alert("Vai trò không được hỗ trợ!");
       }
