@@ -43,4 +43,10 @@ public class EventBatchService implements IEventBatchService {
         eventBatchRepository.resendBatch(batchId);  // Gọi phương thức resend trong repository
     }
 
+    @Override
+    public void deleteBatch(Integer batchId) {
+        eventBatchRepository.deleteBatch(batchId);  // Gọi phương thức delete trong repository
+    }
+
+
 }

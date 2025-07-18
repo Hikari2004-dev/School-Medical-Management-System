@@ -38,7 +38,13 @@ public class EventBatchController {
     public ResponseEntity<ApiResponse<EventBatch>> getEventBatchById(@PathVariable Integer id) {
         try {
             EventBatch batch = eventBatchService.getBatchById(id);
+
             if (batch != null) {
+                // Kiểm tra nếu trạng thái là "Deleted"
+                if ("Deleted".equals(batch.getStatus())) {
+                    return ResponseEntity.status(HttpStatus.GONE)  // HTTP 410 - Gone
+                            .body(new ApiResponse<>(false, "Event Batch with ID " + id + " has been deleted.", null));
+                }
                 return ResponseEntity.ok(new ApiResponse<>(true, "Lấy chi tiết batch thành công", batch));
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -98,4 +104,16 @@ public class EventBatchController {
         List<EventBatch> events = eventBatchService.getTop3UpcomingEvents();
         return events.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(events);
     }
+
+
+    @PutMapping("/{batchId}/delete")
+    public ResponseEntity<ApiResponse<String>> deleteEventBatch(@PathVariable Integer batchId) {
+        try {
+            eventBatchService.deleteBatch(batchId);
+            return ResponseEntity.ok(new ApiResponse<>(true, "Event batch deleted successfully", "Batch ID " + batchId + " marked as deleted"));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(new ApiResponse<>(false, "Error deleting event batch: " + e.getMessage(), null));
+        }
+    }
+
 }
