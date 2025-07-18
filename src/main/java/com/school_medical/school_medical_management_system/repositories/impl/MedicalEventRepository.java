@@ -48,6 +48,33 @@ public class MedicalEventRepository implements IMedicalEventRepository {
     }
 
     @Override
+    public MedicalEvent getEventById(Long id) {
+        String sql = "SELECT * FROM MedicalEvent WHERE event_id = ?";
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setLong(1, id);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                MedicalEvent dto = new MedicalEvent();
+                dto.setEventId(rs.getLong("event_id"));
+                dto.setEventType(rs.getString("event_type"));
+                dto.setEventDate(rs.getDate("event_date").toLocalDate());
+                dto.setDescription(rs.getString("description"));
+                dto.setStudentId(rs.getLong("student_id"));
+                dto.setNurseId(rs.getLong("nurse_id"));
+                dto.setStatus(rs.getString("status"));
+                dto.setApprovedBy(rs.getObject("approved_by") != null ? rs.getInt("approved_by") : null);
+                return dto;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null; // Nếu không tìm thấy
+    }
+
+    @Override
     public void createEvent(MedicalEvent event) {
         String sql = "INSERT INTO MedicalEvent (event_type, event_date, description, student_id, nurse_id, status) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection connection = dataSource.getConnection();

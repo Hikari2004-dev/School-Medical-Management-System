@@ -35,6 +35,7 @@ import vaccine from './pages/form/vaccineForm';
 
 import AdminApp from './AdminApp';
 import UserApp from './UserApp';
+import NurseApp from './NurseApp';
 
 import VNPAYPaymentButton from './pages/Member/VNPAYPaymentButton';
 import Order from './pages/order/order';
@@ -86,7 +87,7 @@ function App() {
           {/* Admin*/}
           <Route path="/admin/*" element={<AdminApp />} />
           <Route path="/*" element={<UserApp />} />
-
+          <Route path="/nurse/*" element={<NurseApp />} />
         </Routes>
         <ChatBot />
       </div>

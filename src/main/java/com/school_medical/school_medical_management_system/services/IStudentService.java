@@ -9,4 +9,5 @@ public interface IStudentService {
     void saveStudentWithHealthInfo(Student student, Healthinfo healthinfo);
     void saveStudentWithHealthInfoAndLinkParent(Student student, Healthinfo healthinfo, int parentUserId);
     List<Student> getAllStudents();  // Phương thức để lấy danh sách học sinh
+    List<Student> getStudentsByParentId(int parentUserId);
 }

@@ -41,4 +41,9 @@ public class StudentServiceImpl implements IStudentService {
     public List<Student> getAllStudents() {
         return studentRepository.getAllStudents();  // Lấy tất cả học sinh từ repository
     }
+
+    @Override
+    public List<Student> getStudentsByParentId(int parentUserId) {
+        return studentRepository.getStudentsByParentId(parentUserId);
+    }
 }

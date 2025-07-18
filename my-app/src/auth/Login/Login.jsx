@@ -23,8 +23,17 @@ function Login() {
       localStorage.setItem("token", data.jwt);
       localStorage.setItem("userName", data.name);
       localStorage.setItem("role", data.role);
-      localStorage.setItem("userId", data.userId);
-      redirectByRole(data.role);
+      localStorage.setItem("userId", data.userId); // ✅ Fix lỗi createdBy null
+
+      if (data.role === "Admin") {
+        navigate("/admin");
+      } else if (data.role === "Parent") {
+        navigate("/");
+      } else if (data.role === "SchoolNurse") {
+        navigate("/nurse");
+      } else {
+        alert("Vai trò không được hỗ trợ!");
+      }
     } else {
       alert("Đăng nhập thất bại!");
     }
