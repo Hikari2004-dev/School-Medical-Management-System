@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-function EventBatchManager() {
+export default function EventBatchManager() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [eventDate, setEventDate] = useState("");
@@ -8,31 +8,58 @@ function EventBatchManager() {
   const [message, setMessage] = useState("");
   const [batches, setBatches] = useState([]);
 
-  const createdBy = parseInt(localStorage.getItem("userId")); // Lấy user ID từ localStorage
+  const token = localStorage.getItem("token");
+  const createdBy = parseInt(localStorage.getItem("userId"), 10);
+
+  // Utility: chỉ parse JSON khi header phù hợp
+  const safeJson = async (res) => {
+    const ct = res.headers.get("content-type") || "";
+    return ct.includes("application/json") ? await res.json() : {};
+  };
+
+  // Load danh sách batch từ server
+  const fetchBatches = async () => {
+    try {
+      const res = await fetch("http://localhost:8080/api/event-batches", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        const data = await safeJson(res);
+        // Giả sử backend trả về mảng trong trường data, hoặc trả thẳng mảng
+        setBatches(data.data || data);
+      } else {
+        setMessage("Không thể lấy danh sách batch.");
+      }
+    } catch (err) {
+      setMessage("Lỗi khi tải danh sách batch: " + err.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchBatches();
+  }, []);
 
   const handleCreate = async () => {
-    const payload = {
-      title,
-      description,
-      eventDate,
-      batchType,
-      createdBy, // Gửi đúng như yêu cầu backend
-    };
+    if (!createdBy) {
+      setMessage("⚠️ Không tìm thấy userId, vui lòng đăng nhập lại.");
+      return;
+    }
+    const payload = { title, description, eventDate, batchType, createdBy };
 
     try {
       const res = await fetch("http://localhost:8080/api/event-batches", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify(payload),
       });
-
-      const result = await res.json();
-      setMessage(result.message);
-
-      if (res.ok && result.success) {
-        const newBatch = { ...result.data, id: Date.now() }; // gán id tạm thời
-        setBatches([...batches, newBatch]);
-
+      const result = await safeJson(res);
+      setMessage(result.message || (res.ok ? "Tạo batch thành công." : "Tạo batch thất bại."));
+      if (res.ok) {
+        // reload toàn bộ danh sách để đảm bảo nhất quán
+        fetchBatches();
         // reset form
         setTitle("");
         setDescription("");
@@ -46,25 +73,29 @@ function EventBatchManager() {
 
   const handleApprove = async (id) => {
     try {
-      const res = await fetch(`http://localhost:8080/api/event-batches/${id}/approve`, {
-        method: "PUT",
-      });
-      const result = await res.json();
-      setMessage(result.message);
-    } catch {
-      setMessage("Lỗi khi phê duyệt batch");
+      const res = await fetch(
+        `http://localhost:8080/api/event-batches/${id}/approve`,
+        { method: "POST", headers: { Authorization: `Bearer ${token}` } }
+      );
+      const result = await safeJson(res);
+      setMessage(result.message || (res.ok ? "Phê duyệt thành công." : "Phê duyệt thất bại."));
+      if (res.ok) fetchBatches();
+    } catch (err) {
+      setMessage("Lỗi khi phê duyệt batch: " + err.message);
     }
   };
 
   const handleResend = async (id) => {
     try {
-      const res = await fetch(`http://localhost:8080/api/event-batches/${id}/resend`, {
-        method: "PUT",
-      });
-      const result = await res.json();
-      setMessage(result.message);
-    } catch {
-      setMessage("Lỗi khi gửi lại batch");
+      const res = await fetch(
+        `http://localhost:8080/api/event-batches/${id}/resend`,
+        { method: "POST", headers: { Authorization: `Bearer ${token}` } }
+      );
+      const result = await safeJson(res);
+      setMessage(result.message || (res.ok ? "Gửi lại thành công." : "Gửi lại thất bại."));
+      if (res.ok) fetchBatches();
+    } catch (err) {
+      setMessage("Lỗi khi gửi lại batch: " + err.message);
     }
   };
 
@@ -129,8 +160,10 @@ function EventBatchManager() {
           </thead>
           <tbody>
             {batches.map((batch, idx) => (
-              <tr key={idx} className="hover:bg-green-50">
-                <td className="border px-3 py-2 text-center">{batch.batchId || `#${idx + 1}`}</td>
+              <tr key={batch.batchId || idx} className="hover:bg-green-50">
+                <td className="border px-3 py-2 text-center">
+                  {batch.batchId}
+                </td>
                 <td className="border px-3 py-2">{batch.title}</td>
                 <td className="border px-3 py-2">{batch.batchType}</td>
                 <td className="border px-3 py-2">{batch.eventDate}</td>
@@ -164,5 +197,3 @@ function EventBatchManager() {
     </div>
   );
 }
-
-export default EventBatchManager;
