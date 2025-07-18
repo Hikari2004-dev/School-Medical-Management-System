@@ -94,55 +94,34 @@ export default function ConsultationAppointments() {
         </h3>
         {selected ? (
           <div className="space-y-4">
-            {["date", "time", "type", "notes"].map((field) => (
-              <div key={field} className="flex items-center">
-                <span className="w-36 font-medium">
-                  {field === "date"
-                    ? "Ngày:"
-                    : field === "time"
-                    ? "Giờ:"
-                    : field === "type"
-                    ? "Loại tư vấn:"
-                    : "Ghi chú:"}
-                </span>
-                {editMode ? (
-                  field === "notes" ? (
-                    <textarea
-                      name="notes"
-                      value={selected.notes}
-                      onChange={(e) =>
-                        setSelected((s) => ({ ...s, notes: e.target.value }))
-                      }
-                      rows={3}
-                      className="flex-1 border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400"
-                    />
-                  ) : (
-                    <input
-                      type={
-                        field === "date"
-                          ? "date"
-                          : field === "time"
-                          ? "time"
-                          : "text"
-                      }
-                      name={field}
-                      value={selected[field]}
-                      onChange={(e) =>
-                        setSelected((s) => ({
-                          ...s,
-                          [field]: e.target.value,
-                        }))
-                      }
-                      className="flex-1 border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400"
-                    />
-                  )
-                ) : (
-                  <span className="flex-1 text-gray-700">
-                    {selected[field]}
-                  </span>
-                )}
-              </div>
-            ))}
+            <div className="flex items-center">
+              <span className="w-36 font-medium">ID cuộc hẹn:</span>
+              <span className="flex-1 text-gray-700">
+                {selected.appointment_id}
+              </span>
+            </div>
+            <div className="flex items-center">
+              <span className="w-36 font-medium">ID học sinh:</span>
+              <span className="flex-1 text-gray-700">{selected.student_id}</span>
+            </div>
+            <div className="flex items-center">
+              <span className="w-36 font-medium">ID y tá:</span>
+              <span className="flex-1 text-gray-700">{selected.nurse_id}</span>
+            </div>
+            <div className="flex items-center">
+              <span className="w-36 font-medium">Ngày giờ hẹn:</span>
+              <span className="flex-1 text-gray-700">
+                {selected.appointment_date}
+              </span>
+            </div>
+            <div className="flex items-center">
+              <span className="w-36 font-medium">Lý do:</span>
+              <span className="flex-1 text-gray-700">{selected.reason}</span>
+            </div>
+            <div className="flex items-center">
+              <span className="w-36 font-medium">Trạng thái:</span>
+              <span className="flex-1 text-gray-700">{selected.status}</span>
+            </div>
 
             <div className="flex justify-end space-x-3 pt-4 border-t">
               <button
