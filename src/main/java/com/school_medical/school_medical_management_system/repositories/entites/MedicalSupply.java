@@ -9,15 +9,10 @@ public class MedicalSupply {
     private String description;
     private Date lastCheckedDate;
     private Integer status;
+    private Date expirationDate;
+    private String unit;  // Đã thêm unit vào model
 
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
+    // Getters và setters cho các thuộc tính
     public Integer getSupplyId() {
         return supplyId;
     }
@@ -56,5 +51,29 @@ public class MedicalSupply {
 
     public void setLastCheckedDate(Date lastCheckedDate) {
         this.lastCheckedDate = lastCheckedDate;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Date getExpirationDate() {
+        return expirationDate;
+    }
+
+    public void setExpirationDate(Date expirationDate) {
+        this.expirationDate = expirationDate;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
 }

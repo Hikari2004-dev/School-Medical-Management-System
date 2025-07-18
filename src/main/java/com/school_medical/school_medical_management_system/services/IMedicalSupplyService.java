@@ -1,7 +1,6 @@
 package com.school_medical.school_medical_management_system.services;
 
 import com.school_medical.school_medical_management_system.repositories.entites.MedicalSupply;
-
 import java.util.List;
 
 public interface IMedicalSupplyService {
@@ -11,4 +10,3 @@ public interface IMedicalSupplyService {
     void updateSupply(MedicalSupply supply);
     void deleteSupply(Integer id);
 }
-

@@ -7,12 +7,26 @@ export default function RSVPForm({ eventId, eventName, eventDate }) {
   const handleResponse = async (response) => {
     setLoading(true);
     try {
-      await fetch(`/api/events/${eventId}/rsvp`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ response }),
-      });
-      setStatus(response);
+      if (response === "accepted") {
+        const res = await fetch(`http://localhost:8080/api/notifications/consent/${eventId}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            consentStatus: true,
+            parentUserId: 5, // truyền đúng user
+            studentId: 2     // truyền đúng student
+          })
+        });
+        if (!res.ok) throw new Error("Không thể xác nhận đồng ý");
+        const data = await res.json();
+        if (data.consentStatus === true) {
+          setStatus("accepted");
+        } else {
+          throw new Error("Không thể xác nhận đồng ý");
+        }
+      } else {
+        setStatus("declined");
+      }
     } catch {
       alert("Có lỗi khi gửi phản hồi, vui lòng thử lại.");
     } finally {
@@ -55,5 +69,5 @@ export default function RSVPForm({ eventId, eventName, eventDate }) {
         </button>
       </div>
     </div>
-);
+  );
 }

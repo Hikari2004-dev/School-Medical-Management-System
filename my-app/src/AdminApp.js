@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {
   FaBars, FaSignOutAlt, FaBell, FaCog
 } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 import Dashboard from './Manager/Dashboard';
 import Performance from './Manager/Performance';
@@ -31,13 +32,14 @@ function AdminApp() {
   const [user, setUser] = useState(null);
   const [page, setPage] = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const role = localStorage.getItem("role");
     const name = localStorage.getItem("userName");
 
-    if (role !== "Admin") {
-      window.location.href = "/";
+    if (role !== "Admin" && role !== "SchoolNurse") {
+      navigate("/");
     }
 
     setUser({ name: name || 'Chưa rõ', role: role || 'Không rõ' });

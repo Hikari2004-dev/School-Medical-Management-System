@@ -8,6 +8,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class StudentServiceImpl implements IStudentService {
 
@@ -21,13 +23,22 @@ public class StudentServiceImpl implements IStudentService {
     @Override
     @Transactional
     public void saveStudentWithHealthInfo(Student student, Healthinfo healthinfo) {
-        // Lưu học sinh và lấy student_id
         int studentId = studentRepository.saveStudent(student);
-
-        // Cập nhật studentId cho HealthInfo
         healthinfo.setStudentId(studentId);
-
-        // Lưu thông tin sức khỏe
         studentRepository.saveHealthInfo(healthinfo);
+    }
+
+    @Override
+    @Transactional
+    public void saveStudentWithHealthInfoAndLinkParent(Student student, Healthinfo healthinfo, int parentUserId) {
+        int studentId = studentRepository.saveStudent(student);
+        healthinfo.setStudentId(studentId);
+        studentRepository.saveHealthInfo(healthinfo);
+        studentRepository.saveParentStudent(parentUserId, studentId);
+    }
+
+    @Override
+    public List<Student> getAllStudents() {
+        return studentRepository.getAllStudents();  // Lấy tất cả học sinh từ repository
     }
 }

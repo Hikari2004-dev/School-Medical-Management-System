@@ -8,10 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Optional;
 
 @Repository
@@ -47,10 +44,8 @@ public class UserRepositoryImpl implements IUserRepository {
 
     @Override
     public Appuser getUserByEmail(String email) {
-        String sql = "SELECT user_id,first_name,last_name,email,phone,address,role_name \n" +
-                "FROM appuser \n" +
-                "JOIN role on appuser.role_id = role.role_id\n" +
-                "WHERE email = ?";
+        String sql = "SELECT user_id, first_name, last_name, email, phone, address, role_name, created_at " +
+                "FROM appuser JOIN role ON appuser.role_id = role.role_id WHERE email = ?";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -65,6 +60,7 @@ public class UserRepositoryImpl implements IUserRepository {
                     user.setPhone(rs.getString("phone"));
                     user.setAddress(rs.getString("address"));
                     user.setRoleName(rs.getString("role_name"));
+                    user.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime()); // ✅ Mới
                     return user;
                 }
             }
@@ -76,7 +72,7 @@ public class UserRepositoryImpl implements IUserRepository {
 
     @Override
     public Optional<Appuser> findByAccountNumber(String accountNumber) {
-        String sql = "SELECT * FROM appuser WHERE user_id = ?"; // giả sử accountNumber = user_id
+        String sql = "SELECT * FROM appuser WHERE user_id = ?";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -91,6 +87,7 @@ public class UserRepositoryImpl implements IUserRepository {
                 user.setEmail(rs.getString("email"));
                 user.setPhone(rs.getString("phone"));
                 user.setAddress(rs.getString("address"));
+                user.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime()); // ✅ Mới
                 return Optional.of(user);
             }
 

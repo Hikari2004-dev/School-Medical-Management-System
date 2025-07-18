@@ -69,4 +69,26 @@ public class MedicalAppointmentRepositoryImpl implements IMedicalAppointmentRepo
         }
     }
 
+    @Override
+    public List<MedicalAppointment> getAllAppointments() {  // Phương thức mới
+        String sql = "SELECT * FROM medicalappointment";
+        List<MedicalAppointment> list = new ArrayList<>();
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                MedicalAppointment app = new MedicalAppointment();
+                app.setAppointmentId(rs.getInt("appointment_id"));
+                app.setStudentId(rs.getInt("student_id"));
+                app.setNurseId(rs.getInt("nurse_id"));
+                app.setAppointmentDate(rs.getTimestamp("appointment_date").toLocalDateTime());
+                app.setReason(rs.getString("reason"));
+                app.setStatus(rs.getString("status"));
+                list.add(app);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error fetching all appointments", e);
+        }
+        return list;
+    }
 }

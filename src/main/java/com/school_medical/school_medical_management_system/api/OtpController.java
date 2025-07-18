@@ -34,7 +34,6 @@ public class OtpController {
             @RequestParam String email,
             @RequestParam String otp,
             @RequestParam String newPassword) {
-
         String responseMessage = otpService.changePassword(email, otp, newPassword);
         return ResponseEntity.ok(responseMessage);
     }

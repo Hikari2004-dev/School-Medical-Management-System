@@ -37,7 +37,8 @@ public class MedicationsubmissionController {
 
     // ✅ Lấy danh sách đơn thuốc của con cái phụ huynh đang đăng nhập
     @GetMapping("/my-submissions")
-    public ResponseEntity<List<Medicationsubmission>> getSubmissionsByCurrentParent(@AuthenticationPrincipal User user) {
+    public ResponseEntity<List<Medicationsubmission>> getSubmissionsByCurrentParent(
+            @AuthenticationPrincipal User user) {
         String email = user.getUsername(); // Lấy email từ JWT
         Appuser appuser = appUserService.getUserByEmail(email); // Truy lại thông tin người dùng
 
@@ -49,7 +50,6 @@ public class MedicationsubmissionController {
         List<Medicationsubmission> submissions = service.findByParentId(parentId); // Truy vấn đơn thuốc của các con
         return ResponseEntity.ok(submissions);
     }
-
 
     // ✅ Lấy chi tiết đơn theo ID
     @GetMapping("/{id}")
@@ -65,8 +65,8 @@ public class MedicationsubmissionController {
     // ✅ School Nurse duyệt đơn: lấy approvedBy từ token
     @PutMapping("/{id}/approve")
     public ResponseEntity<String> approveSubmission(@PathVariable Integer id,
-                                                    @RequestBody ApprovalRequest request,
-                                                    @AuthenticationPrincipal User user) {
+            @RequestBody ApprovalRequest request,
+            @AuthenticationPrincipal User user) {
         String email = user.getUsername();
         Appuser appuser = appUserService.getUserByEmail(email);
 
@@ -77,5 +77,12 @@ public class MedicationsubmissionController {
         Long approvedByUserId = appuser.getId().longValue();
         service.approveSubmission(id, approvedByUserId, request.getApprovalStatus());
         return ResponseEntity.ok("Submission approval status updated successfully.");
+    }
+
+    // Thêm thuốc cho đơn thuốc
+    @PostMapping("/api/medication-submissions")
+    public ResponseEntity<?> createMedications(@RequestBody List<Medicationsubmission> medications) {
+        // Xử lý danh sách thuốc
+        return ResponseEntity.ok("Thêm thuốc thành công");
     }
 }

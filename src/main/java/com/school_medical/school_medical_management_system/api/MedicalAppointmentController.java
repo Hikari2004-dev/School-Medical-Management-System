@@ -1,5 +1,6 @@
 package com.school_medical.school_medical_management_system.api;
 
+import com.school_medical.school_medical_management_system.models.ApiResponse;
 import com.school_medical.school_medical_management_system.models.ApproveAppointmentRequest;
 import com.school_medical.school_medical_management_system.repositories.entites.MedicalAppointment;
 import com.school_medical.school_medical_management_system.services.IMedicalAppointmentService;
@@ -16,6 +17,9 @@ public class MedicalAppointmentController {
     @Autowired
     private IMedicalAppointmentService service;
 
+    /**
+     * Tạo mới một cuộc hẹn
+     */
     @PostMapping("/create")
     public ResponseEntity<?> createAppointment(@RequestBody MedicalAppointment appointment) {
         try {
@@ -26,12 +30,18 @@ public class MedicalAppointmentController {
         }
     }
 
+    /**
+     * Lấy tất cả cuộc hẹn của một sinh viên
+     */
     @GetMapping("/student/{studentId}")
     public ResponseEntity<List<MedicalAppointment>> getAppointmentsByStudent(@PathVariable int studentId) {
         List<MedicalAppointment> appointments = service.getAppointmentsByStudentId(studentId);
         return ResponseEntity.ok(appointments);
     }
 
+    /**
+     * Phê duyệt cuộc hẹn
+     */
     @PutMapping("/approve")
     public ResponseEntity<?> approveAppointment(@RequestBody ApproveAppointmentRequest request) {
         try {
@@ -45,4 +55,22 @@ public class MedicalAppointmentController {
             return ResponseEntity.status(500).body("Error: " + e.getMessage());
         }
     }
+
+    /**
+     * Lấy tất cả các cuộc hẹn
+     */
+    @GetMapping("/all")
+    public ResponseEntity<ApiResponse<List<MedicalAppointment>>> viewAllAppointments() {
+        try {
+            List<MedicalAppointment> allAppointments = service.getAllAppointments();
+            // Trả về dữ liệu với thông báo thành công
+            ApiResponse<List<MedicalAppointment>> response = new ApiResponse<>(true, "Lấy tất cả cuộc hẹn thành công", allAppointments);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            // Trả về thông báo lỗi với chi tiết exception
+            ApiResponse<List<MedicalAppointment>> response = new ApiResponse<>(false, "Lỗi khi lấy tất cả cuộc hẹn: " + e.getMessage(), null);
+            return ResponseEntity.status(500).body(response);
+        }
+    }
+
 }

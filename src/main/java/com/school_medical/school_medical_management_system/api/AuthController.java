@@ -58,7 +58,8 @@ public class AuthController {
         Appuser user = appUserService.getUserByEmail(authRequest.getEmail());
         String name = user.getFirstName();
         String role = user.getRoleName();
-        return ResponseEntity.ok(new AuthResponse(jwt, name, role));
+        Integer userId = user.getId();
+        return ResponseEntity.ok(new AuthResponse(jwt, name, role, userId));
     }
 
     @Autowired
@@ -94,5 +95,6 @@ class AuthResponse {
     private String jwt;
     private String name;
     private String role;
+    private Integer userId;
 }
 

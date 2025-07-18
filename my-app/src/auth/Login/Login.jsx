@@ -106,8 +106,9 @@ function Login() {
       localStorage.setItem("token", data.jwt);
       localStorage.setItem("userName", data.name);
       localStorage.setItem("role", data.role);
+      localStorage.setItem("userId", data.userId);
 
-      if (data.role === "Admin") {
+      if (data.role === "Admin" || data.role === "SchoolNurse") {
         navigate("/admin");
       } else if (data.role === "Parent") {
         navigate("/");

@@ -7,6 +7,7 @@ import java.util.List;
 public interface IEventBatchService {
     void createBatch(EventBatch batch);
     void approveBatch(Integer batchId);
+    void resendBatch(Integer batchId);  // Thêm phương thức resend
     List<EventBatch> getAllBatches();
     EventBatch getBatchById(Integer batchId);
     List<EventBatch> getTop3UpcomingEvents();
