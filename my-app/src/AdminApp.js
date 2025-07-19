@@ -6,20 +6,22 @@ import {
   FaSignOutAlt,
   FaBell,
   FaCog,
-  FaTachometerAlt
+  FaTachometerAlt,
+  FaUserCheck // 👈 Thêm dòng này
 } from 'react-icons/fa';
 
-import MedicalEvents      from './Manager/MedicalEvents';
-import Notifications      from './Manager/Notifications';
-import StudentList        from './Manager/StudentList';
-import EventBatchManager  from './Manager/EventBatchManager';
+import MedicalEvents       from './Manager/MedicalEvents';
+import Notifications       from './Manager/Notifications';
+import StudentList         from './Manager/StudentList';
+import EventBatchManager   from './Manager/EventBatchManager';
+import ConsentStudentPage  from './Manager/ConsentStudentPage';
 
-import logo               from './image/hinhanh/logoproject.png';
+import logo                from './image/hinhanh/logoproject.png';
 
-import iconMedical        from './image/icon/medicalevent.png';
-import iconNotification   from './image/icon/thu.png';
-import iconUsers          from './image/icon/user3.png';
-import iconBatch          from './image/icon/user3.png';
+import iconMedical         from './image/icon/medicalevent.png';
+import iconNotification    from './image/icon/thu.png';
+import iconUsers           from './image/icon/user3.png';
+import iconBatch           from './image/icon/user3.png';
 
 import './index.css';
 
@@ -43,21 +45,21 @@ function Dashboard() {
   if (!summary) return <p className="p-6">Đang tải báo cáo...</p>;
 
   const cards = [
-    { label: 'Báo cáo tháng',           value: summary.reportMonth },
-    { label: 'Thu nhập',               value: summary.income.toLocaleString() },
-    { label: 'Người dùng hôm nay',     value: summary.usersToday },
-    { label: 'Khách hàng mới',         value: summary.newCustomers },
-    { label: 'Đơn mới',                value: summary.newOrders },
-    { label: 'Người dùng hoạt động',   value: summary.activeUsers },
-    { label: 'Khai báo thuốc',         value: summary.medicationSubmissions },
-    { label: 'Tổng số người dùng',     value: summary.totalUsers }
+    { label: 'Báo cáo tháng',         value: summary.reportMonth },
+    { label: 'Thu nhập',             value: summary.income.toLocaleString() },
+    { label: 'Người dùng hôm nay',   value: summary.usersToday },
+    { label: 'Khách hàng mới',       value: summary.newCustomers },
+    { label: 'Đơn mới',              value: summary.newOrders },
+    { label: 'Người dùng hoạt động', value: summary.activeUsers },
+    { label: 'Khai báo thuốc',       value: summary.medicationSubmissions },
+    { label: 'Tổng số người dùng',   value: summary.totalUsers }
   ];
 
   return (
     <div className="p-6">
       <h2 className="text-3xl font-semibold mb-6 text-gray-800">{summary.reportTitle}</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {cards.map((c,i) => (
+        {cards.map((c, i) => (
           <div
             key={i}
             className="bg-white p-5 rounded-xl shadow hover:shadow-lg transition-shadow duration-200"
@@ -87,11 +89,12 @@ export default function AdminApp() {
   }, []);
 
   const navItems = [
-    { key: 'dashboard',    icon: <FaTachometerAlt />,  label: 'Thống kê'         },
-    { key: 'medical',      icon: iconMedical,           label: 'Sự kiện y tế'      },
-    { key: 'notification', icon: iconNotification,      label: 'Thông báo'         },
-    { key: 'students',     icon: iconUsers,             label: 'Danh sách học sinh' },
-    { key: 'eventbatch',   icon: iconBatch,             label: 'Tạo sự kiện'       }
+    { key: 'dashboard',    icon: <FaTachometerAlt />, label: 'Thống kê' },
+    { key: 'medical',      icon: iconMedical,         label: 'Sự kiện y tế' },
+    { key: 'notification', icon: iconNotification,    label: 'Thông báo' },
+    { key: 'students',     icon: iconUsers,           label: 'Danh sách học sinh' },
+    { key: 'eventbatch',   icon: iconBatch,           label: 'Tạo sự kiện' },
+    { key: 'consent',      icon: <FaUserCheck />,     label: 'HS Đồng ý' } // ✅ icon phù hợp
   ];
 
   const getInitials = name =>
@@ -100,19 +103,15 @@ export default function AdminApp() {
   return (
     <div className="flex h-screen text-gray-700">
       {/* Sidebar */}
-      <aside className={`
-        flex flex-col bg-gradient-to-b from-blue-900 to-blue-700 text-white
-        transition-all duration-300 ease-in-out
-        ${sidebarOpen ? 'w-64' : 'w-20'}
-      `}>
+      <aside className={`flex flex-col bg-gradient-to-b from-blue-900 to-blue-700 text-white transition-all duration-300 ease-in-out ${sidebarOpen ? 'w-64' : 'w-20'}`}>
         <button
           className="p-4 self-end focus:outline-none"
           onClick={() => setSidebarOpen(o => !o)}
         >
-          <FaBars size={20}/>
+          <FaBars size={20} />
         </button>
         <div className="flex items-center px-4 mb-6">
-          <img src={logo} alt="Logo" className="w-8 h-8"/>
+          <img src={logo} alt="Logo" className="w-8 h-8" />
           {sidebarOpen && (
             <div className="ml-3">
               <p className="text-lg font-bold">SchoMed</p>
@@ -126,22 +125,14 @@ export default function AdminApp() {
             return (
               <button
                 key={key}
-                className={`
-                  w-full flex items-center  
-                  px-4 py-3 mb-1
-                  ${active
-                    ? 'bg-blue-600'
-                    : 'hover:bg-blue-500'}
-                  transition-colors duration-200
-                  focus:outline-none
-                `}
+                className={`w-full flex items-center px-4 py-3 mb-1 ${active ? 'bg-blue-600' : 'hover:bg-blue-500'} transition-colors duration-200 focus:outline-none`}
                 onClick={() => setPage(key)}
                 title={!sidebarOpen ? label : ''}
               >
                 <div className="w-6 h-6 flex items-center justify-center">
                   {React.isValidElement(icon)
                     ? icon
-                    : <img src={icon} alt={label} className="w-6 h-6"/>}
+                    : <img src={icon} alt={label} className="w-6 h-6" />}
                 </div>
                 {sidebarOpen && (
                   <span className="ml-4 text-sm font-medium">{label}</span>
@@ -159,7 +150,7 @@ export default function AdminApp() {
             }}
             title="Đăng xuất"
           >
-            <FaSignOutAlt className="text-white text-xl"/>
+            <FaSignOutAlt className="text-white text-xl" />
           </button>
           {sidebarOpen && <span className="mt-2 text-sm">Đăng xuất</span>}
         </div>
@@ -170,8 +161,8 @@ export default function AdminApp() {
         <header className="flex items-center justify-between bg-white border-b px-6 py-3 shadow-sm">
           <div></div>
           <div className="flex items-center space-x-4">
-            <FaBell className="text-gray-600 text-xl hover:text-gray-800 transition-colors"/>
-            <FaCog  className="text-gray-600 text-xl hover:text-gray-800 transition-colors"/>
+            <FaBell className="text-gray-600 text-xl hover:text-gray-800 transition-colors" />
+            <FaCog className="text-gray-600 text-xl hover:text-gray-800 transition-colors" />
             {!user ? (
               <div className="text-gray-500 text-sm">Đang tải...</div>
             ) : (
@@ -194,6 +185,7 @@ export default function AdminApp() {
           {page === 'notification' && <Notifications />}
           {page === 'students'     && <StudentList />}
           {page === 'eventbatch'   && <EventBatchManager />}
+          {page === 'consent'      && <ConsentStudentPage />} {/* ✅ thêm render trang HS Đồng ý */}
         </main>
       </div>
     </div>
