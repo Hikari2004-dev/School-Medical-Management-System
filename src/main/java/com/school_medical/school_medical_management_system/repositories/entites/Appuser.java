@@ -1,5 +1,7 @@
 package com.school_medical.school_medical_management_system.repositories.entites;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.time.LocalDateTime;
 
 public class Appuser {
@@ -10,6 +12,7 @@ public class Appuser {
     private String phone;
     private String address;
     private String roleName;
+    @JsonIgnore
     private LocalDateTime createdAt; // ✅ Thêm mới
 
     // --- Getters và Setters ---
