@@ -29,9 +29,15 @@ const ReportPage = () => {
       data.append("file", formData.file);
     }
 
+    // Lấy token từ localStorage với key "accessToken"
+    const token = localStorage.getItem("token"); // Đổi từ "accessToken" sang "token"
+
     try {
-      const response = await fetch("http://localhost:8080/api/reports/update", {
+      const response = await fetch("http://localhost:8080/api/reports/add", {
         method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
         body: data,
       });
 
@@ -47,6 +53,8 @@ const ReportPage = () => {
       alert("⚠️ Đã xảy ra lỗi khi gửi báo cáo.");
     }
   };
+
+  console.log(localStorage.getItem("token"));
 
   return (
     <div className="report-wrapper">
