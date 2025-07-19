@@ -560,3 +560,21 @@ body {
         height: 60px;
     }
 }
+.table-header,
+.table-row {
+  display: grid !important;
+  /* Chia 7 cột tương ứng với header */
+  grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  align-items: center;
+}
+
+/* 2. Đảm bảo mỗi ô canh giữa */
+.table-cell {
+  text-align: center !important;
+  padding: 12px 8px !important;
+}
+
+/* 3. Bỏ padding mặc định của .table-rows để khỏi lệch */
+.table-rows {
+  padding: 0 !important;
+}
