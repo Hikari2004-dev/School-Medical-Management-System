@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.school_medical.school_medical_management_system.repositories.entites.Report;
 import com.school_medical.school_medical_management_system.services.IReportService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/reports")
 public class ReportController {
@@ -67,6 +69,12 @@ public class ReportController {
 
         // Trả về đối tượng báo cáo nếu tìm thấy
         return ResponseEntity.ok(report);
+    }
+
+        //view all report
+    @GetMapping
+    public List<Report> getAllReports() {
+        return reportService.getAllReports(); // ✅ Trả về tất cả báo cáo
     }
 
 }
