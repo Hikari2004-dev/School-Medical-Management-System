@@ -10,8 +10,8 @@ const ConsentStudentPage = () => {
       try {
         const token = localStorage.getItem("token");
 
-        // Lấy danh sách lịch hẹn
-        const resApp = await fetch("http://localhost:8080/api/appointments/all", {
+        // ✅ Đổi sang API lấy thông báo từ phụ huynh
+        const resApp = await fetch("http://localhost:8080/api/notifications/parent", {
           headers: { Authorization: `Bearer ${token}` },
         });
         const appJson = await resApp.json();
