@@ -77,7 +77,8 @@ public class SecurityConfig {
                                 "/api/reports/**",
                                 "/api/orders/**",
                                 "/api/dashboard/**",
-                                "/api/me"
+                                "/api/me",
+                                "/api/classes/**"
                         ).permitAll()  // Permit all the above public endpoints
 
                         .requestMatchers("/api/parent-info/**").authenticated()  // Require authentication for parent-info
