@@ -13,6 +13,32 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
+  // ✅ Đăng nhập bằng Google
+  const handleGoogleLogin = async (credentialResponse) => {
+    try {
+      const { credential } = credentialResponse;
+      const decoded = jwtDecode(credential);
+      // Gửi thông tin Google đến backend để xác thực và lấy role
+      const res = await fetch("http://localhost:8080/login/google", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: decoded.email,
+          name: decoded.name,
+          googleId: decoded.sub,
+        }),
+      });
+      if (!res.ok) throw new Error("Đăng nhập Google thất bại");
+      const data = await res.json();
+      localStorage.setItem("token", data.jwt);
+      localStorage.setItem("userName", data.name);
+      localStorage.setItem("role", data.role);
+      localStorage.setItem("userId", data.userId);
+      redirectByRole(data.role);
+    } catch (error) {
+      alert("Đăng nhập Google thất bại!");
+    }
+  };
   // ✅ Đăng nhập bằng email/mật khẩu
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -39,7 +65,7 @@ export default function Login() {
       } else {
         alert("Vai trò không được hỗ trợ!");
       }
-    } else {
+    } catch (error) {
       alert("Đăng nhập thất bại!");
     }
   };
@@ -58,11 +84,11 @@ export default function Login() {
   };
 
   return (
-      <GoogleOAuthProvider clientId="493912650211-kqoj7t293bdhfgepv1q7kh7vik3o0852.apps.googleusercontent.com">
-        <div className="login-wrapper" style={{ backgroundImage: `url(${Background})` }}>
-          <div className="login-box">
-            <img src={LogoImg} alt="Logo" className="login-logo" />
-            <h2 className="login-title">Đăng nhập</h2>
+    <GoogleOAuthProvider clientId="493912650211-kqoj7t293bdhfgepv1q7kh7vik3o0852.apps.googleusercontent.com">
+      <div className="login-wrapper" style={{ backgroundImage: `url(${Background})` }}>
+        <div className="login-box">
+          <img src={LogoImg} alt="Logo" className="login-logo" />
+          <h2 className="login-title">Đăng nhập</h2>
 
           <form className="login-form" onSubmit={handleSubmit}>
             <div>
@@ -89,28 +115,28 @@ export default function Login() {
               />
             </div>
 
-              <div className="checkbox-links">
-                <label className="remember-label">
-                  <input type="checkbox" className="checkbox" />
-                  Ghi nhớ đăng nhập
-                </label>
-                <div className="link-group">
-                  <Link to="/register">Tạo tài khoản mới</Link>
-                  <Link to="/forget-password">Quên mật khẩu</Link>
-                </div>
+            <div className="checkbox-links">
+              <label className="remember-label">
+                <input type="checkbox" className="checkbox" />
+                Ghi nhớ đăng nhập
+              </label>
+              <div className="link-group">
+                <Link to="/register">Tạo tài khoản mới</Link>
+                <Link to="/forget-password">Quên mật khẩu</Link>
               </div>
-              <button type="submit" className="btn-submit">Tiếp tục</button>
-            </form>
-
-            {/* Google Login Button */}
-            <div className="google-login-container">
-              <GoogleLogin
-                  onSuccess={handleGoogleLogin}
-                  onError={() => alert("Đăng nhập Google thất bại!")}
-              />
             </div>
+            <button type="submit" className="btn-submit">Tiếp tục</button>
+          </form>
+
+          {/* Google Login Button */}
+          <div className="google-login-container">
+            <GoogleLogin
+              onSuccess={handleGoogleLogin}
+              onError={() => alert("Đăng nhập Google thất bại!")}
+            />
           </div>
         </div>
-      </GoogleOAuthProvider>
+      </div>
+    </GoogleOAuthProvider>
   );
 }
