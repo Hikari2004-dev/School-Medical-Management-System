@@ -7,6 +7,8 @@ import com.school_medical.school_medical_management_system.utils.AuthUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api")
 public class UserController {
@@ -29,5 +31,10 @@ public class UserController {
         response.setCreatedAt(user.getCreatedAt());
 
         return response;
+    }
+
+    @GetMapping("/nurses")
+    public List<Appuser> getAllNurses() {
+        return appUserService.getAllNurses();
     }
 }
