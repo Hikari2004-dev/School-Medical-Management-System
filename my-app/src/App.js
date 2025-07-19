@@ -39,10 +39,13 @@ import NurseApp from './NurseApp';
 
 import VNPAYPaymentButton from './pages/Member/VNPAYPaymentButton';
 import Order from './pages/order/order';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
 
 
 function App() {
   return (
+      <GoogleOAuthProvider clientId="493912650211-kqoj7t293bdhfgepv1q7kh7vik3o0852.apps.googleusercontent.com">
     <Router>
       <div>
         <Routes>
@@ -92,6 +95,7 @@ function App() {
         <ChatBot />
       </div>
     </Router>
+      </GoogleOAuthProvider>
   );
 }
 
