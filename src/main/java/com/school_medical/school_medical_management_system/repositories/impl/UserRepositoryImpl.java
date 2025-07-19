@@ -3,6 +3,7 @@ package com.school_medical.school_medical_management_system.repositories.impl;
 import com.school_medical.school_medical_management_system.repositories.IUserRepository;
 import com.school_medical.school_medical_management_system.repositories.entites.Appuser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Repository;
@@ -17,6 +18,12 @@ public class UserRepositoryImpl implements IUserRepository {
 
     @Autowired
     private DataSource dataSource;
+
+    private final JdbcTemplate jdbcTemplate;
+
+    public UserRepositoryImpl(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @Override
     public UserDetails findUserByEmail(String email) {
@@ -128,6 +135,12 @@ public class UserRepositoryImpl implements IUserRepository {
             e.printStackTrace();
             return java.util.Collections.emptyList();
         }
+    }
+
+    @Override
+    public List<String> getAllUserEmails() {
+        String sql = "SELECT email FROM appuser";
+        return jdbcTemplate.queryForList(sql, String.class);
     }
 
 }

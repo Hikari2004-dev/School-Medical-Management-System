@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
-import { jwtDecode } from "jwt-decode";         // ← sửa ở đây
+import { jwtDecode } from 'jwt-decode';  // Import jwtDecode
 
 import "./Login.css";
 import LogoImg from "../../image/hinhanh/logoproject.png";
@@ -13,6 +13,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
+  // ✅ Đăng nhập bằng email/mật khẩu
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -29,16 +30,26 @@ export default function Login() {
       localStorage.setItem("role", data.role);
       localStorage.setItem("userId", data.userId);
 
-      redirectByRole(data.role);
-    } catch (err) {
-      console.error(err);
-      alert(err.message || "Đăng nhập thất bại!");
+      if (data.role === "Admin") {
+        navigate("/admin");
+      } else if (data.role === "Parent") {
+        navigate("/");
+      } else if (data.role === "SchoolNurse") {
+        navigate("/nurse");
+      } else {
+        alert("Vai trò không được hỗ trợ!");
+      }
+    } else {
+      alert("Đăng nhập thất bại!");
     }
   };
 
+  // ✅ Xử lý điều hướng theo role
   const redirectByRole = (role) => {
-    if (role === "Admin" || role === "SchoolNurse") {
+    if (role === "Admin") {
       navigate("/admin");
+    } else if (role === "SchoolNurse") {
+      navigate("/nurse");
     } else if (role === "Parent") {
       navigate("/");
     } else {
@@ -46,41 +57,12 @@ export default function Login() {
     }
   };
 
-  const handleGoogleLogin = async (credentialResponse) => {
-    try {
-      // Ví dụ decode token nếu cần
-      const decoded = jwtDecode(credentialResponse.credential);
-      console.log("Google user:", decoded);
-
-      const res = await fetch("http://localhost:8080/auth/google", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token: credentialResponse.credential }),
-      });
-      if (!res.ok) throw new Error("Google login thất bại");
-
-      const data = await res.json();
-      localStorage.setItem("token", data.jwt);
-      localStorage.setItem("userName", data.name);
-      localStorage.setItem("role", data.role);
-      localStorage.setItem("userId", data.userId);
-
-      redirectByRole(data.role);
-    } catch (err) {
-      console.error(err);
-      alert(err.message || "Đăng nhập Google thất bại!");
-    }
-  };
-
   return (
-    <GoogleOAuthProvider clientId="493912650211-kqoj7t293bdhfgepv1q7kh7vik3o0852.apps.googleusercontent.com">
-      <div
-        className="login-wrapper"
-        style={{ backgroundImage: `url(${Background})` }}
-      >
-        <div className="login-box">
-          <img src={LogoImg} alt="Logo" className="login-logo" />
-          <h2 className="login-title">Đăng nhập</h2>
+      <GoogleOAuthProvider clientId="493912650211-kqoj7t293bdhfgepv1q7kh7vik3o0852.apps.googleusercontent.com">
+        <div className="login-wrapper" style={{ backgroundImage: `url(${Background})` }}>
+          <div className="login-box">
+            <img src={LogoImg} alt="Logo" className="login-logo" />
+            <h2 className="login-title">Đăng nhập</h2>
 
           <form className="login-form" onSubmit={handleSubmit}>
             <div>
@@ -107,30 +89,28 @@ export default function Login() {
               />
             </div>
 
-            <div className="checkbox-links">
-              <label className="remember-label">
-                <input type="checkbox" className="checkbox" />
-                Ghi nhớ đăng nhập
-              </label>
-              <div className="link-group">
-                <Link to="/register">Tạo tài khoản mới</Link>
-                <Link to="/forget-password">Quên mật khẩu</Link>
+              <div className="checkbox-links">
+                <label className="remember-label">
+                  <input type="checkbox" className="checkbox" />
+                  Ghi nhớ đăng nhập
+                </label>
+                <div className="link-group">
+                  <Link to="/register">Tạo tài khoản mới</Link>
+                  <Link to="/forget-password">Quên mật khẩu</Link>
+                </div>
               </div>
+              <button type="submit" className="btn-submit">Tiếp tục</button>
+            </form>
+
+            {/* Google Login Button */}
+            <div className="google-login-container">
+              <GoogleLogin
+                  onSuccess={handleGoogleLogin}
+                  onError={() => alert("Đăng nhập Google thất bại!")}
+              />
             </div>
-
-            <button type="submit" className="btn-submit">
-              Tiếp tục
-            </button>
-          </form>
-
-          <div className="google-login-container">
-            <GoogleLogin
-              onSuccess={handleGoogleLogin}
-              onError={() => alert("Đăng nhập Google thất bại!")}
-            />
           </div>
         </div>
-      </div>
-    </GoogleOAuthProvider>
+      </GoogleOAuthProvider>
   );
 }

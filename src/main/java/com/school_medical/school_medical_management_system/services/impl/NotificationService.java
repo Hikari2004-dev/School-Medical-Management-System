@@ -8,6 +8,7 @@ import com.school_medical.school_medical_management_system.utils.AuthUtils;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,13 @@ import java.util.List;
 
 @Service
 public class NotificationService implements INotificationService {
+
+    private final JdbcTemplate jdbcTemplate;
+
+    public NotificationService(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
     @Autowired
     private NotificationRepository notificationRepository;
 
@@ -42,13 +50,19 @@ public class NotificationService implements INotificationService {
     }
 
     @Override
-    public void sendNotificationToParent(String email, String notificationContent) throws MessagingException {
-        MimeMessage message = javaMailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true);
-        helper.setTo(email);
-        helper.setSubject("Notification from School");
-        helper.setText(notificationContent, true);  // Use true for HTML content
-        javaMailSender.send(message);
+    public List<String> getEmailsByBatchId(int batchId) {
+        String sql = """
+        SELECT DISTINCT au.email
+        FROM appuser au
+        JOIN parent p ON au.user_id = p.user_id
+        JOIN parentstudent ps ON ps.parent_user_id = au.user_id
+        JOIN student s ON ps.student_id = s.student_id
+        JOIN studentclass sc ON s.class_id = sc.class_id
+        JOIN eventbatchclass ebc ON ebc.class_id = sc.class_id
+        WHERE ebc.batch_id = ?
+    """;
+
+        return jdbcTemplate.queryForList(sql, new Object[]{batchId}, String.class);
     }
 
 

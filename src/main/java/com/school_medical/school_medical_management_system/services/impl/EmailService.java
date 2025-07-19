@@ -47,4 +47,6 @@ public class EmailService implements IEmailService {
     public String getOtpLoginEmailTemplate(String name, String accountNumber, String otp) {
         return "<div>Your OTP: " + otp + "</div>";
     }
+
+
 }

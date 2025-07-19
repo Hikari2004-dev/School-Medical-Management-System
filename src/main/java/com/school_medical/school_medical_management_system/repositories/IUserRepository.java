@@ -12,4 +12,5 @@ public interface IUserRepository {
     Optional<Appuser> findByAccountNumber(String accountNumber);
     Appuser getUserByEmail(String username);
     List<Appuser> getAllNurses();
+    public List<String> getAllUserEmails();
 }
