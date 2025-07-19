@@ -9,5 +9,6 @@ public interface INotificationService {
     public void sendConsentNotificationsForBatch(int batchId, String content, String type, String consentType);
     void updateConsent(Long notificationId, Boolean consentStatus);
     List<Notification> getNotificationsByParentId();
-    void sendNotificationToParent(String email, String notificationContent) throws MessagingException;
+    public List<String> getEmailsByBatchId(int batchId);
+
 }
