@@ -16,6 +16,16 @@ public class StudentHealthRequest {
     private float height;
     private float weight;
     private float bmi;
+    private String relationship;  // Trường relationship cho "Father" hoặc "Mother"
+
+    // Getters and Setters cho các trường
+    public String getRelationship() {
+        return relationship;
+    }
+
+    public void setRelationship(String relationship) {
+        this.relationship = relationship;
+    }
 
     public String getStudentName() {
         return studentName;
@@ -120,6 +130,4 @@ public class StudentHealthRequest {
     public void setBmi(float bmi) {
         this.bmi = bmi;
     }
-
-    // Getters and Setters
 }

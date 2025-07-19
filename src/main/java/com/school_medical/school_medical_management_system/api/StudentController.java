@@ -6,7 +6,6 @@ import com.school_medical.school_medical_management_system.repositories.IUserRep
 import com.school_medical.school_medical_management_system.repositories.entites.Appuser;
 import com.school_medical.school_medical_management_system.repositories.entites.Healthinfo;
 import com.school_medical.school_medical_management_system.repositories.entites.Student;
-import com.school_medical.school_medical_management_system.repositories.entites.Studentclass;
 import com.school_medical.school_medical_management_system.services.IStudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,29 +30,27 @@ public class StudentController {
     }
 
     @PostMapping("/save")
-    public String saveStudentWithHealthInfoAndLinkParent(@RequestBody StudentHealthRequest request) {
-        // 1. Lấy email từ JWT đã giải mã
+    public ResponseEntity<ApiResponse<String>> saveStudentWithHealthInfoAndLinkParent(@RequestBody StudentHealthRequest request) {
+        // Lấy email từ JWT đã giải mã
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
 
-        // 2. Truy vấn parent_user_id (user_id) từ database
+        // Truy vấn parent_user_id từ database
         Appuser parent = userRepository.getUserByEmail(email);
         if (parent == null) {
-            return "❌ Không tìm thấy phụ huynh với email: " + email;
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiResponse<>(false, "Không tìm thấy phụ huynh với email: " + email, null));
         }
         int parentUserId = parent.getId();
 
-        // 3. Tạo Student object
+        // Tạo đối tượng Student và Healthinfo
         Student student = new Student();
         student.setName(request.getStudentName());
         student.setDateOfBirth(request.getDob().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate());
         student.setGender(request.getGender());
         student.setGrade(request.getGrade());
-
-        // Sử dụng classId từ request thay vì classField
         student.setClassId(request.getClassId());
 
-        // 4. Tạo Healthinfo object
         Healthinfo healthinfo = new Healthinfo();
         healthinfo.setAllergy(request.getAllergy());
         healthinfo.setChronicDisease(request.getChronicDisease());
@@ -64,21 +61,29 @@ public class StudentController {
         healthinfo.setWeight(request.getWeight());
         healthinfo.setBmi(request.getBmi());
 
-        // 5. Lưu dữ liệu
-        studentService.saveStudentWithHealthInfoAndLinkParent(student, healthinfo, parentUserId);
+        // Lưu học sinh, thông tin sức khỏe và mối quan hệ phụ huynh
+        studentService.saveStudentWithHealthInfoAndLinkParent(student, healthinfo, parentUserId, request.getRelationship());
 
-        return "✅ Học sinh và thông tin sức khỏe đã được lưu và liên kết với phụ huynh!";
+        return ResponseEntity.ok(new ApiResponse<>(true, "Học sinh và thông tin sức khỏe đã được lưu và liên kết với phụ huynh!", "Success"));
     }
-
 
     /**
      * Lấy tất cả học sinh
      */
     @GetMapping("/all")
-    public List<Student> getAllStudents() {
-        return studentService.getAllStudents();
+    public ResponseEntity<ApiResponse<List<Student>>> getAllStudents() {
+        try {
+            List<Student> students = studentService.getAllStudents();
+            return ResponseEntity.ok(new ApiResponse<>(true, "Lấy danh sách học sinh thành công", students));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse<>(false, "Lỗi hệ thống: " + e.getMessage(), null));
+        }
     }
 
+    /**
+     * Lấy danh sách học sinh của phụ huynh
+     */
     @GetMapping("/by-parent/{parentUserId}")
     public ResponseEntity<ApiResponse<List<Student>>> getStudentsByParentId(@PathVariable int parentUserId) {
         try {

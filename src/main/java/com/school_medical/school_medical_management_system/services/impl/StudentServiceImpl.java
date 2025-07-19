@@ -30,11 +30,16 @@ public class StudentServiceImpl implements IStudentService {
 
     @Override
     @Transactional
-    public void saveStudentWithHealthInfoAndLinkParent(Student student, Healthinfo healthinfo, int parentUserId) {
+    public void saveStudentWithHealthInfoAndLinkParent(Student student, Healthinfo healthinfo, int parentUserId, String relationship) {
+        // Lưu học sinh
         int studentId = studentRepository.saveStudent(student);
+
+        // Lưu thông tin sức khỏe của học sinh
         healthinfo.setStudentId(studentId);
         studentRepository.saveHealthInfo(healthinfo);
-        studentRepository.saveParentStudent(parentUserId, studentId);
+
+        // Lưu mối quan hệ giữa phụ huynh và học sinh (cha/mẹ)
+        studentRepository.saveParentStudent(parentUserId, studentId, relationship);  // Truyền relationship vào
     }
 
     @Override
@@ -46,4 +51,5 @@ public class StudentServiceImpl implements IStudentService {
     public List<Student> getStudentsByParentId(int parentUserId) {
         return studentRepository.getStudentsByParentId(parentUserId);
     }
+
 }

@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface IStudentService {
     void saveStudentWithHealthInfo(Student student, Healthinfo healthinfo);
-    void saveStudentWithHealthInfoAndLinkParent(Student student, Healthinfo healthinfo, int parentUserId);
-    List<Student> getAllStudents();  // Phương thức để lấy danh sách học sinh
+    void saveStudentWithHealthInfoAndLinkParent(Student student, Healthinfo healthinfo, int parentUserId, String relationship);  // Đảm bảo khai báo đúng
+    List<Student> getAllStudents();
     List<Student> getStudentsByParentId(int parentUserId);
 }

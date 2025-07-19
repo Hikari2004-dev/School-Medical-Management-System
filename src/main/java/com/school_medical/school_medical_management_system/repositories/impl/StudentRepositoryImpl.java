@@ -37,9 +37,9 @@ public class StudentRepositoryImpl implements IStudentRepository {
     }
 
     @Override
-    public void saveParentStudent(int parentUserId, int studentId) {
+    public void saveParentStudent(int parentUserId, int studentId, String relationship) {
         String sql = "INSERT INTO parentstudent (parent_user_id, student_id, relationship) VALUES (?, ?, ?)";
-        jdbcTemplate.update(sql, parentUserId, studentId, "Father"); // hoặc "Mother", nếu muốn linh hoạt, bạn có thể truyền vào
+        jdbcTemplate.update(sql, parentUserId, studentId, relationship);  // Lưu thông tin mối quan hệ (cha/mẹ)
     }
 
     @Override
@@ -47,30 +47,12 @@ public class StudentRepositoryImpl implements IStudentRepository {
         String sql = "SELECT * FROM student";  // SQL query để lấy tất cả học sinh
         return jdbcTemplate.query(sql, (rs, rowNum) -> {
             Student student = new Student();
-
-            // Lấy student_id từ ResultSet và gán vào đối tượng Student
             student.setId(rs.getInt("student_id"));
-
-            // Lấy tên học sinh từ ResultSet và gán vào đối tượng Student
             student.setName(rs.getString("name"));
-
-            // Lấy ngày sinh từ ResultSet và chuyển từ java.sql.Date thành LocalDate
-            java.sql.Date sqlDate = rs.getDate("date_of_birth");
-            if (sqlDate != null) {
-                student.setDateOfBirth(sqlDate.toLocalDate());
-            } else {
-                student.setDateOfBirth(null);  // Nếu ngày sinh là null, gán là null
-            }
-
-            // Lấy giới tính từ ResultSet và gán vào đối tượng Student
+            student.setDateOfBirth(rs.getDate("date_of_birth").toLocalDate());
             student.setGender(rs.getString("gender"));
-
-            // Lấy lớp học từ ResultSet và gán vào đối tượng Student
             student.setGrade(rs.getString("grade"));
-
-            // Lấy class_id từ ResultSet và gán vào đối tượng Student
             student.setClassId(rs.getInt("class_id"));
-
             return student;  // Trả về đối tượng Student đã được gán thông tin
         });
     }
@@ -78,8 +60,8 @@ public class StudentRepositoryImpl implements IStudentRepository {
     @Override
     public List<Student> getStudentsByParentId(int parentUserId) {
         String sql = "SELECT s.student_id, s.name, s.date_of_birth, s.gender, s.grade, s.class_id " +
-                "FROM mesch.student s " +
-                "JOIN mesch.parentstudent ps ON s.student_id = ps.student_id " +
+                "FROM student s " +
+                "JOIN parentstudent ps ON s.student_id = ps.student_id " +
                 "WHERE ps.parent_user_id = ?";
 
         return jdbcTemplate.query(sql, new Object[]{parentUserId}, (rs, rowNum) -> {
