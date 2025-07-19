@@ -3,7 +3,6 @@ import {
   FaBars, FaSignOutAlt, FaBell, FaCog
 } from 'react-icons/fa';
 
-import Dashboard from './Manager/Dashboard';
 import Performance from './Manager/Performance';
 import ClassManagement from './Manager/ClassManagement';
 import MedicalEvents from './Manager/MedicalEvents';
@@ -29,7 +28,7 @@ import './index.css';
 
 function NurseApp() {
   const [user, setUser] = useState(null);
-  const [page, setPage] = useState('dashboard');
+  const [page, setPage] = useState('home');
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   useEffect(() => {
@@ -45,9 +44,7 @@ function NurseApp() {
   }, []);
 
   const navItems = [
-    { key: 'dashboard', icon: iconDashboard, label: 'Bảng điều khiển' },
     { key: 'home', icon: iconHome, label: 'Trang chủ' },
-    { key: 'performance', icon: iconPerformance, label: 'Hiệu suất' },
     { key: 'notification', icon: iconNotification, label: 'Thông báo' },
     { key: 'appointment', icon: iconAppointment, label: 'Lịch hẹn' },
     { key: 'medical', icon: iconMedical, label: 'Sự kiện y tế' },
@@ -125,8 +122,6 @@ function NurseApp() {
         </header>
 
         <main className="flex-1 bg-gray-50 overflow-auto">
-          {page === 'dashboard' && <Dashboard />}
-          {page === 'performance' && <Performance />}
           {page === 'notification' && <Notifications />}
           {page === 'appointment' && <ConsultationAppointments />}
           {page === 'users' && <ClassManagement />}
