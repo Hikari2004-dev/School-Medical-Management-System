@@ -3,6 +3,7 @@ package com.school_medical.school_medical_management_system.repositories.impl;
 import com.school_medical.school_medical_management_system.repositories.IStudentRepository;
 import com.school_medical.school_medical_management_system.repositories.entites.Healthinfo;
 import com.school_medical.school_medical_management_system.repositories.entites.Student;
+import com.school_medical.school_medical_management_system.repositories.entites.VaccinationParentDeclaration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -75,4 +76,59 @@ public class StudentRepositoryImpl implements IStudentRepository {
             return student;
         });
     }
+
+    @Override
+    public List<Healthinfo> getHealthInfoByUserId(int userId) {
+        String sql = """
+    SELECT h.health_info_id, h.allergy, h.chronic_disease, h.vision, h.hearing, h.medical_history, h.height, h.weight, h.bmi, h.student_id
+    FROM healthinfo h
+    JOIN student s ON s.student_id = h.student_id
+    JOIN parentstudent ps ON ps.student_id = s.student_id
+    JOIN appuser a ON a.user_id = ps.parent_user_id
+    WHERE a.user_id = ?
+    """;
+
+        return jdbcTemplate.query(sql, new Object[]{userId}, (rs, rowNum) -> {
+            Healthinfo healthinfo = new Healthinfo();
+            healthinfo.setHealthInfoId(rs.getInt("health_info_id"));  // Đảm bảo bạn gán health_info_id
+            healthinfo.setAllergy(rs.getString("allergy"));
+            healthinfo.setChronicDisease(rs.getString("chronic_disease"));
+            healthinfo.setVision(rs.getString("vision"));
+            healthinfo.setHearing(rs.getString("hearing"));
+            healthinfo.setMedicalHistory(rs.getString("medical_history"));
+            healthinfo.setHeight(rs.getFloat("height"));
+            healthinfo.setWeight(rs.getFloat("weight"));
+            healthinfo.setBmi(rs.getFloat("bmi"));
+            healthinfo.setStudentId(rs.getInt("student_id"));  // Đảm bảo bạn gán student_id
+            return healthinfo;
+        });
+    }
+
+    @Override
+    public List<VaccinationParentDeclaration> getVaccinationInfoByUserId(int userId) {
+        String sql = """
+    SELECT v.id, v.student_id, v.parent_id, v.vaccine_name, v.declared_date, v.notes, v.status, v.dose_number, v.vaccine_lot, v.consent_verified
+    FROM vaccinationparentdeclaration v
+    JOIN parent p ON p.parent_id = v.parent_id
+    JOIN student s ON s.student_id = v.student_id
+    JOIN appuser a ON a.user_id = p.user_id
+    WHERE a.user_id = ?
+    """;
+
+        return jdbcTemplate.query(sql, new Object[]{userId}, (rs, rowNum) -> {
+            VaccinationParentDeclaration vaccination = new VaccinationParentDeclaration();
+            vaccination.setId(rs.getInt("id"));
+            vaccination.setStudentId(rs.getInt("student_id"));
+            vaccination.setParentId(rs.getInt("parent_id"));
+            vaccination.setVaccinationName(rs.getString("vaccine_name"));
+            vaccination.setDeclaredDate(rs.getDate("declared_date").toLocalDate());
+            vaccination.setNotes(rs.getString("notes"));
+            vaccination.setStatus(rs.getString("status"));
+            vaccination.setDoseNumber(rs.getInt("dose_number"));
+            vaccination.setVaccineLot(rs.getString("vaccine_lot"));
+            vaccination.setConsentVerified(rs.getBoolean("consent_verified"));
+            return vaccination;
+        });
+    }
+
 }

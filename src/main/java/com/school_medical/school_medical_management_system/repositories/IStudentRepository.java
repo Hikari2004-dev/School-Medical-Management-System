@@ -2,6 +2,8 @@ package com.school_medical.school_medical_management_system.repositories;
 
 import com.school_medical.school_medical_management_system.repositories.entites.Student;
 import com.school_medical.school_medical_management_system.repositories.entites.Healthinfo;
+import com.school_medical.school_medical_management_system.repositories.entites.VaccinationParentDeclaration;
+
 import java.util.List;
 
 public interface IStudentRepository {
@@ -9,5 +11,7 @@ public interface IStudentRepository {
     int saveHealthInfo(Healthinfo healthInfo);  // Lưu thông tin sức khỏe
     void saveParentStudent(int parentUserId, int studentId, String relationship);  // Lưu mối quan hệ cha/mẹ
     List<Student> getAllStudents();  // Lấy tất cả học sinh
-    List<Student> getStudentsByParentId(int parentUserId);  // Lấy học sinh theo ID của phụ huynh
+    List<Student> getStudentsByParentId(int parentUserId);
+    List<Healthinfo> getHealthInfoByUserId(int userId);
+    List<VaccinationParentDeclaration> getVaccinationInfoByUserId(int userId);
 }
