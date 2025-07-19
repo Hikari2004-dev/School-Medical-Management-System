@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -143,4 +144,32 @@ public class UserRepositoryImpl implements IUserRepository {
         return jdbcTemplate.queryForList(sql, String.class);
     }
 
+
+    @Override
+    public List<Appuser> getAllUsers() {
+        String sql = "SELECT user_id, first_name, last_name, email, phone, address, role_name, created_at " +
+                "FROM appuser JOIN role ON appuser.role_id = role.role_id";
+
+        List<Appuser> users = new ArrayList<>();
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Appuser user = new Appuser();
+                user.setId(rs.getInt("user_id"));
+                user.setFirstName(rs.getString("first_name"));
+                user.setLastName(rs.getString("last_name"));
+                user.setEmail(rs.getString("email"));
+                user.setPhone(rs.getString("phone"));
+                user.setAddress(rs.getString("address"));
+                user.setRoleName(rs.getString("role_name"));
+                user.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+                users.add(user);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
 }

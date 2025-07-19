@@ -30,4 +30,9 @@ public class AppUserService implements IAppUserService {
         return userRepository.getAllNurses();
     }
 
+    @Override
+    public List<Appuser> getAllUsers() {
+        return userRepository.getAllUsers();
+    }
+
 }
