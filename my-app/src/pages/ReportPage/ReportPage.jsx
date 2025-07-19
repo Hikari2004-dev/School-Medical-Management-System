@@ -11,6 +11,7 @@ const ReportPage = () => {
     expectedResult: "",
     file: null,
   });
+
   const [reports, setReports] = useState([]);
   const [showReportForm, setShowReportForm] = useState(false);
   const [editReportId, setEditReportId] = useState(null);
@@ -21,141 +22,140 @@ const ReportPage = () => {
     status: "",
   });
 
+  // Lấy danh sách báo cáo
   useEffect(() => {
     const fetchReports = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await fetch("http://localhost:8080/api/reports", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+        const res = await fetch("http://localhost:8080/api/reports", {
+          headers: { Authorization: `Bearer ${token}` },
         });
-        if (response.ok) {
-          const data = await response.json();
+        if (res.ok) {
+          const data = await res.json();
           setReports(data);
         }
-      } catch (error) {
-        console.error("Lỗi khi lấy danh sách báo cáo:", error);
+      } catch (err) {
+        console.error("Lỗi khi lấy danh sách báo cáo:", err);
       }
     };
     fetchReports();
   }, []);
 
+  // Xử lý thay đổi input
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    setFormData({
-      ...formData,
+    setFormData((prev) => ({
+      ...prev,
       [name]: files ? files[0] : value,
-    });
+    }));
   };
 
+  // Gửi báo cáo lỗi mới
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
 
-    // Tạo object JSON đúng cấu trúc backend yêu cầu
-    const reportData = {
+    const payload = {
+      errorType: formData.errorType,
       description: formData.errorDetails,
       resultExpected: formData.expectedResult,
-      fileAttachment: formData.file ? formData.file.name : "",
-      errorType: formData.errorType,
-      userId: localStorage.getItem("userId"), // Lấy userId động từ localStorage
+      fileAttachment: formData.file?.name || "",
+      userId,
       status: "Pending",
     };
 
     try {
-      const response = await fetch("http://localhost:8080/api/reports/add", {
+      const res = await fetch("http://localhost:8080/api/reports/add", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(reportData),
+        body: JSON.stringify(payload),
       });
 
-      if (response.ok) {
-        // Tạo object mới để thêm vào danh sách báo cáo
+      if (res.ok) {
         const newReport = {
-          reportId: Math.random().toString(36).slice(2), // Tạo id tạm thời (nếu backend không trả về)
+          reportId: Math.random().toString(36).substring(2),
           createdAt: new Date().toISOString().split("T")[0],
-          errorType: formData.errorType,
-          description: formData.errorDetails,
-          resultExpected: formData.expectedResult,
-          fileAttachment: formData.file ? formData.file.name : "",
-          status: "Pending",
+          ...payload,
         };
         setReports((prev) => [newReport, ...prev]);
-        setShowReportForm(false);
         setFormData({
           errorType: "",
           errorDetails: "",
           expectedResult: "",
           file: null,
         });
+        setShowReportForm(false);
         alert("✅ Báo cáo đã gửi thành công!");
       } else {
-        alert("❌ Gửi báo cáo thất bại. Vui lòng thử lại.");
+        alert("❌ Gửi báo cáo thất bại.");
       }
-    } catch (error) {
-      console.error("Lỗi khi gửi form:", error);
-      alert("⚠️ Đã xảy ra lỗi khi gửi báo cáo.");
+    } catch (err) {
+      console.error("Gửi báo cáo thất bại:", err);
+      alert("⚠️ Có lỗi khi gửi báo cáo.");
     }
   };
 
-  // Thêm hàm cập nhật báo cáo
-  const handleUpdateReport = async (reportId, updatedData) => {
+  // Cập nhật báo cáo
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
     const token = localStorage.getItem("token");
+
     try {
-      const response = await fetch("http://localhost:8080/api/reports/update", {
+      const res = await fetch("http://localhost:8080/api/reports/update", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          reportId,
-          ...updatedData,
-        }),
+        body: JSON.stringify({ reportId: editReportId, ...editData }),
       });
-      if (response.ok) {
-        alert("✅ Cập nhật báo cáo thành công!");
-        // Cập nhật lại danh sách báo cáo nếu cần
-        // Ví dụ: fetchReports();
+
+      if (res.ok) {
+        alert("✅ Cập nhật thành công!");
+        setReports((prev) =>
+          prev.map((r) =>
+            r.reportId === editReportId ? { ...r, ...editData } : r
+          )
+        );
+        setEditReportId(null);
       } else {
-        alert("❌ Cập nhật báo cáo thất bại.");
+        alert("❌ Cập nhật thất bại.");
       }
-    } catch (error) {
-      console.error("Lỗi khi cập nhật báo cáo:", error);
-      alert("⚠️ Đã xảy ra lỗi khi cập nhật báo cáo.");
+    } catch (err) {
+      console.error("Lỗi cập nhật:", err);
+      alert("⚠️ Lỗi khi cập nhật báo cáo.");
     }
   };
 
+  // Xóa báo cáo
   const handleDeleteReport = async (reportId) => {
     const token = localStorage.getItem("token");
     if (!window.confirm("Bạn có chắc muốn xóa báo cáo này?")) return;
     try {
-      const response = await fetch(
+      const res = await fetch(
         `http://localhost:8080/api/reports/delete/${reportId}`,
         {
           method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
-      if (response.ok) {
-        alert("✅ Xóa báo cáo thành công!");
+      if (res.ok) {
         setReports((prev) => prev.filter((r) => r.reportId !== reportId));
+        alert("✅ Đã xóa thành công!");
       } else {
-        alert("❌ Xóa báo cáo thất bại.");
+        alert("❌ Xóa thất bại.");
       }
-    } catch (error) {
-      console.error("Lỗi khi xóa báo cáo:", error);
-      alert("⚠️ Đã xảy ra lỗi khi xóa báo cáo.");
+    } catch (err) {
+      console.error("Lỗi xóa báo cáo:", err);
+      alert("⚠️ Có lỗi xảy ra khi xóa.");
     }
   };
 
+  // Click chỉnh sửa
   const handleEditClick = (report) => {
     setEditReportId(report.reportId);
     setEditData({
@@ -166,22 +166,10 @@ const ReportPage = () => {
     });
   };
 
+  // Xử lý form edit
   const handleEditChange = (e) => {
     const { name, value } = e.target;
-    setEditData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleEditSubmit = async (e) => {
-    e.preventDefault();
-    await handleUpdateReport(editReportId, editData);
-    setEditReportId(null);
-    // Optionally update local state for instant UI feedback
-    setReports((prev) =>
-      prev.map((r) => (r.reportId === editReportId ? { ...r, ...editData } : r))
-    );
+    setEditData((prev) => ({ ...prev, [name]: value }));
   };
 
   return (
@@ -193,11 +181,12 @@ const ReportPage = () => {
           <h1>Báo Cáo Lỗi</h1>
           <p>Giúp chúng tôi cải thiện chất lượng dịch vụ</p>
         </div>
+
         <div className="report-list">
           <h2>Danh sách báo cáo lỗi</h2>
           <div className="report-list-table">
             {reports.length === 0 ? (
-              <div className="no-report">Chưa có báo cáo lỗi nào.</div>
+              <p className="no-report">Chưa có báo cáo lỗi nào.</p>
             ) : (
               <table>
                 <thead>
@@ -206,58 +195,58 @@ const ReportPage = () => {
                     <th>Loại lỗi</th>
                     <th>Mô tả</th>
                     <th>Kết quả mong muốn</th>
-                    <th>File đính kèm</th>
+                    <th>File</th>
                     <th>Trạng thái</th>
+                    <th>Hành động</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {reports.map((report) => (
-                    <tr key={report.reportId}>
-                      <td>{report.createdAt}</td>
+                  {reports.map((r) => (
+                    <tr key={r.reportId}>
+                      <td>{r.createdAt}</td>
                       <td>
-                        {editReportId === report.reportId ? (
+                        {editReportId === r.reportId ? (
                           <select
                             name="errorType"
                             value={editData.errorType}
                             onChange={handleEditChange}
                           >
-                            <option value="frontend">Lỗi giao diện</option>
-                            <option value="backend">Lỗi hệ thống</option>
+                            <option value="frontend">Giao diện</option>
+                            <option value="backend">Hệ thống</option>
                             <option value="khac">Khác</option>
-                            <option value="Software">Software</option>
                           </select>
                         ) : (
-                          report.errorType
+                          r.errorType
                         )}
                       </td>
                       <td>
-                        {editReportId === report.reportId ? (
+                        {editReportId === r.reportId ? (
                           <textarea
                             name="description"
                             value={editData.description}
                             onChange={handleEditChange}
                           />
                         ) : (
-                          report.description
+                          r.description
                         )}
                       </td>
                       <td>
-                        {editReportId === report.reportId ? (
+                        {editReportId === r.reportId ? (
                           <textarea
                             name="resultExpected"
                             value={editData.resultExpected}
                             onChange={handleEditChange}
                           />
                         ) : (
-                          report.resultExpected
+                          r.resultExpected
                         )}
                       </td>
                       <td>
-                        {report.fileAttachment ? (
+                        {r.fileAttachment ? (
                           <a
-                            href={report.fileAttachment}
+                            href={r.fileAttachment}
                             target="_blank"
-                            rel="noopener noreferrer"
+                            rel="noreferrer"
                           >
                             Xem file
                           </a>
@@ -266,7 +255,7 @@ const ReportPage = () => {
                         )}
                       </td>
                       <td>
-                        {editReportId === report.reportId ? (
+                        {editReportId === r.reportId ? (
                           <select
                             name="status"
                             value={editData.status}
@@ -279,38 +268,32 @@ const ReportPage = () => {
                         ) : (
                           <span
                             style={{
-                              color:
-                                report.status === "Pending"
-                                  ? "#eab308"
-                                  : report.status === "Resolved"
-                                    ? "#22c55e"
-                                    : "#ef4444",
                               fontWeight: 600,
+                              color:
+                                r.status === "Pending"
+                                  ? "#eab308"
+                                  : r.status === "Resolved"
+                                  ? "#22c55e"
+                                  : "#ef4444",
                             }}
                           >
-                            {report.status}
+                            {r.status}
                           </span>
                         )}
                       </td>
                       <td>
-                        {editReportId === report.reportId ? (
+                        {editReportId === r.reportId ? (
                           <>
                             <button
                               className="submit-btn"
-                              style={{ marginRight: 8, padding: "4px 10px" }}
                               onClick={handleEditSubmit}
                             >
                               Lưu
                             </button>
                             <button
                               className="submit-btn"
-                              style={{
-                                background: "#ef4444",
-                                color: "#fff",
-                                padding: "4px 10px",
-                              }}
+                              style={{ background: "#ef4444" }}
                               onClick={() => setEditReportId(null)}
-                              type="button"
                             >
                               Hủy
                             </button>
@@ -319,21 +302,14 @@ const ReportPage = () => {
                           <>
                             <button
                               className="submit-btn"
-                              style={{ padding: "4px 10px", marginRight: 8 }}
-                              onClick={() => handleEditClick(report)}
-                              type="button"
+                              onClick={() => handleEditClick(r)}
                             >
                               Sửa
                             </button>
                             <button
                               className="submit-btn"
-                              style={{
-                                background: "#ef4444",
-                                color: "#fff",
-                                padding: "4px 10px",
-                              }}
-                              onClick={() => handleDeleteReport(report.reportId)}
-                              type="button"
+                              style={{ background: "#ef4444" }}
+                              onClick={() => handleDeleteReport(r.reportId)}
                             >
                               Xóa
                             </button>
@@ -347,64 +323,67 @@ const ReportPage = () => {
             )}
           </div>
         </div>
+
         <button
           className="submit-btn"
-          style={{
-            margin: "32px 0 20px 0",
-            background: "#2563eb",
-            color: "#fff",
-          }}
           onClick={() => setShowReportForm((prev) => !prev)}
         >
-          {showReportForm
-            ? "Đóng biểu mẫu báo cáo lỗi"
-            : "Gửi báo cáo lỗi mới"}
+          {showReportForm ? "Đóng biểu mẫu" : "Gửi báo cáo lỗi mới"}
         </button>
+
         {showReportForm && (
           <form className="report-form" onSubmit={handleSubmit}>
             <h3 className="section-title">Chi tiết lỗi</h3>
             <div className="input-group">
               <label>Loại lỗi</label>
-              <select name="errorType" onChange={handleChange} required>
-                <option value="">Chọn loại lỗi</option>
-                <option value="frontend">Lỗi giao diện</option>
-                <option value="backend">Lỗi hệ thống</option>
+              <select
+                name="errorType"
+                value={formData.errorType}
+                onChange={handleChange}
+                required
+              >
+                <option value="">-- Chọn loại lỗi --</option>
+                <option value="frontend">Giao diện</option>
+                <option value="backend">Hệ thống</option>
                 <option value="khac">Khác</option>
               </select>
             </div>
             <div className="input-group">
               <label>
-                Mô tả chi tiết lỗi <span className="required">*</span>
+                Mô tả lỗi <span className="required">*</span>
               </label>
               <textarea
                 name="errorDetails"
-                placeholder="Vui lòng mô tả chi tiết lỗi bạn gặp phải..."
-                maxLength={1000}
-                required
+                value={formData.errorDetails}
                 onChange={handleChange}
+                required
+                placeholder="Chi tiết lỗi bạn gặp..."
               />
             </div>
             <div className="input-group">
               <label>Kết quả mong muốn</label>
               <textarea
                 name="expectedResult"
-                placeholder="Bạn mong muốn hệ thống xử lý ra sao?"
-                maxLength={500}
+                value={formData.expectedResult}
                 onChange={handleChange}
+                placeholder="Bạn mong muốn hệ thống xử lý ra sao?"
               />
             </div>
-            <h3 className="section-title">Tài liệu đính kèm</h3>
             <div className="input-group file-upload">
               <label>
-                Đính kèm file
-                <span className="file-info-icon" title="Chấp nhận hình ảnh hoặc PDF">
-                  {" "}
+                Đính kèm file{" "}
+                <span className="file-info-icon" title="Chấp nhận hình ảnh/PDF">
                   ℹ️
                 </span>
               </label>
               <div className="upload-box">
-                <input type="file" name="file" onChange={handleChange} />
-                <span>📎 Chọn hoặc kéo thả file vào đây</span>
+                <input
+                  type="file"
+                  name="file"
+                  accept=".png,.jpg,.jpeg,.pdf"
+                  onChange={handleChange}
+                />
+                <span>📎 Kéo thả hoặc chọn file</span>
               </div>
             </div>
             <button type="submit" className="submit-btn">
