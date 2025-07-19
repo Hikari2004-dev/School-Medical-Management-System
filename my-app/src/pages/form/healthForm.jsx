@@ -1,117 +1,117 @@
-import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+// src/pages/HealthFormApp.js
+import React, { useState, useEffect } from "react";
+import { useNavigate }            from "react-router-dom";
+import Header                     from "../../components/Header/Header";
+import Footer                     from "../../components/Footer/Footer";
 import "./healthForm.css";
-import Header from '../../components/Header/Header';
-import Footer from '../../components/Footer/Footer';
-
-// Định nghĩa base URL cho backend API (thiết lập trong .env)
-const API_BASE = process.env.REACT_APP_API_BASE_URL || '';
 
 export default function HealthFormApp() {
-  const { studentId: paramId } = useParams();
-  const [formData, setFormData] = useState({
-    studentName: "",
-    dob: "",
-    gender: "",
-    grade: "",
-    classId: "",
-    allergy: "",
-    chronicDisease: "",
-    medicalHistory: "",
-    vision: "",
-    hearing: "",
-    height: "",
-    weight: "",
-    bmi: ""
+  const [classes, setClasses]       = useState([]);
+  const [loadError, setLoadError]   = useState("");
+  const [formData, setFormData]     = useState({
+    fullName:        "",
+    dob:             "",
+    gender:          "",
+    classId:         "",
+    // health info
+    allergy:         "",
+    chronicDisease:  "",
+    medicalHistory:  "",
+    vision:          "",
+    hearing:         "",
+    height:          "",
+    weight:          "",
+    bmi:             ""
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting]   = useState(false);
   const [submitMessage, setSubmitMessage] = useState("");
   const navigate = useNavigate();
 
-  // Load existing data if editing
+  // 1) Fetch danh sách lớp
   useEffect(() => {
-    if (!paramId) return;
-    (async () => {
-      try {
-        const res = await fetch(`${API_BASE}/api/health-form/${paramId}`);
-        if (!res.ok) {
-          const text = await res.text();
-          throw new Error(text || res.statusText);
-        }
-        const contentType = res.headers.get('content-type') || '';
-        if (!contentType.includes('application/json')) {
-          const text = await res.text();
-          throw new Error('Invalid JSON: ' + text);
-        }
-        const data = await res.json();
-        setFormData({
-          studentName: data.studentName || "",
-          dob: data.dob || "",
-          gender: data.gender || "",
-          grade: data.grade || "",
-          classId: data.classId?.toString() || "",
-          allergy: data.allergy || "",
-          chronicDisease: data.chronicDisease || "",
-          medicalHistory: data.medicalHistory || "",
-          vision: data.vision || "",
-          hearing: data.hearing || "",
-          height: data.height?.toString() || "",
-          weight: data.weight?.toString() || "",
-          bmi: data.bmi?.toString() || ""
-        });
-      } catch (error) {
-        console.error('Error loading form:', error);
-        setSubmitMessage('Không thể tải thông tin ban đầu. ' + error.message);
-      }
-    })();
-  }, [paramId]);
+    fetch("/api/classes")
+      .then(res => {
+        if (!res.ok) throw new Error(res.statusText);
+        return res.json();
+      })
+      .then(data => setClasses(data))
+      .catch(err => setLoadError("Không thể tải danh sách lớp: " + err.message));
+  }, []);
 
-  const handleInputChange = (field, value) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+  // 2) Generic handler
+  const handleChange = (field, value) =>
+    setFormData(fd => ({ ...fd, [field]: value }));
+
+  // 3) Khi chọn lớp: tự derive grade, lưu classId
+  const handleClassSelect = (value) => {
+    const cls = classes.find(c => c.id === Number(value));
+    const grade = cls?.className.match(/^(\d+)/)?.[1] || "";
+    setFormData(fd => ({
+      ...fd,
+      classId: value,
+      // nếu bạn cần grade ở formData thì thêm ở đây
+      grade
+    }));
   };
 
+  // 4) Submit form
   const handleSubmit = async e => {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitMessage("");
 
-    const endpoint = paramId ? `/api/health-form/${paramId}` : '/api/health-form';
     try {
-      const payload = {
-        ...formData,
-        classId: Number(formData.classId),
-        height: parseFloat(formData.height),
-        weight: parseFloat(formData.weight),
-        bmi: parseFloat(formData.bmi)
+      // 4.1) Tạo student trước
+      const studentPayload = {
+        name:       formData.fullName,
+        dateOfBirth: formData.dob,
+        gender:     formData.gender,
+        // derive grade nếu cần backend
+        grade:      formData.grade,
+        classId:    Number(formData.classId)
       };
-
-      const res = await fetch(`${API_BASE}${endpoint}`, {
-        method: paramId ? 'PUT' : 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+      const studentRes = await fetch("/api/students/save", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify(studentPayload)
       });
+      if (!studentRes.ok) {
+        const errText = await studentRes.text();
+        throw new Error(errText || studentRes.statusText);
+      }
+      const studentResult = await studentRes.json();
+      // giả sử backend trả về { success:true, data: { studentId: 123 } }
+      const studentId = studentResult.data?.studentId;
+      if (!studentId) throw new Error("Không lấy được studentId");
 
-      if (!res.ok) {
-        const text = await res.text();
-        throw new Error(text || res.statusText);
+      // 4.2) Gửi health info kèm student_id
+      const healthPayload = {
+        studentId:      studentId,
+        allergy:        formData.allergy,
+        chronicDisease: formData.chronicDisease,
+        medicalHistory: formData.medicalHistory,
+        vision:         formData.vision,
+        hearing:        formData.hearing,
+        height:         parseFloat(formData.height),
+        weight:         parseFloat(formData.weight),
+        bmi:            parseFloat(formData.bmi)
+      };
+      const healthRes = await fetch("/api/healthinfo", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify(healthPayload)
+      });
+      if (!healthRes.ok) {
+        const errText = await healthRes.text();
+        throw new Error(errText || healthRes.statusText);
       }
 
-      const contentType = res.headers.get('content-type') || '';
-      if (!contentType.includes('application/json')) {
-        const text = await res.text();
-        throw new Error('Invalid JSON: ' + text);
-      }
+      setSubmitMessage("Lưu thành công!");
+      setTimeout(() => navigate("/vaccineForm"), 1200);
 
-      const result = await res.json();
-      if (result.success) {
-        setSubmitMessage('Thông tin đã được lưu thành công!');
-        setTimeout(() => navigate('/vaccineForm'), 1200);
-      } else {
-        setSubmitMessage(result.message || 'Lỗi từ server');
-      }
-    } catch (error) {
-      console.error('Error submitting form:', error);
-      setSubmitMessage('Lỗi khi gửi dữ liệu: ' + error.message);
+    } catch (err) {
+      console.error(err);
+      setSubmitMessage("Có lỗi: " + err.message);
     } finally {
       setIsSubmitting(false);
     }
@@ -119,19 +119,18 @@ export default function HealthFormApp() {
 
   const handleReset = () => {
     setFormData({
-      studentName: "",
-      dob: "",
-      gender: "",
-      grade: "",
-      classId: "",
-      allergy: "",
-      chronicDisease: "",
-      medicalHistory: "",
-      vision: "",
-      hearing: "",
-      height: "",
-      weight: "",
-      bmi: ""
+      fullName:        "",
+      dob:             "",
+      gender:          "",
+      classId:         "",
+      allergy:         "",
+      chronicDisease:  "",
+      medicalHistory:  "",
+      vision:          "",
+      hearing:         "",
+      height:          "",
+      weight:          "",
+      bmi:             ""
     });
     setSubmitMessage("");
   };
@@ -141,172 +140,174 @@ export default function HealthFormApp() {
       <Header />
       <div className="health-form-bg">
         <div className="health-form-card">
-          <div className="form-header big-header">
-            <span className="form-header-icon big-icon"></span>
-            <div>
-              <h1 className="form-title big-title">
-                PHIẾU NHẬP THÔNG TIN SỨC KHỎE<br/>HỌC SINH
-              </h1>
-              <p className="form-desc big-desc">
-                Vui lòng điền đầy đủ và chính xác thông tin sức khỏe của học sinh
-              </p>
-            </div>
-          </div>
+          <h1 className="form-title">
+            PHIẾU NHẬP THÔNG TIN SỨC KHỎE HỌC SINH
+          </h1>
+          {loadError && <p className="form-message error">{loadError}</p>}
+
           <form onSubmit={handleSubmit} className="health-form">
             {/* THÔNG TIN CÁ NHÂN */}
             <fieldset>
-              <legend className="section-title">THÔNG TIN CÁ NHÂN</legend>
+              <legend>Thông tin cá nhân</legend>
               <div className="form-row">
                 <div className="form-group">
-                  <label className="form-label">Họ và tên học sinh</label>
+                  <label>Họ và tên</label>
                   <input
                     type="text"
-                    placeholder="Nhập họ và tên đầy đủ"
-                    value={formData.studentName}
-                    onChange={e => handleInputChange('studentName', e.target.value)}
+                    required
+                    value={formData.fullName}
+                    onChange={e => handleChange("fullName", e.target.value)}
                   />
                 </div>
                 <div className="form-group">
-                  <label className="form-label">Ngày sinh</label>
+                  <label>Ngày sinh</label>
                   <input
                     type="date"
+                    required
                     value={formData.dob}
-                    onChange={e => handleInputChange('dob', e.target.value)}
+                    onChange={e => handleChange("dob", e.target.value)}
                   />
                 </div>
-              </div>
-              <div className="form-row">
                 <div className="form-group">
-                  <label className="form-label">Giới tính</label>
+                  <label>Giới tính</label>
                   <select
+                    required
                     value={formData.gender}
-                    onChange={e => handleInputChange('gender', e.target.value)}
+                    onChange={e => handleChange("gender", e.target.value)}
                   >
                     <option value="">Chọn giới tính</option>
                     <option value="Male">Nam</option>
                     <option value="Female">Nữ</option>
                   </select>
                 </div>
-                <div className="form-group">
-                  <label className="form-label">Lớp</label>
-                  <input
-                    type="text"
-                    placeholder="Ví dụ: 5"
-                    value={formData.grade}
-                    onChange={e => handleInputChange('grade', e.target.value)}
-                  />
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Mã lớp</label>
-                  <input
-                    type="number"
-                    placeholder="Nhập mã lớp"
-                    value={formData.classId}
-                    onChange={e => handleInputChange('classId', e.target.value)}
-                  />
-                </div>
               </div>
             </fieldset>
+
+            {/* CHỌN LỚP */}
+            <fieldset>
+              <legend>Chọn lớp</legend>
+              <div className="form-group">
+                <label>Lớp</label>
+                <select
+                  required
+                  value={formData.classId}
+                  onChange={e => handleClassSelect(e.target.value)}
+                >
+                  <option value="">-- Chọn lớp --</option>
+                  {classes.map(c => (
+                    <option key={c.id} value={c.id}>
+                      {c.className} – {c.room} (ID: {c.id})
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </fieldset>
+
             {/* CHỈ SỐ CƠ THỂ */}
             <fieldset>
-              <legend className="section-title">CHỈ SỐ CƠ THỂ</legend>
+              <legend>Chỉ số cơ thể</legend>
               <div className="form-row">
                 <div className="form-group">
-                  <label className="form-label">Chiều cao (cm)</label>
+                  <label>Chiều cao (cm)</label>
                   <input
                     type="number"
-                    placeholder="Ví dụ: 150.5"
+                    required
                     value={formData.height}
-                    onChange={e => handleInputChange('height', e.target.value)}
+                    onChange={e => handleChange("height", e.target.value)}
                   />
                 </div>
                 <div className="form-group">
-                  <label className="form-label">Cân nặng (kg)</label>
+                  <label>Cân nặng (kg)</label>
                   <input
                     type="number"
-                    placeholder="Ví dụ: 45.2"
+                    required
                     value={formData.weight}
-                    onChange={e => handleInputChange('weight', e.target.value)}
+                    onChange={e => handleChange("weight", e.target.value)}
                   />
                 </div>
                 <div className="form-group">
-                  <label className="form-label">BMI</label>
+                  <label>BMI</label>
                   <input
                     type="number"
                     step="0.1"
-                    placeholder="Ví dụ: 19.9"
+                    required
                     value={formData.bmi}
-                    onChange={e => handleInputChange('bmi', e.target.value)}
+                    onChange={e => handleChange("bmi", e.target.value)}
                   />
                 </div>
               </div>
             </fieldset>
-            {/* THÔNG TIN SỨC KHỎE */}
+
+            {/* DỊ ỨNG */}
             <fieldset>
-              <legend className="section-title">Thông tin sức khỏe</legend>
-              <div className="form-row">
-                <div className="form-group">
-                  <label className="form-label">Dị ứng</label>
-                  <textarea
-                    placeholder="Nhập các loại dị ứng nếu có"
-                    value={formData.allergy}
-                    onChange={e => handleInputChange('allergy', e.target.value)}
-                  />
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Bệnh mãn tính</label>
-                  <textarea
-                    placeholder="Nhập các bệnh mãn tính nếu có"
-                    value={formData.chronicDisease}
-                    onChange={e => handleInputChange('chronicDisease', e.target.value)}
-                  />
-                </div>
-              </div>
-              <div className="form-row">
-                <div className="form-group">
-                  <label className="form-label">Tiền sử bệnh</label>
-                  <textarea
-                    placeholder="Nhập tiền sử bệnh, điều trị..."
-                    value={formData.medicalHistory}
-                    onChange={e => handleInputChange('medicalHistory', e.target.value)}
-                  />
-                </div>
-              </div>
+              <legend>Dị ứng</legend>
+              <textarea
+                value={formData.allergy}
+                onChange={e => handleChange("allergy", e.target.value)}
+              />
             </fieldset>
-            {/* KHÁM THỊ LỰC & THÍNH LỰC */}
+
+            {/* BỆNH MÃN TÍNH */}
             <fieldset>
-              <legend className="section-title">Khám thị lực & thính lực</legend>
+              <legend>Bệnh mãn tính</legend>
+              <textarea
+                value={formData.chronicDisease}
+                onChange={e => handleChange("chronicDisease", e.target.value)}
+              />
+            </fieldset>
+
+            {/* TIỀN SỬ BỆNH */}
+            <fieldset>
+              <legend>Tiền sử bệnh</legend>
+              <textarea
+                value={formData.medicalHistory}
+                onChange={e => handleChange("medicalHistory", e.target.value)}
+              />
+            </fieldset>
+
+            {/* THỊ LỰC & THÍNH LỰC */}
+            <fieldset>
+              <legend>Thị lực & Thính lực</legend>
               <div className="form-row">
                 <div className="form-group">
-                  <label className="form-label">Thị lực (ví dụ: 10/10)</label>
+                  <label>Thị lực</label>
                   <input
                     type="text"
-                    placeholder="Nhập kết quả thị lực"
                     value={formData.vision}
-                    onChange={e => handleInputChange('vision', e.target.value)}
+                    onChange={e => handleChange("vision", e.target.value)}
                   />
                 </div>
                 <div className="form-group">
-                  <label className="form-label">Thính lực</label>
+                  <label>Thính lực</label>
                   <input
                     type="text"
-                    placeholder="Ví dụ: Tốt"
                     value={formData.hearing}
-                    onChange={e => handleInputChange('hearing', e.target.value)}
+                    onChange={e => handleChange("hearing", e.target.value)}
                   />
                 </div>
               </div>
             </fieldset>
-            <div className="form-note">
-              <span>Thông tin sức khỏe của bạn sẽ được bảo mật và chỉ sử dụng cho mục đích chăm sóc sức khỏe tại trường.</span>
-            </div>
+
             <div className="form-actions">
-              <button type="submit" disabled={isSubmitting} className="submit-btn">
-                {paramId ? 'CẬP NHẬT' : 'LƯU THÔNG TIN'}
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="submit-btn"
+              >
+                LƯU THÔNG TIN
               </button>
-              <button type="button" onClick={handleReset} className="reset-btn">LÀM LẠI</button>
+              <button
+                type="button"
+                onClick={handleReset}
+                className="reset-btn"
+              >
+                LÀM LẠI
+              </button>
             </div>
-            {submitMessage && <p className="form-message">{submitMessage}</p>}
+
+            {submitMessage && (
+              <p className="form-message">{submitMessage}</p>
+            )}
           </form>
         </div>
       </div>
