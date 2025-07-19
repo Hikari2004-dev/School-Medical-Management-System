@@ -1,0 +1,33 @@
+package com.school_medical.school_medical_management_system.api;
+
+import com.school_medical.school_medical_management_system.models.UserProfileResponse;
+import com.school_medical.school_medical_management_system.repositories.entites.Appuser;
+import com.school_medical.school_medical_management_system.services.IAppUserService;
+import com.school_medical.school_medical_management_system.utils.AuthUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api")
+public class UserController {
+
+    @Autowired
+    private IAppUserService appUserService;
+
+    @GetMapping("/me")
+    public UserProfileResponse getMyProfile() {
+        String currentEmail = AuthUtils.getCurrentUserEmail(); // ✅ dùng static
+        Appuser user = appUserService.getUserByEmail(currentEmail);
+
+        UserProfileResponse response = new UserProfileResponse();
+        response.setId(user.getId());
+        response.setFirstName(user.getFirstName());
+        response.setLastName(user.getLastName());
+        response.setPhone(user.getPhone());
+        response.setAddress(user.getAddress());
+        response.setRoleName(user.getRoleName());
+        response.setCreatedAt(user.getCreatedAt());
+
+        return response;
+    }
+}
