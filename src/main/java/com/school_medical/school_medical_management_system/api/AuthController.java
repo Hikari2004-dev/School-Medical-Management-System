@@ -7,6 +7,7 @@ import com.school_medical.school_medical_management_system.repositories.entites.
 import com.school_medical.school_medical_management_system.services.impl.CustomUserDetailsService;
 import com.school_medical.school_medical_management_system.services.IAppUserService;
 import com.school_medical.school_medical_management_system.services.IStudentParentService;
+import com.school_medical.school_medical_management_system.services.impl.GoogleAuthService;
 import com.school_medical.school_medical_management_system.utils.AuthUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class AuthController {
@@ -80,6 +82,24 @@ public class AuthController {
         Collection<? extends GrantedAuthority> roles = user.getAuthorities();
 
         return ResponseEntity.ok("Email: " + email + ", Roles: " + roles);
+    }
+
+    @Autowired
+    private GoogleAuthService googleAuthService;
+
+    @PostMapping("/google")
+    public ResponseEntity<?> loginWithGoogle(@RequestBody Map<String, String> body) {
+        String googleToken = body.get("token");
+        if (googleToken == null || googleToken.isEmpty()) {
+            return ResponseEntity.badRequest().body("Missing Google token");
+        }
+
+        try {
+            Map<String, Object> response = googleAuthService.processGoogleLogin(googleToken);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        }
     }
 }
 
