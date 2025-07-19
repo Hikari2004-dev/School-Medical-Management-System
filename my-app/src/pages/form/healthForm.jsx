@@ -1,95 +1,136 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+// src/pages/HealthFormApp.js
+import React, { useState, useEffect } from "react";
+import { useNavigate }            from "react-router-dom";
+import Header                     from "../../components/Header/Header";
+import Footer                     from "../../components/Footer/Footer";
 import "./healthForm.css";
-import Header from '../../components/Header/Header';
-import Footer from '../../components/Footer/Footer';
 
 export default function HealthFormApp() {
-  const [formData, setFormData] = useState({
-    personalInfo: {
-      fullName: "",
-      studentClass: "",
-      birthDate: "",
-      studentId: "",
-    },
-    bodyMeasurements: {
-      height: "",
-      weight: "",
-    },
-    allergies: "",
-    chronicDiseases: "",
-    medicalHistory: "",
-    visionScore: "",
+  const [classes, setClasses]       = useState([]);
+  const [loadError, setLoadError]   = useState("");
+  const [formData, setFormData]     = useState({
+    fullName:        "",
+    dob:             "",
+    gender:          "",
+    classId:         "",
+    // health info
+    allergy:         "",
+    chronicDisease:  "",
+    medicalHistory:  "",
+    vision:          "",
+    hearing:         "",
+    height:          "",
+    weight:          "",
+    bmi:             ""
   });
-
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting]   = useState(false);
   const [submitMessage, setSubmitMessage] = useState("");
   const navigate = useNavigate();
 
-  const handleInputChange = (section, field, value) => {
-    setFormData((prev) => ({
-      ...prev,
-      [section]: typeof prev[section] === "object"
-        ? { ...prev[section], [field]: value }
-        : value,
+  // 1) Fetch danh sách lớp
+  useEffect(() => {
+    fetch("/api/classes")
+      .then(res => {
+        if (!res.ok) throw new Error(res.statusText);
+        return res.json();
+      })
+      .then(data => setClasses(data))
+      .catch(err => setLoadError("Không thể tải danh sách lớp: " + err.message));
+  }, []);
+
+  // 2) Generic handler
+  const handleChange = (field, value) =>
+    setFormData(fd => ({ ...fd, [field]: value }));
+
+  // 3) Khi chọn lớp: tự derive grade, lưu classId
+  const handleClassSelect = (value) => {
+    const cls = classes.find(c => c.id === Number(value));
+    const grade = cls?.className.match(/^(\d+)/)?.[1] || "";
+    setFormData(fd => ({
+      ...fd,
+      classId: value,
+      // nếu bạn cần grade ở formData thì thêm ở đây
+      grade
     }));
   };
 
-  const handleSubmit = async (e) => {
+  // 4) Submit form
+  const handleSubmit = async e => {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitMessage("");
 
     try {
-      const response = await fetch("/api/health-form", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
+      // 4.1) Tạo student trước
+      const studentPayload = {
+        name:       formData.fullName,
+        dateOfBirth: formData.dob,
+        gender:     formData.gender,
+        // derive grade nếu cần backend
+        grade:      formData.grade,
+        classId:    Number(formData.classId)
+      };
+      const studentRes = await fetch("/api/students/save", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify(studentPayload)
       });
-
-      const result = await response.json();
-
-      if (result.success) {
-        setSubmitMessage("Thông tin đã được lưu thành công!");
-        setTimeout(() => {
-          navigate("/vaccineForm");
-        }, 1200); // Chờ 1.2 giây để hiển thị thông báo trước khi chuyển trang
-      } else {
-        setSubmitMessage(result.message);
+      if (!studentRes.ok) {
+        const errText = await studentRes.text();
+        throw new Error(errText || studentRes.statusText);
       }
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      setSubmitMessage("Có lỗi xảy ra khi lưu thông tin");
+      const studentResult = await studentRes.json();
+      // giả sử backend trả về { success:true, data: { studentId: 123 } }
+      const studentId = studentResult.data?.studentId;
+      if (!studentId) throw new Error("Không lấy được studentId");
+
+      // 4.2) Gửi health info kèm student_id
+      const healthPayload = {
+        studentId:      studentId,
+        allergy:        formData.allergy,
+        chronicDisease: formData.chronicDisease,
+        medicalHistory: formData.medicalHistory,
+        vision:         formData.vision,
+        hearing:        formData.hearing,
+        height:         parseFloat(formData.height),
+        weight:         parseFloat(formData.weight),
+        bmi:            parseFloat(formData.bmi)
+      };
+      const healthRes = await fetch("/api/healthinfo", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify(healthPayload)
+      });
+      if (!healthRes.ok) {
+        const errText = await healthRes.text();
+        throw new Error(errText || healthRes.statusText);
+      }
+
+      setSubmitMessage("Lưu thành công!");
+      setTimeout(() => navigate("/vaccineForm"), 1200);
+
+    } catch (err) {
+      console.error(err);
+      setSubmitMessage("Có lỗi: " + err.message);
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const handleVisionChange = (value) => {
-    setFormData((prev) => ({
-      ...prev,
-      visionScore: value,
-    }));
-  };
-
   const handleReset = () => {
     setFormData({
-      personalInfo: {
-        fullName: "",
-        studentClass: "",
-        birthDate: "",
-        studentId: "",
-      },
-      bodyMeasurements: {
-        height: "",
-        weight: "",
-      },
-      allergies: "",
-      chronicDiseases: "",
-      medicalHistory: "",
-      visionScore: "",
+      fullName:        "",
+      dob:             "",
+      gender:          "",
+      classId:         "",
+      allergy:         "",
+      chronicDisease:  "",
+      medicalHistory:  "",
+      vision:          "",
+      hearing:         "",
+      height:          "",
+      weight:          "",
+      bmi:             ""
     });
     setSubmitMessage("");
   };
@@ -99,162 +140,174 @@ export default function HealthFormApp() {
       <Header />
       <div className="health-form-bg">
         <div className="health-form-card">
-          <div className="form-header big-header">
-            <span className="form-header-icon big-icon">
-              {/* Bạn có thể dùng icon SVG hoặc emoji hoặc FontAwesome */}
+          <h1 className="form-title">
+            PHIẾU NHẬP THÔNG TIN SỨC KHỎE HỌC SINH
+          </h1>
+          {loadError && <p className="form-message error">{loadError}</p>}
 
-            </span>
-            <div>
-              <h1 className="form-title big-title">PHIẾU NHẬP THÔNG TIN SỨC KHỎE<br />HỌC SINH</h1>
-              <p className="form-desc big-desc">Vui lòng điền đầy đủ và chính xác thông tin sức khỏe của học sinh</p>
-            </div>
-          </div>
           <form onSubmit={handleSubmit} className="health-form">
+            {/* THÔNG TIN CÁ NHÂN */}
             <fieldset>
-              <legend className="section-title">
-                THÔNG TIN CÁ NHÂN
-              </legend>
+              <legend>Thông tin cá nhân</legend>
               <div className="form-row">
                 <div className="form-group">
-                  <label className="form-label">
-                    <span className="input-icon">🆔</span> Họ và tên học sinh
-                  </label>
+                  <label>Họ và tên</label>
                   <input
                     type="text"
-                    placeholder="Nhập họ và tên đầy đủ"
-                    value={formData.personalInfo.fullName}
-                    onChange={(e) => handleInputChange("personalInfo", "fullName", e.target.value)}
+                    required
+                    value={formData.fullName}
+                    onChange={e => handleChange("fullName", e.target.value)}
                   />
                 </div>
                 <div className="form-group">
-                  <label className="form-label">
-                    <span className="input-icon">🏫</span> Lớp
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Ví dụ: 5A"
-                    value={formData.personalInfo.studentClass}
-                    onChange={(e) => handleInputChange("personalInfo", "studentClass", e.target.value)}
-                  />
-                </div>
-              </div>
-              <div className="form-row">
-                <div className="form-group">
-                  <label className="form-label">
-                    <span className="input-icon">📅</span> Ngày sinh
-                  </label>
+                  <label>Ngày sinh</label>
                   <input
                     type="date"
-                    value={formData.personalInfo.birthDate}
-                    onChange={(e) => handleInputChange("personalInfo", "birthDate", e.target.value)}
+                    required
+                    value={formData.dob}
+                    onChange={e => handleChange("dob", e.target.value)}
                   />
                 </div>
                 <div className="form-group">
-                  <label className="form-label">
-                    <span className="input-icon">🆔</span> Mã học sinh
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Nhập mã học sinh"
-                    value={formData.personalInfo.studentId}
-                    onChange={(e) => handleInputChange("personalInfo", "studentId", e.target.value)}
-                  />
+                  <label>Giới tính</label>
+                  <select
+                    required
+                    value={formData.gender}
+                    onChange={e => handleChange("gender", e.target.value)}
+                  >
+                    <option value="">Chọn giới tính</option>
+                    <option value="Male">Nam</option>
+                    <option value="Female">Nữ</option>
+                  </select>
                 </div>
               </div>
             </fieldset>
 
+            {/* CHỌN LỚP */}
             <fieldset>
-              <legend className="section-title">CHỈ SỐ CƠ THỂ</legend>
+              <legend>Chọn lớp</legend>
+              <div className="form-group">
+                <label>Lớp</label>
+                <select
+                  required
+                  value={formData.classId}
+                  onChange={e => handleClassSelect(e.target.value)}
+                >
+                  <option value="">-- Chọn lớp --</option>
+                  {classes.map(c => (
+                    <option key={c.id} value={c.id}>
+                      {c.className} – {c.room} (ID: {c.id})
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </fieldset>
+
+            {/* CHỈ SỐ CƠ THỂ */}
+            <fieldset>
+              <legend>Chỉ số cơ thể</legend>
               <div className="form-row">
                 <div className="form-group">
-                  <label className="form-label">Chiều cao (cm)</label>
+                  <label>Chiều cao (cm)</label>
                   <input
                     type="number"
-                    placeholder="Ví dụ: 150"
-                    value={formData.bodyMeasurements.height}
-                    onChange={(e) => handleInputChange("bodyMeasurements", "height", e.target.value)}
+                    required
+                    value={formData.height}
+                    onChange={e => handleChange("height", e.target.value)}
                   />
                 </div>
                 <div className="form-group">
-                  <label className="form-label">Cân nặng (kg)</label>
+                  <label>Cân nặng (kg)</label>
                   <input
                     type="number"
-                    placeholder="Ví dụ: 45"
-                    value={formData.bodyMeasurements.weight}
-                    onChange={(e) => handleInputChange("bodyMeasurements", "weight", e.target.value)}
+                    required
+                    value={formData.weight}
+                    onChange={e => handleChange("weight", e.target.value)}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>BMI</label>
+                  <input
+                    type="number"
+                    step="0.1"
+                    required
+                    value={formData.bmi}
+                    onChange={e => handleChange("bmi", e.target.value)}
                   />
                 </div>
               </div>
             </fieldset>
 
+            {/* DỊ ỨNG */}
             <fieldset>
-              <legend className="section-title">THÔNG TIN DỊ ỨNG</legend>
-              <div className="form-group">
-                <label className="form-label">
-                  Dị ứng (thức ăn, thuốc, môi trường...)
-                </label>
-                <textarea
-                  placeholder="Nhập các loại dị ứng nếu có"
-                  value={formData.allergies}
-                  onChange={(e) => handleInputChange("allergies", null, e.target.value)}
-                />
-              </div>
+              <legend>Dị ứng</legend>
+              <textarea
+                value={formData.allergy}
+                onChange={e => handleChange("allergy", e.target.value)}
+              />
             </fieldset>
 
+            {/* BỆNH MÃN TÍNH */}
             <fieldset>
-              <legend className="section-title">BỆNH MÃN TÍNH</legend>
-              <div className="form-group">
-                <label className="form-label">
-                  Bệnh mãn tính (hen suyễn, tiểu đường, tim mạch...)
-                </label>
-                <textarea
-                  placeholder="Nhập các bệnh mãn tính nếu có"
-                  value={formData.chronicDiseases}
-                  onChange={(e) => handleInputChange("chronicDiseases", null, e.target.value)}
-                />
-              </div>
+              <legend>Bệnh mãn tính</legend>
+              <textarea
+                value={formData.chronicDisease}
+                onChange={e => handleChange("chronicDisease", e.target.value)}
+              />
             </fieldset>
 
+            {/* TIỀN SỬ BỆNH */}
             <fieldset>
-              <legend className="section-title">THỊ LỰC</legend>
-              <div className="form-group">
-                <label className="form-label">
-                  Đánh giá thị lực (1 - kém nhất, 10 - tốt nhất)
-                </label>
-                <input
-                  type="number"
-                  min="1"
-                  max="10"
-                  placeholder="Nhập điểm thị lực từ 1 đến 10"
-                  value={formData.visionScore}
-                  onChange={(e) => handleVisionChange(e.target.value)}
-                />
-              </div>
+              <legend>Tiền sử bệnh</legend>
+              <textarea
+                value={formData.medicalHistory}
+                onChange={e => handleChange("medicalHistory", e.target.value)}
+              />
             </fieldset>
 
+            {/* THỊ LỰC & THÍNH LỰC */}
             <fieldset>
-              <legend className="section-title">TIỀN SỬ BỆNH</legend>
-              <div className="form-group">
-                <label className="form-label">
-                  Tiền sử bệnh và điều trị
-                </label>
-                <textarea
-                  placeholder="Nhập tiền sử bệnh, các lần nhập viện, phẫu thuật..."
-                  value={formData.medicalHistory}
-                  onChange={(e) => handleInputChange("medicalHistory", null, e.target.value)}
-                />
+              <legend>Thị lực & Thính lực</legend>
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Thị lực</label>
+                  <input
+                    type="text"
+                    value={formData.vision}
+                    onChange={e => handleChange("vision", e.target.value)}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Thính lực</label>
+                  <input
+                    type="text"
+                    value={formData.hearing}
+                    onChange={e => handleChange("hearing", e.target.value)}
+                  />
+                </div>
               </div>
             </fieldset>
-
-            <div className="form-note">
-              <span>Thông tin sức khỏe của bạn sẽ được bảo mật và chỉ sử dụng cho mục đích chăm sóc sức khỏe tại trường. Vui lòng kiểm tra kỹ thông tin trước khi gửi.</span>
-            </div>
 
             <div className="form-actions">
-              <button type="submit" disabled={isSubmitting} className="submit-btn">LƯU THÔNG TIN</button>
-              <button type="button" onClick={handleReset} className="reset-btn">LÀM LẠI</button>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="submit-btn"
+              >
+                LƯU THÔNG TIN
+              </button>
+              <button
+                type="button"
+                onClick={handleReset}
+                className="reset-btn"
+              >
+                LÀM LẠI
+              </button>
             </div>
-            {submitMessage && <p className="form-message">{submitMessage}</p>}
+
+            {submitMessage && (
+              <p className="form-message">{submitMessage}</p>
+            )}
           </form>
         </div>
       </div>

@@ -16,23 +16,48 @@ import "./OnlineConsultationPage.css";
 const OnlineConsultationPage = () => {
   // State
   const [nurses, setNurses] = useState([]);
-  const [selectedNurse, setSelectedNurse] = useState("");
+  const [selectedNurseId, setSelectedNurseId] = useState(""); // sửa lại lưu nurse_id
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedSlot, setSelectedSlot] = useState("");
   const [issue, setIssue] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
+  const [showSlotError, setShowSlotError] = useState(false);
 
   // Fetch nurse list
   useEffect(() => {
-    (async () => {
+    const fetchNurses = async () => {
       try {
-        const res = await fetch("https://your-api-endpoint.com/api/nurses");
-        setNurses(await res.json());
+        const token = localStorage.getItem("token"); // Lấy token từ localStorage
+        const res = await fetch("http://localhost:8080/api/nurses", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`, // Thêm token vào header
+          },
+        });
+        if (res.status === 403) {
+          setError("Bạn chưa được phép truy cập danh sách y tá.");
+          setNurses([]);
+          return;
+        }
+        const data = await res.json();
+        const nursesData = data.map(n => ({
+          id: n.id || n.firstName + n.lastName,
+          name: `${n.firstName} ${n.lastName}`,
+          email: n.email,
+          phone: n.phone,
+          address: n.address,
+          specialty: n.roleName || "School Nurse",
+          avatar: "/default-avatar.png",
+        }));
+        setNurses(nursesData);
       } catch (e) {
+        setError("Không thể lấy danh sách y tá. Vui lòng thử lại.");
         console.error(e);
       }
-    })();
+    };
+    fetchNurses();
   }, []);
 
   // Helpers
@@ -51,10 +76,10 @@ const OnlineConsultationPage = () => {
     }
     return arr;
   }, []);
-  const occupied = booked[selectedNurse]?.[selectedDate] || [];
+  const occupied = booked[selectedNurseId]?.[selectedDate] || [];
 
   const reset = () => {
-    setSelectedNurse("");
+    setSelectedNurseId("");
     setSelectedDate("");
     setSelectedSlot("");
     setIssue("");
@@ -62,9 +87,39 @@ const OnlineConsultationPage = () => {
     setError("");
   };
 
-  const handleSubmit = (e) => {
+  // Hàm kiểm tra trùng lịch với nurseId, ngày và slot
+  const checkDuplicateAppointment = async (nurseId, appointmentDate, appointmentSlot) => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch("http://localhost:8080/api/appointments/all", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+      });
+      if (!res.ok) return false;
+      const result = await res.json();
+      // Dữ liệu thực tế nằm trong result.data
+      const data = Array.isArray(result.data) ? result.data : [];
+      return data.some(app => {
+        // app.appointmentDate dạng "2025-07-15T10:30:00"
+        if (!app.appointmentDate || !app.nurseId) return false;
+        const [date, time] = app.appointmentDate.split("T");
+        return (
+          Number(app.nurseId) === Number(nurseId) &&
+          date === appointmentDate &&
+          time.slice(0, 5) === appointmentSlot
+        );
+      });
+    } catch (err) {
+      return false;
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!selectedNurse || !selectedDate || !selectedSlot || !issue) {
+    if (!selectedNurseId || !selectedDate || !selectedSlot || !issue) {
       return setError("Vui lòng điền đầy đủ thông tin.");
     }
     if (
@@ -74,9 +129,54 @@ const OnlineConsultationPage = () => {
       return setError("Chọn thời điểm hợp lệ.");
     }
     if (occupied.includes(selectedSlot)) {
-      return setError("Khung giờ đã được đặt.");
+      setShowSlotError(true);
+      setTimeout(() => setShowSlotError(false), 3000);
+      return;
     }
-    setSubmitted(true);
+
+    const studentId = Number(localStorage.getItem("student_id")) || 1;
+    const nurseId = Number(selectedNurseId);
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setError("Bạn chưa đăng nhập. Vui lòng đăng nhập để kiểm tra lịch.");
+      return false;
+    }
+
+    const appointmentDate = `${selectedDate}T${selectedSlot}:00`;
+
+    if (await checkDuplicateAppointment(nurseId, selectedDate, selectedSlot)) {
+      setShowSlotError(true);
+      setTimeout(() => setShowSlotError(false), 3000);
+      return;
+    }
+
+    try {
+      const res = await fetch("http://localhost:8080/api/appointments/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          studentId,
+          nurseId,
+          appointmentDate,
+          reason: issue,
+          status: "Pending",
+        }),
+      });
+      if (res.status === 403) {
+        setError("Bạn không có quyền đặt lịch. Vui lòng đăng nhập lại.");
+        return;
+      }
+      if (!res.ok) {
+        setError("Đặt lịch thất bại. Vui lòng thử lại.");
+        return;
+      }
+      setSubmitted(true);
+    } catch (err) {
+      setError("Đặt lịch thất bại. Vui lòng thử lại.");
+    }
   };
 
   return (
@@ -148,7 +248,7 @@ const OnlineConsultationPage = () => {
             {submitted ? (
               <div className="oc-success">
                 <div className="oc-success-message">
-                  <CheckCircle /> Thành công với <strong>{selectedNurse}</strong>{" "}
+                  <CheckCircle /> Thành công với <strong>{nurses.find(n => n.id === Number(selectedNurseId))?.name}</strong>{" "}
                   ngày <strong>{selectedDate} {selectedSlot}</strong>
                 </div>
                 <button onClick={reset} className="oc-reset-button">
@@ -160,16 +260,16 @@ const OnlineConsultationPage = () => {
                 <div className="oc-form-group">
                   <label className="oc-label">Chọn y tá</label>
                   <select
-                    value={selectedNurse}
+                    value={selectedNurseId}
                     onChange={(e) => {
-                      setSelectedNurse(e.target.value);
+                      setSelectedNurseId(e.target.value);
                       setError("");
                     }}
                     className="oc-select"
                   >
                     <option value="">-- Chọn --</option>
                     {nurses.map((n) => (
-                      <option key={n.id} value={n.name}>
+                      <option key={n.id} value={n.id}>
                         {n.name} – {n.specialty}
                       </option>
                     ))}
@@ -199,9 +299,7 @@ const OnlineConsultationPage = () => {
                         const isBooked = occupied.includes(s);
                         const disabledSlot = isPast || isBooked;
                         const isSelected = selectedSlot === s;
-                        const btnClass = `oc-slot-button ${
-                          disabledSlot ? "disabled" : isSelected ? "selected" : ""
-                        }`;
+                        const btnClass = `oc-slot-button ${disabledSlot ? "disabled" : isSelected ? "selected" : ""}`;
                         return (
                           <button
                             key={s}
@@ -209,8 +307,13 @@ const OnlineConsultationPage = () => {
                             disabled={disabledSlot}
                             onClick={() => !disabledSlot && setSelectedSlot(s)}
                             className={btnClass}
+                            style={isBooked ? { background: "#ffeaea", color: "#ff4d4f", border: "1px solid #ff4d4f" } : {}}
+                            title={isBooked ? "Khung giờ đã được đặt" : ""}
                           >
                             {s}
+                            {isBooked && (
+                              <span style={{ marginLeft: 6, color: "#ff4d4f", fontSize: 14 }}>⏰</span>
+                            )}
                           </button>
                         );
                       })}
@@ -237,6 +340,31 @@ const OnlineConsultationPage = () => {
               </form>
             )}
 
+            {showSlotError && (
+              <div
+                style={{
+                  position: "fixed",
+                  top: "24px",
+                  right: "24px",
+                  zIndex: 9999,
+                  background: "#fff",
+                  border: "1px solid #ff4d4f",
+                  borderRadius: "8px",
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+                  padding: "14px 28px",
+                  color: "#ff4d4f",
+                  fontWeight: "bold",
+                  fontSize: "18px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
+                }}
+              >
+                <span style={{ fontSize: 22 }}>⏰</span>
+                Khung giờ đã được đặt
+              </div>
+            )}
+
             <div className="oc-info-list">
               <p className="oc-info-item">
                 <MessageCircle className="oc-info-icon" />
@@ -258,30 +386,28 @@ const OnlineConsultationPage = () => {
             <h3 className="oc-nurse-list-title">
               <Users /> Danh sách y tá
             </h3>
-            {nurses.map((n) => {
-              const disabledCard = submitted && n.name !== selectedNurse;
-              const selectedCard = selectedNurse === n.name;
-              const cardClass = `oc-nurse-card ${
-                selectedCard ? "selected" : ""
-              } ${disabledCard ? "disabled" : ""}`;
-              return (
-                <div
-                  key={n.id}
-                  onClick={() => !submitted && setSelectedNurse(n.name)}
-                  className={cardClass}
-                >
-                  <img
-                    src={n.avatar}
-                    alt={n.name}
-                    className="oc-nurse-avatar"
-                  />
-                  <div className="oc-nurse-info">
-                    <h4 className="oc-nurse-name">{n.name}</h4>
-                    <p className="oc-nurse-specialty">{n.specialty}</p>
-                  </div>
-                </div>
-              );
-            })}
+            <table className="oc-nurse-table">
+              <thead>
+                <tr>
+                  <th>Họ tên</th>
+                  <th>Email</th>
+                  <th>Số điện thoại</th>
+                  <th>Địa chỉ</th>
+                  <th>Vai trò</th>
+                </tr>
+              </thead>
+              <tbody>
+                {nurses.map((n) => (
+                  <tr key={n.id}>
+                    <td>{n.name}</td>
+                    <td>{n.email}</td>
+                    <td>{n.phone}</td>
+                    <td>{n.address}</td>
+                    <td>{n.specialty}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </section>

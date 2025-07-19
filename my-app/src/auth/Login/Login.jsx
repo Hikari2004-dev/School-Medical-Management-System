@@ -41,20 +41,11 @@ function Login() {
     }
   };
 
-  const handleGoogleLogin = (response) => {
-    const { credential } = response;
-    const userData = jwtDecode(credential); // Use jwtDecode here
-    localStorage.setItem("token", credential);
-    localStorage.setItem("userName", userData.name);
-    localStorage.setItem("role", userData.role);
-    localStorage.setItem("userId", userData.userId);
-
-    if (userData.role === "Admin") {
+  const redirectByRole = (role) => {
+    if (role === "Admin" || role === "SchoolNurse") {
       navigate("/admin");
-    } else if (userData.role === "Parent") {
+    } else if (role === "Parent") {
       navigate("/");
-    } else if (userData.role === "SchoolNurse") {
-      navigate("/nurse");
     } else {
       alert("Vai trò không được hỗ trợ!");
     }

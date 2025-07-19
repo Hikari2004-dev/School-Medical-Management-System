@@ -1,5 +1,6 @@
 package com.school_medical.school_medical_management_system.api;
 
+import com.school_medical.school_medical_management_system.models.ApiResponse;
 import com.school_medical.school_medical_management_system.models.StudentHealthRequest;
 import com.school_medical.school_medical_management_system.repositories.IUserRepository;
 import com.school_medical.school_medical_management_system.repositories.entites.Appuser;
@@ -8,6 +9,8 @@ import com.school_medical.school_medical_management_system.repositories.entites.
 import com.school_medical.school_medical_management_system.repositories.entites.Studentclass;
 import com.school_medical.school_medical_management_system.services.IStudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -74,5 +77,16 @@ public class StudentController {
     @GetMapping("/all")
     public List<Student> getAllStudents() {
         return studentService.getAllStudents();
+    }
+
+    @GetMapping("/by-parent/{parentUserId}")
+    public ResponseEntity<ApiResponse<List<Student>>> getStudentsByParentId(@PathVariable int parentUserId) {
+        try {
+            List<Student> students = studentService.getStudentsByParentId(parentUserId);
+            return ResponseEntity.ok(new ApiResponse<>(true, "Lấy danh sách học sinh thành công", students));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse<>(false, "Lỗi hệ thống: " + e.getMessage(), null));
+        }
     }
 }

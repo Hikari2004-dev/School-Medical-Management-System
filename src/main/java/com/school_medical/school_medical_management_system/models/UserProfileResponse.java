@@ -1,21 +1,17 @@
-package com.school_medical.school_medical_management_system.repositories.entites;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+package com.school_medical.school_medical_management_system.models;
 
 import java.time.LocalDateTime;
 
-public class Appuser {
+public class UserProfileResponse {
     private Integer id;
     private String firstName;
     private String lastName;
-    private String email;
     private String phone;
     private String address;
     private String roleName;
-    @JsonIgnore
-    private LocalDateTime createdAt; // ✅ Thêm mới
+    private LocalDateTime createdAt;
 
-    // --- Getters và Setters ---
+    // Getters & Setters
     public Integer getId() { return id; }
     public void setId(Integer id) { this.id = id; }
 
@@ -24,9 +20,6 @@ public class Appuser {
 
     public String getLastName() { return lastName; }
     public void setLastName(String lastName) { this.lastName = lastName; }
-
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
 
     public String getPhone() { return phone; }
     public void setPhone(String phone) { this.phone = phone; }

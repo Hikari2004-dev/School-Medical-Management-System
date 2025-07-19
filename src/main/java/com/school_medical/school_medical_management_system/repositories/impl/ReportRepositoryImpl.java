@@ -7,6 +7,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Repository
 public class ReportRepositoryImpl implements IReportRepository {
@@ -79,5 +80,23 @@ public class ReportRepositoryImpl implements IReportRepository {
         } catch (EmptyResultDataAccessException e) {
             return null; // Return null if no report found
         }
+    }
+
+    @Override
+    public List<Report> getAllReports() {
+        String sql = "SELECT * FROM mesch.report ORDER BY report_date DESC";
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
+            Report report = new Report();
+            report.setReportId(rs.getInt("report_id"));
+            report.setReportDate(rs.getDate("report_date"));
+            report.setDescription(rs.getString("description"));
+            report.setResultExpected(rs.getString("result_expected"));
+            report.setFileAttachment(rs.getString("file_attachment"));
+            report.setErrorType(rs.getString("error_type"));
+            report.setUserId(rs.getInt("user_id"));
+            report.setStatus(rs.getString("status"));
+            report.setCreatedAt(rs.getDate("created_at"));
+            return report;
+        });
     }
 }

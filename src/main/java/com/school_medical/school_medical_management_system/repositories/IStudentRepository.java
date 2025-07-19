@@ -9,5 +9,6 @@ public interface IStudentRepository {
     int saveHealthInfo(Healthinfo healthInfo);
     void saveParentStudent(int parentUserId, int studentId);
     List<Student> getAllStudents();  // Phương thức này phải được khai báo trong interface
+    List<Student> getStudentsByParentId(int parentUserId);
 }
 

@@ -11,6 +11,8 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @Service
 public class AppUserService implements IAppUserService {
     @Autowired
@@ -21,6 +23,11 @@ public class AppUserService implements IAppUserService {
     @Override
     public Appuser getUserByEmail(String email) {
         return userRepository.getUserByEmail(email);
+    }
+
+    @Override
+    public List<Appuser> getAllNurses() {
+        return userRepository.getAllNurses();
     }
 
 }

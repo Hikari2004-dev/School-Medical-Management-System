@@ -6,6 +6,8 @@ import com.school_medical.school_medical_management_system.services.IReportServi
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ReportServiceImpl implements IReportService {
 
@@ -34,5 +36,10 @@ public class ReportServiceImpl implements IReportService {
     @Override
     public Report getReport(int reportId) {
         return reportRepository.getReportById(reportId);
+    }
+
+    @Override
+    public List<Report> getAllReports() {
+        return reportRepository.getAllReports();
     }
 }
