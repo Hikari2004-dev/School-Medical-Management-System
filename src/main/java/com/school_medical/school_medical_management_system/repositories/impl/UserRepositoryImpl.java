@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.sql.*;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -97,4 +98,36 @@ public class UserRepositoryImpl implements IUserRepository {
             throw new RuntimeException("Error querying user by account number", e);
         }
     }
+
+    @Override
+    public List<Appuser> getAllNurses() {
+        String sql = "SELECT a.user_id, a.first_name, a.last_name, a.email, a.phone, a.address, r.role_name " +
+                "FROM appuser a JOIN role r ON a.role_id = r.role_id " +
+                "WHERE a.role_id = 3";
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            List<Appuser> nurses = new java.util.ArrayList<>();
+            while (rs.next()) {
+                Appuser user = new Appuser();
+                user.setId(rs.getInt("user_id"));
+                user.setFirstName(rs.getString("first_name"));
+                user.setLastName(rs.getString("last_name"));
+                user.setEmail(rs.getString("email"));
+                user.setPhone(rs.getString("phone"));
+                user.setAddress(rs.getString("address"));
+                user.setRoleName(rs.getString("role_name"));
+                // Không set createdAt vì bạn muốn ẩn
+                nurses.add(user);
+            }
+            return nurses;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return java.util.Collections.emptyList();
+        }
+    }
+
 }

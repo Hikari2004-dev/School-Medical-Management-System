@@ -7,6 +7,8 @@ import com.school_medical.school_medical_management_system.utils.AuthUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AppUserService implements IAppUserService {
     @Autowired
@@ -18,4 +20,10 @@ public class AppUserService implements IAppUserService {
     public Appuser getUserByEmail(String email) {
         return userRepository.getUserByEmail(email);
     }
+
+    @Override
+    public List<Appuser> getAllNurses() {
+        return userRepository.getAllNurses();
+    }
+
 }
