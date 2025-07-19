@@ -9,11 +9,10 @@ export default function VaccineForm() {
   const [minDate, setMinDate] = useState('');
   const [vaccines, setVaccines] = useState([]);
   const [userInfo, setUserInfo] = useState(null);
+  const [students, setStudents] = useState([]);
 
   const [formData, setFormData] = useState({
-    fullName: "",
-    phone: "",
-    email: "",
+    studentName: "",
     age: "",
     vaccineName: "",
     vaccinationDate: "",
@@ -22,42 +21,56 @@ export default function VaccineForm() {
     notes: ""
   });
 
-  // Ngày hiện tại để giới hạn ngày hẹn
   useEffect(() => {
     setMinDate(new Date().toISOString().split('T')[0]);
   }, []);
 
-  // Lấy danh sách vaccine
   useEffect(() => {
     axios.get('http://localhost:8080/api/vaccinations')
-      .then(response => {
-        setVaccines(response.data);
-      })
-      .catch(error => {
-        console.error('Lỗi khi lấy danh sách vaccine:', error);
-      });
+      .then(res => setVaccines(res.data))
+      .catch(err => console.error('Lỗi khi lấy danh sách vaccine:', err));
   }, []);
 
-  // Lấy thông tin phụ huynh
   useEffect(() => {
     axios.get("http://localhost:8080/api/parent-info/me", {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`
       }
     })
-      .then(response => {
-        const data = response.data;
-        setUserInfo(data);
-        setFormData(prev => ({
-          ...prev,
-          fullName: data.name || "",
-          phone: data.phone || "",
-          email: data.email || ""
-        }));
+      .then(res => {
+        setUserInfo(res.data);
       })
-      .catch(err => {
-        console.error("Lỗi khi lấy thông tin phụ huynh:", err);
-      });
+      .catch(err => console.error("Lỗi khi lấy thông tin phụ huynh:", err));
+  }, []);
+
+  useEffect(() => {
+    axios.get("http://localhost:8080/api/students/by-parent/5", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      }
+    })
+      .then(res => {
+        const studentList = res.data?.data || [];
+        setStudents(studentList);
+
+        if (studentList.length > 0) {
+          const student = studentList[0];
+          const dob = new Date(student.dateOfBirth);
+          const today = new Date();
+          let age = today.getFullYear() - dob.getFullYear();
+          const m = today.getMonth() - dob.getMonth();
+          if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+            age--;
+          }
+
+          setFormData(prev => ({
+            ...prev,
+            studentName: student.name,
+            age: age.toString()
+          }));
+        }
+      })
+      .catch(err => console.error("Lỗi khi lấy danh sách học sinh:", err));
   }, []);
 
   const handleChange = (e) => {
@@ -76,7 +89,7 @@ export default function VaccineForm() {
       vaccinationDate: formData.vaccinationDate,
       status: "Pending",
       confirmed: false,
-      studentId: 3, // Có thể thay bằng studentId từ props hoặc userInfo nếu có
+      studentId: students[0]?.id || null,
       declaredByParent: true,
       declaredDate: new Date().toISOString().split('T')[0],
       notes: formData.notes,
@@ -88,19 +101,16 @@ export default function VaccineForm() {
         Authorization: `Bearer ${localStorage.getItem("token")}`
       }
     })
-      .then(res => {
+      .then(() => {
         alert("Đăng ký tiêm vaccine thành công!");
-        setFormData({
-          fullName: userInfo?.name || "",
-          phone: userInfo?.phone || "",
-          email: userInfo?.email || "",
-          age: "",
+        setFormData(prev => ({
+          ...prev,
           vaccineName: "",
           vaccinationDate: "",
           vaccinationTime: "",
           location: "",
           notes: ""
-        });
+        }));
       })
       .catch(err => {
         console.error("Lỗi khi gửi đăng ký:", err);
@@ -111,7 +121,6 @@ export default function VaccineForm() {
   return (
     <>
       <Header />
-
       <div className="vaccine-page">
         <nav className="vaccine-breadcrumb">
           <Link to="/" className="breadcrumb-link">Trang chủ</Link>
@@ -128,51 +137,24 @@ export default function VaccineForm() {
           <div className="vaccine-form-wrapper">
             <form className="vaccine-form" onSubmit={handleSubmit}>
               <div className="vaccine-grid">
-
                 <div className="vaccine-field">
-                  <label>Họ và Tên <span className="required">*</span></label>
-                  <input
-                    type="text"
-                    name="fullName"
-                    placeholder="Nguyễn Văn A"
-                    value={formData.fullName}
-                    readOnly
-                  />
-                </div>
-
-                <div className="vaccine-field">
-                  <label>Số điện thoại <span className="required">*</span></label>
-                  <input
-                    type="tel"
-                    name="phone"
-                    placeholder="+84 912 345 678"
-                    value={formData.phone}
-                    readOnly
-                  />
-                </div>
-
-                <div className="vaccine-field">
-                  <label>Email</label>
-                  <input
-                    type="email"
-                    name="email"
-                    placeholder="email@example.com"
-                    value={formData.email}
-                    readOnly
-                  />
+                  <label>Tên học sinh <span className="required">*</span></label>
+                  <input type="text" name="studentName" value={formData.studentName} readOnly />
                 </div>
 
                 <div className="vaccine-field">
                   <label>Tuổi <span className="required">*</span></label>
-                  <input
-                    type="number"
-                    name="age"
-                    min={6}
-                    max={11}
-                    placeholder="6–11"
-                    value={formData.age}
-                    onChange={handleChange}
-                  />
+                  <input type="number" name="age" value={formData.age} readOnly />
+                </div>
+
+                <div className="vaccine-field">
+                  <label>Số điện thoại <span className="required">*</span></label>
+                  <input type="tel" value={userInfo?.phone || ""} readOnly />
+                </div>
+
+                <div className="vaccine-field">
+                  <label>Email</label>
+                  <input type="email" value={userInfo?.email || ""} readOnly />
                 </div>
 
                 <div className="vaccine-field">
@@ -189,23 +171,12 @@ export default function VaccineForm() {
 
                 <div className="vaccine-field">
                   <label>Ngày hẹn <span className="required">*</span></label>
-                  <input
-                    type="date"
-                    name="vaccinationDate"
-                    min={minDate}
-                    value={formData.vaccinationDate}
-                    onChange={handleChange}
-                  />
+                  <input type="date" name="vaccinationDate" min={minDate} value={formData.vaccinationDate} onChange={handleChange} />
                 </div>
 
                 <div className="vaccine-field">
                   <label>Giờ hẹn <span className="required">*</span></label>
-                  <input
-                    type="time"
-                    name="vaccinationTime"
-                    value={formData.vaccinationTime}
-                    onChange={handleChange}
-                  />
+                  <input type="time" name="vaccinationTime" value={formData.vaccinationTime} onChange={handleChange} />
                 </div>
 
                 <div className="vaccine-field">
@@ -219,23 +190,14 @@ export default function VaccineForm() {
 
               <div className="vaccine-field full-width">
                 <label>Ghi chú</label>
-                <textarea
-                  name="notes"
-                  rows={3}
-                  placeholder="Ghi chú đặc biệt (nếu có)..."
-                  value={formData.notes}
-                  onChange={handleChange}
-                />
+                <textarea name="notes" rows={3} value={formData.notes} onChange={handleChange} placeholder="Ghi chú đặc biệt (nếu có)..." />
               </div>
 
-              <button type="submit" className="vaccine-submit">
-                Đăng Ký Tiêm Vaccine
-              </button>
+              <button type="submit" className="vaccine-submit">Đăng Ký Tiêm Vaccine</button>
             </form>
           </div>
         </div>
       </div>
-
       <Footer />
     </>
   );
