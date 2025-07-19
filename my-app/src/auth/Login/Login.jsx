@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 
 import "./Login.css";
 import LogoImg from "../../image/hinhanh/logoproject.png";
-import GoogleLogo from "../../image/icon/LogoGoogle.png";
 import Background from "../../image/hinhanh/backgroundauth.png";
 
 function Login() {
@@ -13,7 +12,6 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const res = await fetch("http://localhost:8080/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -22,7 +20,6 @@ function Login() {
 
     if (res.ok) {
       const data = await res.json();
-
       localStorage.setItem("token", data.jwt);
       localStorage.setItem("userName", data.name);
       localStorage.setItem("role", data.role);
@@ -42,11 +39,18 @@ function Login() {
     }
   };
 
+  const redirectByRole = (role) => {
+    if (role === "Admin" || role === "SchoolNurse") {
+      navigate("/admin");
+    } else if (role === "Parent") {
+      navigate("/");
+    } else {
+      alert("Vai trò không được hỗ trợ!");
+    }
+  };
+
   return (
-    <div
-      className="login-wrapper"
-      style={{ backgroundImage: `url(${Background})` }}
-    >
+    <div className="login-wrapper" style={{ backgroundImage: `url(${Background})` }}>
       <div className="login-box">
         <img src={LogoImg} alt="Logo" className="login-logo" />
         <h2 className="login-title">Đăng nhập</h2>
@@ -87,20 +91,7 @@ function Login() {
             </div>
           </div>
 
-          <button type="submit" className="btn-submit">
-            Continue
-          </button>
-
-          <div className="or-separator">
-            <hr className="dividerLine" />
-            <span className="dividerText">OR</span>
-            <hr className="dividerLine" />
-          </div>
-
-          <button type="button" className="btn-google">
-            <img src={GoogleLogo} alt="Google" className="google-icon" />
-            <span>Continue with Google</span>
-          </button>
+          <button type="submit" className="btn-submit">Tiếp tục</button>
         </form>
       </div>
     </div>
