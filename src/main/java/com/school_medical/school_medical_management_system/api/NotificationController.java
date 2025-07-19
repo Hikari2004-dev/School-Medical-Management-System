@@ -56,6 +56,16 @@ public class NotificationController {
         return ResponseEntity.ok(notifications);
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<Notification>> getAllNotifications() {
+        try {
+            List<Notification> notifications = notificationService.getAllNotifications();
+            return ResponseEntity.ok(notifications);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(null); // Lỗi hệ thống khi lấy tất cả thông báo
+        }
+    }
+
     @PostMapping("/send")
     public String sendNotificationToAllUsers(@RequestParam String subject, @RequestParam String content) {
         List<String> emails = userRepository.getAllUserEmails();

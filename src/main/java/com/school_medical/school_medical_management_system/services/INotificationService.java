@@ -1,14 +1,13 @@
 package com.school_medical.school_medical_management_system.services;
 
 import com.school_medical.school_medical_management_system.repositories.entites.Notification;
-import jakarta.mail.MessagingException;
 
 import java.util.List;
 
 public interface INotificationService {
-    public void sendConsentNotificationsForBatch(int batchId, String content, String type, String consentType);
+    void sendConsentNotificationsForBatch(int batchId, String content, String type, String consentType);
     void updateConsent(Long notificationId, Boolean consentStatus);
     List<Notification> getNotificationsByParentId();
-    public List<String> getEmailsByBatchId(int batchId);
-
+    List<String> getEmailsByBatchId(int batchId);
+    List<Notification> getAllNotifications();
 }

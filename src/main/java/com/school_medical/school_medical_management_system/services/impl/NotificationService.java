@@ -65,5 +65,9 @@ public class NotificationService implements INotificationService {
         return jdbcTemplate.queryForList(sql, new Object[]{batchId}, String.class);
     }
 
-
+    // Thêm phương thức để lấy tất cả notification
+    @Override
+    public List<Notification> getAllNotifications() {
+        return notificationRepository.getAllNotifications();
+    }
 }

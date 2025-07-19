@@ -3,7 +3,6 @@ package com.school_medical.school_medical_management_system.repositories.impl;
 import com.school_medical.school_medical_management_system.repositories.IEventBatchRepository;
 import com.school_medical.school_medical_management_system.repositories.INotificationRepository;
 import com.school_medical.school_medical_management_system.repositories.entites.Notification;
-import com.school_medical.school_medical_management_system.repositories.entites.StudentParent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -23,7 +22,7 @@ public class NotificationRepository implements INotificationRepository {
     private IEventBatchRepository eventBatchRepository;
 
     @Override
-    public void sendBatchNotifications(int batchId, String content,String consentType) {
+    public void sendBatchNotifications(int batchId, String content, String consentType) {
         String sql = "INSERT INTO Notification (\n" +
                 "    content,\n" +
                 "    student_id,\n" +
@@ -45,7 +44,7 @@ public class NotificationRepository implements INotificationRepository {
                 "    WHERE n.student_id = s.student_id \n" +
                 "      AND n.parent_user_id = ps.parent_user_id \n" +
                 "      AND n.batch_id = ebc.batch_id\n" +
-                ")\n";
+                ")";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             String type = eventBatchRepository.getBatchById(batchId).getBatchType();
@@ -108,4 +107,35 @@ public class NotificationRepository implements INotificationRepository {
 
         return notifications;
     }
+
+    // Thêm phương thức này để lấy tất cả notification
+    @Override
+    public List<Notification> getAllNotifications() {
+        List<Notification> notifications = new ArrayList<>();
+        String sql = "SELECT * FROM Notification ORDER BY date_sent DESC";
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Notification notification = new Notification();
+                notification.setNotificationId(rs.getLong("notification_id"));
+                notification.setContent(rs.getString("content"));
+                notification.setDateSent(rs.getTimestamp("date_sent"));
+                notification.setConfirmed(rs.getBoolean("confirmed"));
+                notification.setType(rs.getString("type"));
+                notification.setStudentId(rs.getLong("student_id"));
+                notification.setParentUserId(rs.getLong("parent_user_id"));
+                notification.setConsentStatus(rs.getObject("consent_status") != null ? rs.getBoolean("consent_status") : null);
+
+                notifications.add(notification);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error retrieving all notifications", e);
+        }
+
+        return notifications;
     }
+}
