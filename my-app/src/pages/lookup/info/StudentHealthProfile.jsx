@@ -19,6 +19,7 @@ const StudentHealthProfile = () => {
 
   const [isEditing, setIsEditing] = useState(false);
   const [profile, setProfile] = useState({
+    id: 1, // 👈 Thêm id vào profile
     allergy: "",
     chronicDisease: "",
     medicalHistory: "",
@@ -44,7 +45,7 @@ const StudentHealthProfile = () => {
       })
       .then((data) => {
         if (data.success && data.data) {
-          setProfile(data.data);
+          setProfile({ id: 1, ...data.data }); // 👈 Giữ lại id khi set
         } else {
           console.warn("Không có dữ liệu hồ sơ:", data.message);
         }
@@ -57,23 +58,40 @@ const StudentHealthProfile = () => {
       const token = localStorage.getItem("token");
       if (!token) return console.error("⚠️ Không có token");
 
-      fetch("http://localhost:8080/api/healthinfo/1", {
+      const payload = { ...profile, id: 1 }; // 👈 đảm bảo có id
+
+      const putRequest = fetch("http://localhost:8080/api/healthinfo/1", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(profile),
-      })
-        .then((res) => {
-          if (!res.ok) throw new Error("Cập nhật thất bại");
-          return res.json();
-        })
-        .then((data) => {
-          console.log("✅ Cập nhật thành công", data);
+        body: JSON.stringify(payload),
+      });
+
+      const saveRequest = fetch("http://localhost:8080/api/healthinfo/save/1", {
+        method: "PUT", // ✅ Sửa từ POST thành PUT nếu backend yêu cầu
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      Promise.all([putRequest, saveRequest])
+        .then(async ([putRes, saveRes]) => {
+          const putData = await putRes.json().catch(() => null);
+          const saveData = await saveRes.json().catch(() => null);
+
+          console.log("PUT /1 status:", putRes.status, putData);
+          console.log("PUT /save/1 status:", saveRes.status, saveData);
+
+          if (!putRes.ok || !saveRes.ok) {
+            throw new Error("❌ Một trong các yêu cầu cập nhật thất bại");
+          }
         })
         .catch((err) => {
-          console.error("❌ Lỗi cập nhật:", err);
+          console.error("❌ Lỗi khi cập nhật:", err);
         });
     }
 
@@ -140,7 +158,7 @@ const StudentHealthProfile = () => {
 
       <main className="profile-main">
         <button onClick={() => navigate("/")} className="home-button">
-           ⬅ Quay về trang chính
+          ⬅ Quay về trang chính
         </button>
 
         <div className="profile-card">
@@ -152,7 +170,6 @@ const StudentHealthProfile = () => {
             </div>
           </div>
 
-          {/* 👉 Đây là phần tab bạn yêu cầu thêm */}
           <div className="profile-tabs">
             {Object.values(tabRoutes).map((label) => (
               <span
