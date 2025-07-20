@@ -6,6 +6,7 @@ import com.school_medical.school_medical_management_system.repositories.IUserRep
 import com.school_medical.school_medical_management_system.repositories.entites.Appuser;
 import com.school_medical.school_medical_management_system.repositories.entites.Healthinfo;
 import com.school_medical.school_medical_management_system.repositories.entites.Student;
+import com.school_medical.school_medical_management_system.repositories.entites.VaccinationParentDeclaration;
 import com.school_medical.school_medical_management_system.services.IStudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -94,4 +95,33 @@ public class StudentController {
                     .body(new ApiResponse<>(false, "Lỗi hệ thống: " + e.getMessage(), null));
         }
     }
+
+    @GetMapping("/healthinfo")
+    public ResponseEntity<List<Healthinfo>> getHealthInfoByUserId(@RequestParam int userId) {
+        // Gọi service để lấy dữ liệu
+        List<Healthinfo> healthInfos = studentService.getHealthInfoByUserId(userId);
+
+        // Kiểm tra nếu không có dữ liệu
+        if (healthInfos.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);  // Không tìm thấy dữ liệu
+        }
+
+        // Trả về dữ liệu
+        return ResponseEntity.ok(healthInfos);
+    }
+
+    @GetMapping("/vaccination-info")
+    public ResponseEntity<List<VaccinationParentDeclaration>> getVaccinationInfoByUserId(@RequestParam int userId) {
+        // Lấy thông tin tiêm chủng của học sinh từ userId (parent_user_id)
+        List<VaccinationParentDeclaration> vaccinationInfos = studentService.getVaccinationInfoByUserId(userId);
+
+        // Nếu không có dữ liệu
+        if (vaccinationInfos.isEmpty()) {
+            return ResponseEntity.status(404).body(null);  // Trả về 404 nếu không có dữ liệu
+        }
+
+        // Trả về dữ liệu tiêm chủng
+        return ResponseEntity.ok(vaccinationInfos);
+    }
+
 }

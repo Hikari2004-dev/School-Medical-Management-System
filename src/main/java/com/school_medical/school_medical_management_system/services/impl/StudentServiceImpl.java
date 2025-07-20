@@ -3,6 +3,7 @@ package com.school_medical.school_medical_management_system.services.impl;
 import com.school_medical.school_medical_management_system.repositories.IStudentRepository;
 import com.school_medical.school_medical_management_system.repositories.entites.Healthinfo;
 import com.school_medical.school_medical_management_system.repositories.entites.Student;
+import com.school_medical.school_medical_management_system.repositories.entites.VaccinationParentDeclaration;
 import com.school_medical.school_medical_management_system.services.IStudentService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,16 @@ public class StudentServiceImpl implements IStudentService {
     @Override
     public List<Student> getStudentsByParentId(int parentUserId) {
         return studentRepository.getStudentsByParentId(parentUserId);
+    }
+
+    @Override
+    public List<Healthinfo> getHealthInfoByUserId(int userId) {
+        return studentRepository.getHealthInfoByUserId(userId);
+    }
+
+    @Override
+    public List<VaccinationParentDeclaration> getVaccinationInfoByUserId(int userId) {
+        return studentRepository.getVaccinationInfoByUserId(userId);
     }
 
 }
