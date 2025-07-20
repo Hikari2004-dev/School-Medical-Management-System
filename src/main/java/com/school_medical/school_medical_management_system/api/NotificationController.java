@@ -90,4 +90,9 @@ public class NotificationController {
         return ResponseEntity.ok("Đã gửi email cho các phụ huynh trong batch " + batchId);
     }
 
+    @PostMapping("/sendone")
+    public String sendNotificationToUser(@RequestParam String email,@RequestParam String subject, @RequestParam String content) {
+            emailService.sendEmail(email, subject, content);
+        return "Notification sent to this user";
+    }
 }

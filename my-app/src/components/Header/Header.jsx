@@ -220,21 +220,22 @@ export default function Header() {
             onClick={async (e) => {
               e.preventDefault();
               const token = localStorage.getItem("token");
-              if (token) {
+              const userId = localStorage.getItem("userId");
+              if (token && userId) {
                 try {
                   const res = await fetch(
-                    "http://localhost:8080/api/vaccination-history/my-children",
+                    `http://localhost:8080/api/students/healthinfo?userId=${userId}`,
                     {
                       headers: { Authorization: `Bearer ${token}` },
                     }
                   );
                   if (!res.ok) throw new Error();
                   const data = await res.json();
-                  // Giả sử dữ liệu rỗng là null hoặc object không có thuộc tính chính
-                  if (!data || Object.keys(data).length === 0) {
-                    navigate("/health-form");
-                  } else {
+                  // Nếu có thông tin sức khỏe thì chuyển sang student profile
+                  if (data && Object.keys(data).length > 0) {
                     navigate("/student-profile");
+                  } else {
+                    navigate("/health-form");
                   }
                 } catch {
                   navigate("/health-form");

@@ -8,4 +8,5 @@ public interface INotificationRepository {
     void updateConsentStatus(Long notificationId, Boolean consentStatus);
     List<Notification> getNotificationsByParentId(Integer parentUserId);
     List<Notification> getAllNotifications();
+    void saveNotification(Notification notification);
 }
