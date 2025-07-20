@@ -216,7 +216,7 @@ export default function HealthFormApp() {
                   <option value="">-- Chọn lớp --</option>
                   {classes.map((c) => (
                     <option key={c.id} value={c.id}>
-                      {c.className} – {c.room} (ID: {c.id})
+                      {c.className} – {c.room} 
                     </option>
                   ))}
                 </select>
@@ -240,7 +240,6 @@ export default function HealthFormApp() {
                   <option value="">-- Chọn mối quan hệ --</option>
                   <option value="Father">Cha</option>
                   <option value="Mother">Mẹ</option>
-                  <option value="Other">Khác</option>
                 </select>
               </div>
             </fieldset>
