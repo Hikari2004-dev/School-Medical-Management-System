@@ -1,3 +1,4 @@
+// src/auth/Login/Login.jsx
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
@@ -12,53 +13,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  // Đăng nhập bằng email/password
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await fetch("http://localhost:8080/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (!res.ok) {
-        alert("Đăng nhập thất bại!");
-        return;
-      }
-
-      const data = await res.json();
-      console.log("🔐 Login response:", data);
-
-      if (!data.userId) {
-        alert("Không lấy được userId. Vui lòng kiểm tra backend.");
-        return;
-      }
-
-      localStorage.setItem("token", data.jwt);
-      localStorage.setItem("userName", data.name);
-      localStorage.setItem("role", data.role);
-      localStorage.setItem("userId", data.userId);
-
-      redirectByRole(data.role);
-    } catch (err) {
-      console.error("❌ Login error:", err);
-      alert(err.message || "Có lỗi xảy ra, thử lại sau!");
-    }
-  };
-
-  // Chuyển trang theo vai trò
-  const redirectByRole = (role) => {
-    if (role === "Admin" || role === "SchoolNurse") {
-      navigate("/admin");
-    } else if (role === "Parent") {
-      navigate("/");
-    } else {
-      alert("Vai trò không được hỗ trợ!");
-    }
-  };
-
-  // Đăng nhập bằng Google
+  // ✅ Xử lý đăng nhập Google
   const handleGoogleLogin = async (credentialResponse) => {
     try {
       const decoded = jwtDecode(credentialResponse.credential);
@@ -67,7 +22,12 @@ export default function Login() {
       const res = await fetch("http://localhost:8080/auth/google", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token: credentialResponse.credential }),
+        body: JSON.stringify({
+          email: decoded.email,
+          name: decoded.name,
+          googleId: decoded.sub,
+          token: credentialResponse.credential,
+        }),
       });
 
       if (!res.ok) throw new Error("Google login thất bại");
@@ -92,18 +52,62 @@ export default function Login() {
     }
   };
 
+  // ✅ Đăng nhập bằng email/mật khẩu
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch("http://localhost:8080/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!res.ok) throw new Error("Đăng nhập thất bại");
+
+      const data = await res.json();
+      console.log("🔐 Login response:", data);
+
+      if (!data.userId) {
+        alert("Không lấy được userId. Vui lòng kiểm tra backend.");
+        return;
+      }
+
+      localStorage.setItem("token", data.jwt);
+      localStorage.setItem("userName", data.name);
+      localStorage.setItem("role", data.role);
+      localStorage.setItem("userId", data.userId);
+
+      redirectByRole(data.role);
+    } catch (error) {
+      alert("Đăng nhập thất bại!");
+    }
+  };
+
+  // ✅ Điều hướng theo vai trò
+  const redirectByRole = (role) => {
+    if (role === "Admin") {
+      navigate("/admin");
+    } else if (role === "SchoolNurse") {
+      navigate("/nurse");
+    } else if (role === "Parent") {
+      navigate("/");
+    } else {
+      alert("Vai trò không được hỗ trợ!");
+    }
+  };
+
   return (
     <GoogleOAuthProvider clientId="493912650211-kqoj7t293bdhfgepv1q7kh7vik3o0852.apps.googleusercontent.com">
       <div
         className="login-wrapper"
-        style={{ backgroundImage: `url(${Background})` }}
+        style={{ backgroundImage: `url(${Background})` }}  // Fix template string
       >
         <div className="login-box">
           <img src={LogoImg} alt="Logo" className="login-logo" />
           <h2 className="login-title">Đăng nhập</h2>
 
           <form className="login-form" onSubmit={handleSubmit}>
-            <div>
+            <div className="form-group">
               <label className="login-label">Email</label>
               <input
                 type="email"
@@ -115,7 +119,7 @@ export default function Login() {
               />
             </div>
 
-            <div>
+            <div className="form-group">
               <label className="login-label">Mật khẩu</label>
               <input
                 type="password"
@@ -137,12 +141,12 @@ export default function Login() {
                 <Link to="/forget-password">Quên mật khẩu</Link>
               </div>
             </div>
-
             <button type="submit" className="btn-submit">
               Tiếp tục
             </button>
           </form>
 
+          {/* Google Login Button */}
           <div className="google-login-container">
             <GoogleLogin
               onSuccess={handleGoogleLogin}
