@@ -56,7 +56,8 @@ public class EventBatchRepository implements IEventBatchRepository {
     @Override
     public List<EventBatch> getAllBatches() {
         List<EventBatch> batches = new ArrayList<>();
-        String sql = "SELECT * FROM EventBatch WHERE status != 'Deleted'";  // Lọc bỏ những batch có trạng thái 'Deleted'
+        String sql = "SELECT * FROM EventBatch WHERE status != 'Deleted'\n" +
+                "ORDER BY event_date DESC";  // Lọc bỏ những batch có trạng thái 'Deleted'
 
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
