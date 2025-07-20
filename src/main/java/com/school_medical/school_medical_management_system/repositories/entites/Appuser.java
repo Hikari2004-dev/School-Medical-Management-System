@@ -14,6 +14,17 @@ public class Appuser {
     private Integer roleId;  // Bổ sung roleId
     private String password;  // Thêm thuộc tính password
 
+    private String gender;  // Thêm trường giới tính
+
+    // Getter và Setter cho gender
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
     @JsonIgnore
     private LocalDateTime createdAt;
 

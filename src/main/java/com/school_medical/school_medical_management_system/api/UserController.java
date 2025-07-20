@@ -58,7 +58,6 @@ public class UserController {
         Appuser registeredUser = appUserService.registerUser(user);
 
         // Trả về thông báo thành công với mã trạng thái CREATED (201)
-        return new ResponseEntity<>("Tạo tài khoản thành công", HttpStatus.CREATED);
+        return new ResponseEntity<>("Tạo tài khoản và thêm thông tin phụ huynh thành công", HttpStatus.CREATED);
     }
-
 }

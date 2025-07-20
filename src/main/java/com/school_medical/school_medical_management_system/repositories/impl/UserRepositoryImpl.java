@@ -2,6 +2,7 @@ package com.school_medical.school_medical_management_system.repositories.impl;
 
 import com.school_medical.school_medical_management_system.repositories.IUserRepository;
 import com.school_medical.school_medical_management_system.repositories.entites.Appuser;
+import com.school_medical.school_medical_management_system.repositories.entites.Parent;
 import com.school_medical.school_medical_management_system.repositories.entites.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -213,4 +214,9 @@ public class UserRepositoryImpl implements IUserRepository {
         return user;
     }
 
+    @Override
+    public void saveParent(Parent parent) {
+        String sql = "INSERT INTO parent (user_id, full_name, gender, phone) VALUES (?, ?, ?, ?)";
+        jdbcTemplate.update(sql, parent.getUserId(), parent.getFullName(), parent.getGender(), parent.getPhone());
+    }
 }
