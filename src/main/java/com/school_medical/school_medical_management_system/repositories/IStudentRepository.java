@@ -17,5 +17,5 @@ public interface IStudentRepository {
     List<Healthinfo> getHealthInfoByUserId(int userId);
     List<VaccinationParentDeclaration> getVaccinationInfoByUserId(int userId);
     List<Student> getStudentsByParentUserId(int parentUserId);
-    Optional<Appuser> findParentEmailByStudentName(String studentName);
+    Optional<Appuser> findParentEmailByStudentId(int studentId);
 }

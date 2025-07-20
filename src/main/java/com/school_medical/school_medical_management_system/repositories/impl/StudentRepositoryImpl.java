@@ -163,28 +163,22 @@ public class StudentRepositoryImpl implements IStudentRepository {
     }
 
     @Override
-    public Optional<Appuser> findParentEmailByStudentName(String studentName) {
+    public Optional<Appuser> findParentEmailByStudentId(int studentId) {
         String sql = """
         SELECT a.email
         FROM appuser a
         JOIN parentstudent ps ON a.user_id = ps.parent_user_id
-        JOIN student s ON s.student_id = ps.student_id
-        WHERE s.name = ?
+        WHERE ps.student_id = ?
     """;
 
-        // Sử dụng query thay vì queryForObject
-        List<Appuser> parents = jdbcTemplate.query(sql, new Object[]{studentName}, (rs, rowNum) -> {
+        // Sử dụng query để lấy kết quả và kiểm tra
+        List<Appuser> parents = jdbcTemplate.query(sql, new Object[]{studentId}, (rs, rowNum) -> {
             Appuser parent = new Appuser();
             parent.setEmail(rs.getString("email"));
             return parent;
         });
 
-        // Nếu có ít nhất một kết quả, trả về Optional chứa giá trị đầu tiên
-        if (!parents.isEmpty()) {
-            return Optional.of(parents.get(0));
-        }
-
-        // Nếu không có kết quả nào, trả về Optional.empty()
-        return Optional.empty();
+        // Nếu tìm thấy phụ huynh, trả về Optional chứa đối tượng, nếu không trả về Optional.empty()
+        return parents.isEmpty() ? Optional.empty() : Optional.of(parents.get(0));
     }
 }

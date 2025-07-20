@@ -71,7 +71,7 @@ public class StudentServiceImpl implements IStudentService {
     }
 
     @Override
-    public Optional<Appuser> getParentEmailByStudentName(String studentName) {
-        return studentRepository.findParentEmailByStudentName(studentName);
+    public Optional<Appuser> getParentEmailByStudentId(int studentId) {
+        return studentRepository.findParentEmailByStudentId(studentId);
     }
 }

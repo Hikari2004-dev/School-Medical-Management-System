@@ -16,5 +16,5 @@ public interface IStudentService {
     List<Healthinfo> getHealthInfoByUserId(int userId);
     List<VaccinationParentDeclaration> getVaccinationInfoByUserId(int userId);
     List<Student> getStudentsByParentUserId(int parentUserId);
-    Optional<Appuser> getParentEmailByStudentName(String studentName);
+    Optional<Appuser> getParentEmailByStudentId(int studentId);
 }

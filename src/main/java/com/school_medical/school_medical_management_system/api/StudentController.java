@@ -148,10 +148,9 @@ public class StudentController {
     }
 
 
-    @GetMapping("/parent-email")
-    public ResponseEntity<String> getParentEmailByStudentName(@RequestParam String name) {
-        // Gọi dịch vụ để lấy email của phụ huynh
-        Optional<Appuser> parentEmail = studentService.getParentEmailByStudentName(name);
+    @GetMapping("/parent-email/{studentId}")
+    public ResponseEntity<String> getParentEmailByStudentId(@PathVariable int studentId) {
+        Optional<Appuser> parentEmail = studentService.getParentEmailByStudentId(studentId);
 
         // Nếu tìm thấy email phụ huynh, trả về email
         if (parentEmail.isPresent()) {
@@ -159,6 +158,6 @@ public class StudentController {
         }
 
         // Nếu không tìm thấy, trả về thông báo lỗi
-        return ResponseEntity.status(404).body("Parent not found for student: " + name);
+        return ResponseEntity.status(404).body("Parent not found for student ID: " + studentId);
     }
 }
