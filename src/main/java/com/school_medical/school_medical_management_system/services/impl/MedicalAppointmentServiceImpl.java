@@ -18,7 +18,6 @@ public class MedicalAppointmentServiceImpl implements IMedicalAppointmentService
     public void createAppointment(MedicalAppointment appointment) {
         repository.createAppointment(appointment);
     }
-
     @Override
     public List<MedicalAppointment> getAppointmentsByStudentId(int studentId) {
         return repository.getAppointmentsByStudentId(studentId);

@@ -18,20 +18,36 @@ public class MedicalAppointmentRepositoryImpl implements IMedicalAppointmentRepo
 
     @Override
     public void createAppointment(MedicalAppointment appointment) {
-        String sql = "INSERT INTO medicalappointment (student_id, nurse_id, appointment_date, reason, status) VALUES (?, ?, ?, ?, ?)";
+        String sql = """
+            INSERT INTO medicalappointment (student_id, nurse_id, parent_user_id, appointment_date, reason, status)
+            VALUES (?, ?, ?, ?, ?, ?)
+        """;
+
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
+
             stmt.setInt(1, appointment.getStudentId());
-            stmt.setInt(2, appointment.getNurseId());
-            stmt.setTimestamp(3, Timestamp.valueOf(appointment.getAppointmentDate()));
-            stmt.setString(4, appointment.getReason());
-            stmt.setString(5, appointment.getStatus());
+
+            if (appointment.getParentUserId() == null) {
+                // Người tạo là nurse
+                stmt.setInt(2, appointment.getNurseId());
+                stmt.setNull(3, Types.INTEGER);
+            } else {
+                // Người tạo là parent
+                stmt.setInt(2, appointment.getNurseId());
+                stmt.setInt(3, appointment.getParentUserId());
+            }
+
+            stmt.setTimestamp(4, Timestamp.valueOf(appointment.getAppointmentDate()));
+            stmt.setString(5, appointment.getReason());
+            stmt.setString(6, appointment.getStatus());
+
             stmt.executeUpdate();
+
         } catch (SQLException e) {
             throw new RuntimeException("Error creating appointment", e);
         }
     }
-
     @Override
     public List<MedicalAppointment> getAppointmentsByStudentId(int studentId) {
         String sql = "SELECT * FROM medicalappointment WHERE student_id = ?";

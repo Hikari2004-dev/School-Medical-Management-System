@@ -54,7 +54,7 @@ public class UserRepositoryImpl implements IUserRepository {
 
     @Override
     public Appuser getUserByEmail(String email) {
-        String sql = "SELECT user_id, first_name, last_name, email, phone, address, role_name, created_at " +
+        String sql = "SELECT user_id, first_name, last_name, email, phone, address, appuser.role_id, role_name, created_at " +
                 "FROM appuser JOIN role ON appuser.role_id = role.role_id WHERE email = ?";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -69,8 +69,9 @@ public class UserRepositoryImpl implements IUserRepository {
                     user.setEmail(rs.getString("email"));
                     user.setPhone(rs.getString("phone"));
                     user.setAddress(rs.getString("address"));
+                    user.setRoleId(rs.getInt("role_id"));         // ✅ Bổ sung
                     user.setRoleName(rs.getString("role_name"));
-                    user.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime()); // ✅ Mới
+                    user.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
                     return user;
                 }
             }

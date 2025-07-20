@@ -1,7 +1,6 @@
 package com.school_medical.school_medical_management_system.repositories.entites;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.time.LocalDateTime;
 
 public class Appuser {
@@ -12,8 +11,9 @@ public class Appuser {
     private String phone;
     private String address;
     private String roleName;
+    private Integer roleId; // ✅ Bổ sung
     @JsonIgnore
-    private LocalDateTime createdAt; // ✅ Thêm mới
+    private LocalDateTime createdAt;
 
     // --- Getters và Setters ---
     public Integer getId() { return id; }
@@ -36,6 +36,9 @@ public class Appuser {
 
     public String getRoleName() { return roleName; }
     public void setRoleName(String roleName) { this.roleName = roleName; }
+
+    public Integer getRoleId() { return roleId; }
+    public void setRoleId(Integer roleId) { this.roleId = roleId; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
