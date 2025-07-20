@@ -1,276 +1,25 @@
-// import React, { useState, useEffect } from "react";
-// import { useNavigate, useLocation } from "react-router-dom";
-// import AvatarImg from "../../../image/hinhanh/avatar.png";
-// import LogoImg from "../../../image/hinhanh/logoproject.png";
-// import "./StudentHealthProfile.css";
-
-// const StudentHealthProfile = () => {
-//   const navigate = useNavigate();
-//   const location = useLocation();
-
-//   const tabRoutes = {
-//     "/patient-search": "Thông tin cá nhân",
-//     "/medications": "Đơn thuốc",
-//     "/vaccinations": "Lịch sử tiêm chủng",
-//     "/health-record": "Hồ sơ sức khỏe",
-//   };
-
-//   const activeTab = tabRoutes[location.pathname] || "Hồ sơ sức khỏe";
-
-//   const [isEditing, setIsEditing] = useState(false);
-//   const [profile, setProfile] = useState({
-//     id: 1, // 👈 Thêm id vào profile
-//     allergy: "",
-//     chronicDisease: "",
-//     medicalHistory: "",
-//     vision: "",
-//     hearing: "",
-//     height: "",
-//     weight: "",
-//     bmi: "",
-//   });
-
-//   useEffect(() => {
-//     const token = localStorage.getItem("token");
-//     if (!token) return console.warn("⚠️ No token found");
-
-//     fetch("http://localhost:8080/api/healthinfo/1", {
-//       headers: {
-//         Authorization: `Bearer ${token}`,
-//       },
-//     })
-//       .then((res) => {
-//         if (!res.ok) throw new Error("Lỗi khi lấy dữ liệu hồ sơ");
-//         return res.json();
-//       })
-//       .then((data) => {
-//         if (data.success && data.data) {
-//           setProfile({ id: 1, ...data.data }); // 👈 Giữ lại id khi set
-//         } else {
-//           console.warn("Không có dữ liệu hồ sơ:", data.message);
-//         }
-//       })
-//       .catch((err) => console.error("Lỗi fetch:", err));
-//   }, []);
-
-//   const handleEditToggle = () => {
-//     if (isEditing) {
-//       const token = localStorage.getItem("token");
-//       if (!token) return console.error("⚠️ Không có token");
-
-//       const payload = { ...profile, id: 1 }; // 👈 đảm bảo có id
-
-//       const putRequest = fetch("http://localhost:8080/api/healthinfo/1", {
-//         method: "PUT",
-//         headers: {
-//           "Content-Type": "application/json",
-//           Authorization: `Bearer ${token}`,
-//         },
-//         body: JSON.stringify(payload),
-//       });
-
-//       const saveRequest = fetch("http://localhost:8080/api/healthinfo/save/1", {
-//         method: "PUT", // ✅ Sửa từ POST thành PUT nếu backend yêu cầu
-//         headers: {
-//           "Content-Type": "application/json",
-//           Authorization: `Bearer ${token}`,
-//         },
-//         body: JSON.stringify(payload),
-//       });
-
-//       Promise.all([putRequest, saveRequest])
-//         .then(async ([putRes, saveRes]) => {
-//           const putData = await putRes.json().catch(() => null);
-//           const saveData = await saveRes.json().catch(() => null);
-
-//           console.log("PUT /1 status:", putRes.status, putData);
-//           console.log("PUT /save/1 status:", saveRes.status, saveData);
-
-//           if (!putRes.ok || !saveRes.ok) {
-//             throw new Error("❌ Một trong các yêu cầu cập nhật thất bại");
-//           }
-//         })
-//         .catch((err) => {
-//           console.error("❌ Lỗi khi cập nhật:", err);
-//         });
-//     }
-
-//     setIsEditing(!isEditing);
-//   };
-
-//   const handleChange = (field, value) => {
-//     const updated = { ...profile, [field]: value };
-//     if (field === "height" || field === "weight") {
-//       const h = field === "height" ? parseFloat(value) : parseFloat(updated.height);
-//       const w = field === "weight" ? parseFloat(value) : parseFloat(updated.weight);
-//       if (h > 0 && w > 0) {
-//         updated.bmi = (w / ((h / 100) ** 2)).toFixed(2);
-//       }
-//     }
-//     setProfile(updated);
-//   };
-
-//   const handleTabClick = (label) => {
-//     const path = Object.keys(tabRoutes).find((key) => tabRoutes[key] === label);
-//     if (path && location.pathname !== path) {
-//       navigate(path);
-//     }
-//   };
-
-//   return (
-//     <div className="student-profile-page">
-//       <aside className="sidebar">
-//         <div className="brand-box">
-//           <img src={LogoImg} alt="Logo" className="brand-icon" />
-//           <div className="brand-text">
-//             <h1>SchoMed</h1>
-//             <p>School Medical</p>
-//           </div>
-//         </div>
-
-//         <nav className="sidebar-nav">
-//           <button
-//             onClick={() => navigate("/patient-search")}
-//             className={location.pathname === "/patient-search" ? "active" : ""}
-//           >
-//             🏠 Trang chủ
-//           </button>
-//           <button
-//             onClick={() => navigate("/medications")}
-//             className={location.pathname === "/medications" ? "active" : ""}
-//           >
-//             💊 Đơn thuốc
-//           </button>
-//           <button
-//             onClick={() => navigate("/vaccinations")}
-//             className={location.pathname === "/vaccinations" ? "active" : ""}
-//           >
-//             💉 Sổ vaccine
-//           </button>
-//           <button
-//             onClick={() => navigate("/health-record")}
-//             className={location.pathname === "/health-record" ? "active" : ""}
-//           >
-//             📁 Hồ sơ sức khỏe
-//           </button>
-//         </nav>
-//       </aside>
-
-//       <main className="profile-main">
-//         <button onClick={() => navigate("/")} className="home-button">
-//           ⬅ Quay về trang chính
-//         </button>
-
-//         <div className="profile-card">
-//           <div className="profile-overview">
-//             <img src={AvatarImg} alt="avatar" className="avatar" />
-//             <div className="info-text">
-//               <h2>Thông tin hồ sơ sức khỏe</h2>
-//               <p>Thông tin chi tiết về tình trạng sức khỏe học sinh</p>
-//             </div>
-//           </div>
-
-//           <div className="profile-tabs">
-//             {Object.values(tabRoutes).map((label) => (
-//               <span
-//                 key={label}
-//                 className={`tab ${activeTab === label ? "active" : ""}`}
-//                 onClick={() => handleTabClick(label)}
-//               >
-//                 {label}
-//               </span>
-//             ))}
-//           </div>
-
-//           <div className="profile-detail">
-//             <div className="info-columns">
-//               <div className="contact-left">
-//                 <label><strong>Dị ứng:</strong></label>
-//                 {isEditing ? (
-//                   <input
-//                     className="input-line"
-//                     value={profile.allergy}
-//                     onChange={(e) => handleChange("allergy", e.target.value)}
-//                   />
-//                 ) : (
-//                   <p>{profile.allergy}</p>
-//                 )}
-
-//                 <label><strong>Bệnh mãn tính:</strong></label>
-//                 {isEditing ? (
-//                   <input
-//                     className="input-line"
-//                     value={profile.chronicDisease}
-//                     onChange={(e) => handleChange("chronicDisease", e.target.value)}
-//                   />
-//                 ) : (
-//                   <p>{profile.chronicDisease}</p>
-//                 )}
-
-//                 <label><strong>Lịch sử bệnh:</strong></label>
-//                 {isEditing ? (
-//                   <input
-//                     className="input-line"
-//                     value={profile.medicalHistory}
-//                     onChange={(e) => handleChange("medicalHistory", e.target.value)}
-//                   />
-//                 ) : (
-//                   <p>{profile.medicalHistory}</p>
-//                 )}
-//               </div>
-
-//               <div className="contact-right">
-//                 <label><strong>Thị lực:</strong></label>
-//                 {isEditing ? (
-//                   <input
-//                     className="input-line"
-//                     value={profile.vision}
-//                     onChange={(e) => handleChange("vision", e.target.value)}
-//                   />
-//                 ) : (
-//                   <p>{profile.vision}</p>
-//                 )}
-
-//                 <label><strong>Thính lực:</strong></label>
-//                 {isEditing ? (
-//                   <input
-//                     className="input-line"
-//                     value={profile.hearing}
-//                     onChange={(e) => handleChange("hearing", e.target.value)}
-//                   />
-//                 ) : (
-//                   <p>{profile.hearing}</p>
-//                 )}
-//               </div>
-//             </div>
-
-//             <button
-//               onClick={handleEditToggle}
-//               className="home-button"
-//               style={{ marginTop: "20px" }}
-//             >
-//               {isEditing ? "💾 Lưu lại" : "✏️ Chỉnh sửa"}
-//             </button>
-//           </div>
-//         </div>
-//       </main>
-//     </div>
-//   );
-// };
-
-// export default StudentHealthProfile;
-// src/pages/lookup/info/StudentHealthProfile.jsx
-import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation, useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import "./StudentHealthProfile.css";
 import AvatarImg from "../../../image/hinhanh/avatar.png";
 import LogoImg from "../../../image/hinhanh/logoproject.png";
-import "./StudentHealthProfile.css";
 
 const StudentHealthProfile = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  // Nếu bạn có route param, dùng useParams:
-  const { studentId: paramId } = useParams();
+
+  const [children, setChildren] = useState([]);
+  const [selectedStudentId, setSelectedStudentId] = useState(null);
+  const [profile, setProfile] = useState({
+    allergy: "",
+    chronicDisease: "",
+    medicalHistory: "",
+    vision: "",
+    hearing: "",
+  });
+
+  const userId = localStorage.getItem("userId");
+  const token = localStorage.getItem("token");
 
   const tabRoutes = {
     "/patient-search": "Thông tin cá nhân",
@@ -280,103 +29,64 @@ const StudentHealthProfile = () => {
   };
   const activeTab = tabRoutes[location.pathname] || "Hồ sơ sức khỏe";
 
-  const [isEditing, setIsEditing] = useState(false);
-  const [profile, setProfile] = useState({
-    id: "",
-    allergy: "",
-    chronicDisease: "",
-    medicalHistory: "",
-    vision: "",
-    hearing: "",
-    height: "",
-    weight: "",
-    bmi: "",
-  });
-
-  useEffect(() => {
-    // Lấy studentId: ưu tiên param, nếu không thì localStorage
-    const id = paramId || localStorage.getItem("studentId");
-    if (!id) {
-      console.warn("⚠️ Không có studentId để fetch hồ sơ");
-      return;
-    }
-    setProfile(p => ({ ...p, id }));
-    const token = localStorage.getItem("token");
-    if (!token) return console.warn("⚠️ No token found");
-
-    fetch(`http://localhost:8080/api/healthinfo/${id}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then(res => {
-        if (!res.ok) throw new Error("Lỗi khi lấy dữ liệu hồ sơ");
-        return res.json();
-      })
-      .then(data => {
-        if (data.success && data.data) {
-          setProfile({ id, ...data.data });
-        } else {
-          console.warn("Không có dữ liệu hồ sơ:", data.message);
-        }
-      })
-      .catch(err => console.error("Lỗi fetch:", err));
-  }, [paramId]);
-
-  const handleEditToggle = () => {
-    if (isEditing) {
-      const token = localStorage.getItem("token");
-      if (!token) return console.error("⚠️ Không có token");
-      const payload = { ...profile };
-
-      fetch(`http://localhost:8080/api/healthinfo/${profile.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(payload),
-      })
-        .then(res => {
-          if (!res.ok) throw new Error("Cập nhật thất bại");
-        })
-        .then(() => {
-          // nếu có endpoint save riêng, gọi tiếp
-          return fetch(
-            `http://localhost:8080/api/healthinfo/save/${profile.id}`,
-            {
-              method: "PUT",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-              },
-              body: JSON.stringify(payload),
-            }
-          );
-        })
-        .then(res => {
-          if (!res.ok) throw new Error("Lưu thất bại");
-          alert("Cập nhật thành công");
-        })
-        .catch(err => console.error("❌ Lỗi khi cập nhật:", err));
-    }
-    setIsEditing(!isEditing);
-  };
-
-  const handleChange = (field, value) => {
-    const updated = { ...profile, [field]: value };
-    if (field === "height" || field === "weight") {
-      const h = parseFloat(updated.height) || 0;
-      const w = parseFloat(updated.weight) || 0;
-      if (h > 0 && w > 0) {
-        updated.bmi = (w / ((h / 100) ** 2)).toFixed(2);
-      }
-    }
-    setProfile(updated);
-  };
-
-  const handleTabClick = label => {
-    const path = Object.keys(tabRoutes).find(k => tabRoutes[k] === label);
+  const handleTabClick = (label) => {
+    const path = Object.keys(tabRoutes).find((k) => tabRoutes[k] === label);
     if (path && location.pathname !== path) navigate(path);
   };
+
+  // 📌 Fetch danh sách học sinh của phụ huynh
+  useEffect(() => {
+    if (!userId || !token) return;
+
+    fetch(`http://localhost:8080/api/students/by-parent/${userId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.success && Array.isArray(res.data)) {
+          setChildren(res.data);
+          if (res.data.length > 0) {
+            setSelectedStudentId(res.data[0].id); // mặc định học sinh đầu tiên
+          }
+        }
+      })
+      .catch((err) => console.error("❌ Lỗi lấy danh sách học sinh:", err));
+  }, [userId, token]);
+
+  // 📌 Fetch hồ sơ sức khỏe khi học sinh thay đổi
+  useEffect(() => {
+    if (!userId || !selectedStudentId || !token) return;
+
+    fetch(`http://localhost:8080/api/students/healthinfo?userId=${userId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (Array.isArray(res)) {
+          const health = res.find(
+            (item) => item.studentId === Number(selectedStudentId)
+          );
+          if (health) {
+            setProfile({
+              allergy: health.allergy,
+              chronicDisease: health.chronicDisease,
+              medicalHistory: health.medicalHistory,
+              vision: health.vision,
+              hearing: health.hearing,
+            });
+          } else {
+            setProfile({
+              allergy: "",
+              chronicDisease: "",
+              medicalHistory: "",
+              vision: "",
+              hearing: "",
+            });
+          }
+        }
+      })
+      .catch((err) => console.error("❌ Lỗi lấy hồ sơ sức khỏe:", err));
+  }, [selectedStudentId, userId, token]);
 
   return (
     <div className="student-profile-page">
@@ -388,6 +98,7 @@ const StudentHealthProfile = () => {
             <p>School Medical</p>
           </div>
         </div>
+
         <nav className="sidebar-nav">
           {Object.entries(tabRoutes).map(([path, label]) => (
             <button
@@ -402,7 +113,8 @@ const StudentHealthProfile = () => {
       </aside>
 
       <main className="profile-main">
-        <button onClick={() => navigate("/")} className="home-button">
+        {/* ✅ Nút quay về */}
+        <button className="home-button" onClick={() => navigate("/")}>
           ⬅ Quay về trang chính
         </button>
 
@@ -411,12 +123,22 @@ const StudentHealthProfile = () => {
             <img src={AvatarImg} alt="avatar" className="avatar" />
             <div className="info-text">
               <h2>Hồ sơ sức khỏe học sinh</h2>
-              <p>Mã HS: {profile.id}</p>
+              <label>Chọn học sinh:</label>
+              <select
+                value={selectedStudentId || ""}
+                onChange={(e) => setSelectedStudentId(e.target.value)}
+              >
+                {children.map((child) => (
+                  <option key={child.id} value={child.id}>
+                    {child.name} ({child.grade})
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
 
           <div className="profile-tabs">
-            {Object.values(tabRoutes).map(label => (
+            {Object.values(tabRoutes).map((label) => (
               <span
                 key={label}
                 className={`tab ${activeTab === label ? "active" : ""}`}
@@ -431,72 +153,23 @@ const StudentHealthProfile = () => {
             <div className="info-columns">
               <div className="contact-left">
                 <label><strong>Dị ứng:</strong></label>
-                {isEditing ? (
-                  <input
-                    className="input-line"
-                    value={profile.allergy}
-                    onChange={e => handleChange("allergy", e.target.value)}
-                  />
-                ) : (
-                  <p>{profile.allergy}</p>
-                )}
+                <p>{profile.allergy || "Không có thông tin"}</p>
+
                 <label><strong>Bệnh mãn tính:</strong></label>
-                {isEditing ? (
-                  <input
-                    className="input-line"
-                    value={profile.chronicDisease}
-                    onChange={e =>
-                      handleChange("chronicDisease", e.target.value)
-                    }
-                  />
-                ) : (
-                  <p>{profile.chronicDisease}</p>
-                )}
+                <p>{profile.chronicDisease || "Không có thông tin"}</p>
+
                 <label><strong>Lịch sử bệnh:</strong></label>
-                {isEditing ? (
-                  <input
-                    className="input-line"
-                    value={profile.medicalHistory}
-                    onChange={e =>
-                      handleChange("medicalHistory", e.target.value)
-                    }
-                  />
-                ) : (
-                  <p>{profile.medicalHistory}</p>
-                )}
+                <p>{profile.medicalHistory || "Không có thông tin"}</p>
               </div>
 
               <div className="contact-right">
                 <label><strong>Thị lực:</strong></label>
-                {isEditing ? (
-                  <input
-                    className="input-line"
-                    value={profile.vision}
-                    onChange={e => handleChange("vision", e.target.value)}
-                  />
-                ) : (
-                  <p>{profile.vision}</p>
-                )}
+                <p>{profile.vision || "Không có thông tin"}</p>
+
                 <label><strong>Thính lực:</strong></label>
-                {isEditing ? (
-                  <input
-                    className="input-line"
-                    value={profile.hearing}
-                    onChange={e => handleChange("hearing", e.target.value)}
-                  />
-                ) : (
-                  <p>{profile.hearing}</p>
-                )}
+                <p>{profile.hearing || "Không có thông tin"}</p>
               </div>
             </div>
-
-            <button
-              onClick={handleEditToggle}
-              className="home-button"
-              style={{ marginTop: 20 }}
-            >
-              {isEditing ? "💾 Lưu lại" : "✏️ Chỉnh sửa"}
-            </button>
           </div>
         </div>
       </main>
@@ -505,4 +178,3 @@ const StudentHealthProfile = () => {
 };
 
 export default StudentHealthProfile;
-

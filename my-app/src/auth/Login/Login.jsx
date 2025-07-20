@@ -1,4 +1,3 @@
-// src/auth/Login/Login.jsx
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
@@ -100,14 +99,14 @@ export default function Login() {
     <GoogleOAuthProvider clientId="493912650211-kqoj7t293bdhfgepv1q7kh7vik3o0852.apps.googleusercontent.com">
       <div
         className="login-wrapper"
-        style={{ backgroundImage: `url(${Background})` }}  // Fix template string
+        style={{ backgroundImage: `url(${Background})` }}
       >
         <div className="login-box">
           <img src={LogoImg} alt="Logo" className="login-logo" />
           <h2 className="login-title">Đăng nhập</h2>
 
           <form className="login-form" onSubmit={handleSubmit}>
-            <div className="form-group">
+            <div>
               <label className="login-label">Email</label>
               <input
                 type="email"
@@ -119,7 +118,7 @@ export default function Login() {
               />
             </div>
 
-            <div className="form-group">
+            <div>
               <label className="login-label">Mật khẩu</label>
               <input
                 type="password"
