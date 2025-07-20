@@ -3,6 +3,7 @@ package com.school_medical.school_medical_management_system.services.impl;
 import com.school_medical.school_medical_management_system.config.JwtUtil;
 import com.school_medical.school_medical_management_system.repositories.IUserRepository;
 import com.school_medical.school_medical_management_system.repositories.entites.Appuser;
+import com.school_medical.school_medical_management_system.repositories.entites.Parent;
 import com.school_medical.school_medical_management_system.services.IAppUserService;
 import com.school_medical.school_medical_management_system.utils.AuthUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,12 +79,26 @@ public class AppUserService implements IAppUserService {
         }
 
         // Lưu người dùng vào cơ sở dữ liệu
-        return userRepository.saveUser(user);
-    }
+        Appuser registeredUser = userRepository.saveUser(user);
 
+        // Thêm thông tin phụ huynh vào bảng 'parent'
+        Parent parent = new Parent();
+        parent.setUserId(registeredUser.getId());  // Gán user_id từ Appuser
+        parent.setFullName(registeredUser.getFirstName() + " " + registeredUser.getLastName());  // Kết hợp first name và last name
+        parent.setPhone(registeredUser.getPhone());  // Gán số điện thoại
+        parent.setGender(registeredUser.getGender());  // Gán giới tính từ Appuser
+
+// Nếu giới tính không được cung cấp, bạn có thể gán mặc định ở đây
+        if (parent.getGender() == null || parent.getGender().isEmpty()) {
+            parent.setGender("Nam");  // Nếu không có giới tính, gán mặc định là Nam
+        }
+        // Lưu thông tin phụ huynh vào bảng parent
+        userRepository.saveParent(parent);
+
+        return registeredUser;
+    }
     private boolean isValidEmail(String email) {
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
         return email != null && email.matches(emailRegex);
     }
-
 }
