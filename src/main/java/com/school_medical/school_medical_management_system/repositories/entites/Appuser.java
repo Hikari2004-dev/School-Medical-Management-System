@@ -11,7 +11,9 @@ public class Appuser {
     private String phone;
     private String address;
     private String roleName;
-    private Integer roleId; // ✅ Bổ sung
+    private Integer roleId;  // Bổ sung roleId
+    private String password;  // Thêm thuộc tính password
+
     @JsonIgnore
     private LocalDateTime createdAt;
 
@@ -42,4 +44,13 @@ public class Appuser {
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+    // Thêm phương thức getPassword() và setPassword() cho mật khẩu
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }

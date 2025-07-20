@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -33,6 +34,56 @@ public class AppUserService implements IAppUserService {
     @Override
     public List<Appuser> getAllUsers() {
         return userRepository.getAllUsers();
+    }
+
+
+    public Appuser registerUser(Appuser user) {
+        // Kiểm tra nếu đối tượng user là null
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User data is missing");
+        }
+
+        // Kiểm tra các trường bắt buộc của người dùng
+        if (user.getFirstName() == null || user.getFirstName().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "First name is required");
+        }
+
+        if (user.getLastName() == null || user.getLastName().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Last name is required");
+        }
+
+        if (user.getEmail() == null || user.getEmail().isEmpty() || !isValidEmail(user.getEmail())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid email");
+        }
+
+        if (user.getPhone() == null || user.getPhone().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Phone number is required");
+        }
+
+        if (user.getAddress() == null || user.getAddress().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Address is required");
+        }
+
+        // Kiểm tra nếu email đã tồn tại
+        if (getUserByEmail(user.getEmail()) != null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email already exists");
+        }
+
+        // Gán roleId mặc định là 4 (Parent)
+        user.setRoleId(4);
+
+        // Gán thời gian tạo nếu chưa có
+        if (user.getCreatedAt() == null) {
+            user.setCreatedAt(LocalDateTime.now());  // Gán thời gian hiện tại nếu chưa có
+        }
+
+        // Lưu người dùng vào cơ sở dữ liệu
+        return userRepository.saveUser(user);
+    }
+
+    private boolean isValidEmail(String email) {
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        return email != null && email.matches(emailRegex);
     }
 
 }

@@ -14,4 +14,5 @@ public interface IUserRepository {
     List<Appuser> getAllNurses();
     List<String> getAllUserEmails();
     List<Appuser> getAllUsers();
+    Appuser saveUser(Appuser user);
 }

@@ -6,6 +6,7 @@ import com.school_medical.school_medical_management_system.repositories.entites.
 import com.school_medical.school_medical_management_system.services.IAppUserService;
 import com.school_medical.school_medical_management_system.utils.AuthUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,4 +50,15 @@ public class UserController {
             return ResponseEntity.status(500).body(new ApiResponse<>(false, "Lỗi hệ thống: " + e.getMessage(), null));
         }
     }
+
+    // Endpoint đăng ký tài khoản
+    @PostMapping("/register")
+    public ResponseEntity<String> registerUser(@RequestBody Appuser user) {
+        // Đăng ký người dùng
+        Appuser registeredUser = appUserService.registerUser(user);
+
+        // Trả về thông báo thành công với mã trạng thái CREATED (201)
+        return new ResponseEntity<>("Tạo tài khoản thành công", HttpStatus.CREATED);
+    }
+
 }
