@@ -12,81 +12,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  // ✅ Đăng nhập bằng Google
-  const handleGoogleLogin = async (credentialResponse) => {
-    try {
-      const { credential } = credentialResponse;
-      const decoded = jwtDecode(credential);
-      // Gửi thông tin Google đến backend để xác thực và lấy role
-      const res = await fetch("http://localhost:8080/login/google", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: decoded.email,
-          name: decoded.name,
-          googleId: decoded.sub,
-        }),
-      });
-      if (!res.ok) throw new Error("Đăng nhập Google thất bại");
-      const data = await res.json();
-      localStorage.setItem("token", data.jwt);
-      localStorage.setItem("userName", data.name);
-      localStorage.setItem("role", data.role);
-      localStorage.setItem("userId", data.userId);
-      redirectByRole(data.role);
-    } catch (error) {
-      alert("Đăng nhập Google thất bại!");
-    }
-  };
-  // ✅ Đăng nhập bằng email/mật khẩu
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await fetch("http://localhost:8080/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-      if (!res.ok) throw new Error("Đăng nhập thất bại");
-      const data = await res.json();
-      console.log("🔐 Login response:", data);
-
-      if (!data.userId) {
-        alert("Không lấy được userId. Vui lòng kiểm tra backend.");
-        return;
-      }
-
-      localStorage.setItem("token", data.jwt);
-      localStorage.setItem("userName", data.name);
-      localStorage.setItem("role", data.role);
-      localStorage.setItem("userId", data.userId);
-
-      if (data.role === "Admin") {
-        navigate("/admin");
-      } else if (data.role === "Parent") {
-        navigate("/");
-      } else if (data.role === "SchoolNurse") {
-        navigate("/nurse");
-      } else {
-        alert("Vai trò không được hỗ trợ!");
-      }
-    } catch (error) {
-      alert("Đăng nhập thất bại!");
-    }
-  };
-
-  // ✅ Xử lý điều hướng theo role
-  const redirectByRole = (role) => {
-    if (role === "Admin" || role === "SchoolNurse") {
-      navigate("/admin");
-    } else if (role === "Parent") {
-      navigate("/");
-    } else {
-      alert("Vai trò không được hỗ trợ!");
-    }
-  };
-
-  // Đăng nhập bằng Google
+  // ✅ Xử lý đăng nhập Google
   const handleGoogleLogin = async (credentialResponse) => {
     try {
       const decoded = jwtDecode(credentialResponse.credential);
@@ -95,7 +21,12 @@ export default function Login() {
       const res = await fetch("http://localhost:8080/auth/google", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token: credentialResponse.credential }),
+        body: JSON.stringify({
+          email: decoded.email,
+          name: decoded.name,
+          googleId: decoded.sub,
+          token: credentialResponse.credential,
+        }),
       });
 
       if (!res.ok) throw new Error("Google login thất bại");
@@ -117,6 +48,50 @@ export default function Login() {
     } catch (err) {
       console.error("❌ Google login error:", err);
       alert(err.message || "Đăng nhập Google thất bại!");
+    }
+  };
+
+  // ✅ Đăng nhập bằng email/mật khẩu
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch("http://localhost:8080/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!res.ok) throw new Error("Đăng nhập thất bại");
+
+      const data = await res.json();
+      console.log("🔐 Login response:", data);
+
+      if (!data.userId) {
+        alert("Không lấy được userId. Vui lòng kiểm tra backend.");
+        return;
+      }
+
+      localStorage.setItem("token", data.jwt);
+      localStorage.setItem("userName", data.name);
+      localStorage.setItem("role", data.role);
+      localStorage.setItem("userId", data.userId);
+
+      redirectByRole(data.role);
+    } catch (error) {
+      alert("Đăng nhập thất bại!");
+    }
+  };
+
+  // ✅ Điều hướng theo vai trò
+  const redirectByRole = (role) => {
+    if (role === "Admin") {
+      navigate("/admin");
+    } else if (role === "SchoolNurse") {
+      navigate("/nurse");
+    } else if (role === "Parent") {
+      navigate("/");
+    } else {
+      alert("Vai trò không được hỗ trợ!");
     }
   };
 
@@ -165,7 +140,9 @@ export default function Login() {
                 <Link to="/forget-password">Quên mật khẩu</Link>
               </div>
             </div>
-            <button type="submit" className="btn-submit">Tiếp tục</button>
+            <button type="submit" className="btn-submit">
+              Tiếp tục
+            </button>
           </form>
 
           {/* Google Login Button */}
