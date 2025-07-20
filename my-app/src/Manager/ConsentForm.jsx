@@ -1,127 +1,92 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-const ConsentForm = () => {
-    const [formData, setFormData] = useState({
-        studentName: "",
-        className: "",
-        consent: "",
-        note: "",
-    });
+export default function ConsentForm() {
+    const [subject, setSubject] = useState("");
+    const [content, setContent] = useState("");
+    const [users, setUsers] = useState([]);
+    const [status, setStatus] = useState("");
 
-    const handleChange = (e) => {
-        setFormData((prev) => ({
-            ...prev,
-            [e.target.name]: e.target.value,
-        }));
-    };
+    useEffect(() => {
+        fetch("http://localhost:8080/api/users/all")
+            .then((res) => {
+                if (!res.ok) throw new Error("Không lấy được danh sách người dùng");
+                return res.text();
+            })
+            .then((text) => {
+                if (!text) return [];
+                try {
+                    const data = JSON.parse(text);
+                    setUsers(Array.isArray(data) ? data : data.data || []);
+                } catch {
+                    setUsers([]);
+                }
+            })
+            .catch(() => setUsers([]));
+    }, []);
 
-    const handleSubmit = async (e) => {
+    const handleSend = async (e) => {
         e.preventDefault();
-
-        const { studentName, className, consent, note } = formData;
-
-        const content = `
-      Họ tên học sinh: ${studentName}
-      Lớp: ${className}
-      Ý kiến phụ huynh: ${consent}
-      Ghi chú thêm: ${note}
-    `;
-
+        setStatus("Đang gửi...");
         try {
-            const res = await fetch("http://localhost:8080/api/send-consent-email", {
+            const token = localStorage.getItem("token");
+            const recipients = users.map(u => u.email).filter(Boolean);
+            const body = { subject, content, recipients };
+            const res = await fetch("http://localhost:8080/api/notifications/send", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    subject: "Xác nhận tiêm vaccine",
-                    content: content,
-                    to: "school@example.com",
-                }),
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify(body),
             });
-
             if (res.ok) {
-                alert("Gửi xác nhận thành công!");
-                setFormData({ studentName: "", className: "", consent: "", note: "" });
+                setStatus("Gửi thành công!");
+                setSubject("");
+                setContent("");
             } else {
-                alert("Lỗi khi gửi email.");
+                setStatus("Gửi thất bại!");
             }
-        } catch (error) {
-            alert("Không thể kết nối đến máy chủ.");
-            console.error(error);
+        } catch {
+            setStatus("Có lỗi xảy ra!");
         }
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-            <div className="bg-white p-8 rounded-xl shadow-md w-full max-w-xl">
-                <h2 className="text-2xl font-semibold text-center text-blue-600 mb-6">
-                    Phiếu Xác Nhận Tiêm Vaccine
-                </h2>
-
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
-                        <label className="block font-medium mb-1">Họ tên học sinh</label>
-                        <input
-                            type="text"
-                            name="studentName"
-                            value={formData.studentName}
-                            onChange={handleChange}
-                            required
-                            className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block font-medium mb-1">Lớp</label>
-                        <input
-                            type="text"
-                            name="className"
-                            value={formData.className}
-                            onChange={handleChange}
-                            required
-                            className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block font-medium mb-1">Ý kiến phụ huynh</label>
-                        <select
-                            name="consent"
-                            value={formData.consent}
-                            onChange={handleChange}
-                            required
-                            className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                        >
-                            <option value="">-- Chọn --</option>
-                            <option value="Đồng ý tiêm">Đồng ý tiêm</option>
-                            <option value="Không đồng ý tiêm">Không đồng ý tiêm</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label className="block font-medium mb-1">Ghi chú thêm</label>
-                        <textarea
-                            name="note"
-                            rows="4"
-                            value={formData.note}
-                            onChange={handleChange}
-                            className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                        />
-                    </div>
-
-                    <button
-                        type="submit"
-                        className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg text-lg font-medium transition"
-                    >
-                        Gửi xác nhận
-                    </button>
-
-                    <p className="text-sm text-gray-500 text-center">
-                        Thông tin sẽ được gửi về nhà trường qua email.
-                    </p>
-                </form>
+        <form
+            className="max-w-lg mx-auto bg-white p-8 rounded shadow"
+            onSubmit={handleSend}
+        >
+            <h2 className="text-xl font-bold mb-6 text-blue-700">
+                Gửi thông báo qua Email
+            </h2>
+            <div className="mb-4">
+                <label className="block mb-2 font-medium">Tiêu đề</label>
+                <input
+                    className="w-full border rounded px-3 py-2"
+                    value={subject}
+                    onChange={(e) => setSubject(e.target.value)}
+                    required
+                />
             </div>
-        </div>
+            <div className="mb-4">
+                <label className="block mb-2 font-medium">Nội dung</label>
+                <textarea
+                    className="w-full border rounded px-3 py-2"
+                    rows={5}
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
+                    required
+                />
+            </div>
+            <button
+                type="submit"
+                className="bg-blue-600 text-white px-6 py-2 rounded font-semibold"
+            >
+                Gửi thông báo
+            </button>
+            {status && (
+                <p className="mt-4 text-center text-green-600">{status}</p>
+            )}
+        </form>
     );
-};
-
-export default ConsentForm;
+}

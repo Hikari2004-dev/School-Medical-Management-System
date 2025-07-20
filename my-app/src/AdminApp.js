@@ -7,21 +7,22 @@ import {
   FaBell,
   FaCog,
   FaTachometerAlt,
-  FaUserCheck // 👈 Thêm dòng này
+  FaUserCheck,
+  FaClipboardCheck // 👈 Thêm icon mới cho ConsentForm
 } from 'react-icons/fa';
 
-import MedicalEvents       from './Manager/MedicalEvents';
-import Notifications       from './Manager/Notifications';
-import StudentList         from './Manager/StudentList';
-import EventBatchManager   from './Manager/EventBatchManager';
-import ConsentStudentPage  from './Manager/ConsentStudentPage';
+import MedicalEvents from './Manager/MedicalEvents';
+import Notifications from './Manager/Notifications';
+import StudentList from './Manager/StudentList';
+import EventBatchManager from './Manager/EventBatchManager';
+import ConsentStudentPage from './Manager/ConsentStudentPage';
+import ConsentForm from './Manager/ConsentForm';
+import logo from './image/hinhanh/logoproject.png';
 
-import logo                from './image/hinhanh/logoproject.png';
-
-import iconMedical         from './image/icon/medicalevent.png';
-import iconNotification    from './image/icon/thu.png';
-import iconUsers           from './image/icon/user3.png';
-import iconBatch           from './image/icon/user3.png';
+import iconMedical from './image/icon/medicalevent.png';
+import iconNotification from './image/icon/thu.png';
+import iconUsers from './image/icon/user3.png';
+import iconBatch from './image/icon/user3.png';
 
 import './index.css';
 
@@ -29,7 +30,7 @@ const API_BASE = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080';
 
 function Dashboard() {
   const [summary, setSummary] = useState(null);
-  const [error,   setError]   = useState('');
+  const [error, setError] = useState('');
 
   useEffect(() => {
     fetch(`${API_BASE}/api/dashboard/summary`, { mode: 'cors' })
@@ -41,18 +42,18 @@ function Dashboard() {
       .catch(err => setError(err.message));
   }, []);
 
-  if (error)    return <p className="p-6 text-red-500">Lỗi: {error}</p>;
+  if (error) return <p className="p-6 text-red-500">Lỗi: {error}</p>;
   if (!summary) return <p className="p-6">Đang tải báo cáo...</p>;
 
   const cards = [
-    { label: 'Báo cáo tháng',         value: summary.reportMonth },
-    { label: 'Thu nhập',             value: summary.income.toLocaleString() },
-    { label: 'Người dùng hôm nay',   value: summary.usersToday },
-    { label: 'Khách hàng mới',       value: summary.newCustomers },
-    { label: 'Đơn mới',              value: summary.newOrders },
+    { label: 'Báo cáo tháng', value: summary.reportMonth },
+    { label: 'Thu nhập', value: summary.income.toLocaleString() },
+    { label: 'Người dùng hôm nay', value: summary.usersToday },
+    { label: 'Khách hàng mới', value: summary.newCustomers },
+    { label: 'Đơn mới', value: summary.newOrders },
     { label: 'Người dùng hoạt động', value: summary.activeUsers },
-    { label: 'Khai báo thuốc',       value: summary.medicationSubmissions },
-    { label: 'Tổng số người dùng',   value: summary.totalUsers }
+    { label: 'Khai báo thuốc', value: summary.medicationSubmissions },
+    { label: 'Tổng số người dùng', value: summary.totalUsers }
   ];
 
   return (
@@ -74,8 +75,8 @@ function Dashboard() {
 }
 
 export default function AdminApp() {
-  const [user, setUser]               = useState(null);
-  const [page, setPage]               = useState('dashboard');
+  const [user, setUser] = useState(null);
+  const [page, setPage] = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   useEffect(() => {
@@ -89,12 +90,13 @@ export default function AdminApp() {
   }, []);
 
   const navItems = [
-    { key: 'dashboard',    icon: <FaTachometerAlt />, label: 'Thống kê' },
-    { key: 'medical',      icon: iconMedical,         label: 'Sự kiện y tế' },
-    { key: 'notification', icon: iconNotification,    label: 'Thông báo' },
-    { key: 'students',     icon: iconUsers,           label: 'Danh sách học sinh' },
-    { key: 'eventbatch',   icon: iconBatch,           label: 'Tạo sự kiện' },
-    { key: 'consent',      icon: <FaUserCheck />,     label: 'HS Đồng ý' } // ✅ icon phù hợp
+    { key: 'dashboard', icon: <FaTachometerAlt />, label: 'Thống kê' },
+    { key: 'medical', icon: iconMedical, label: 'Sự kiện y tế' },
+    { key: 'notification', icon: iconNotification, label: 'Thông báo' },
+    { key: 'students', icon: iconUsers, label: 'Danh sách học sinh' },
+    { key: 'eventbatch', icon: iconBatch, label: 'Tạo sự kiện' },
+    { key: 'consent', icon: <FaUserCheck />, label: 'HS Đồng ý' },
+    { key: 'consentform', icon: <FaClipboardCheck />, label: 'Gửi thông báo' } // Đổi icon cho ConsentForm
   ];
 
   const getInitials = name =>
@@ -180,12 +182,13 @@ export default function AdminApp() {
         </header>
 
         <main className="flex-1 overflow-auto p-4">
-          {page === 'dashboard'    && <Dashboard />}
-          {page === 'medical'      && <MedicalEvents />}
+          {page === 'dashboard' && <Dashboard />}
+          {page === 'medical' && <MedicalEvents />}
           {page === 'notification' && <Notifications />}
-          {page === 'students'     && <StudentList />}
-          {page === 'eventbatch'   && <EventBatchManager />}
-          {page === 'consent'      && <ConsentStudentPage />} {/* ✅ thêm render trang HS Đồng ý */}
+          {page === 'students' && <StudentList />}
+          {page === 'eventbatch' && <EventBatchManager />}
+          {page === 'consent' && <ConsentStudentPage />}
+          {page === 'consentform' && <ConsentForm />} {/* Thêm render trang ConsentForm */}
         </main>
       </div>
     </div>
