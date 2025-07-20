@@ -29,16 +29,21 @@ export default function ConsentForm() {
         setStatus("Đang gửi...");
         try {
             const token = localStorage.getItem("token");
-            const recipients = users.map(u => u.email).filter(Boolean);
-            const body = { subject, content, recipients };
+
+            // 🔁 Dùng URLSearchParams để gửi dạng x-www-form-urlencoded
+            const formData = new URLSearchParams();
+            formData.append("subject", subject);
+            formData.append("content", content);
+
             const res = await fetch("http://localhost:8080/api/notifications/send", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json",
+                    "Content-Type": "application/x-www-form-urlencoded",
                     Authorization: `Bearer ${token}`,
                 },
-                body: JSON.stringify(body),
+                body: formData.toString(),
             });
+
             if (res.ok) {
                 setStatus("Gửi thành công!");
                 setSubject("");
