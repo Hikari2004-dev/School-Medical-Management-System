@@ -4,6 +4,7 @@ import com.school_medical.school_medical_management_system.repositories.IEventBa
 import com.school_medical.school_medical_management_system.repositories.INotificationRepository;
 import com.school_medical.school_medical_management_system.repositories.entites.Notification;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -17,6 +18,9 @@ import java.util.List;
 public class NotificationRepository implements INotificationRepository {
     @Autowired
     private DataSource dataSource;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     @Autowired
     private IEventBatchRepository eventBatchRepository;
@@ -137,5 +141,19 @@ public class NotificationRepository implements INotificationRepository {
         }
 
         return notifications;
+    }
+
+    public void saveNotification(Notification notification) {
+        String sql = "INSERT INTO notification (content, date_sent, confirmed, type, student_id, parent_user_id, consent_status) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+        jdbcTemplate.update(sql,
+                notification.getContent(),
+                notification.getDateSent(),
+                notification.getConfirmed(),
+                notification.getType(),
+                notification.getStudentId(),
+                notification.getParentUserId(),
+                notification.getConsentStatus());
     }
 }

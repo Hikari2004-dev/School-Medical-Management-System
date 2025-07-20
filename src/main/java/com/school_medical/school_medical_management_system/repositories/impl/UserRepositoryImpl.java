@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -173,6 +174,43 @@ public class UserRepositoryImpl implements IUserRepository {
             e.printStackTrace();
         }
         return users;
+    }
+
+    @Override
+    public Appuser saveUser(Appuser user) {
+        String sql = "INSERT INTO appuser (first_name, last_name, email, password, phone, address, role_id, created_at) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+        // Kiểm tra nếu createdAt là null, thì gán giá trị hiện tại
+        if (user.getCreatedAt() == null) {
+            user.setCreatedAt(LocalDateTime.now());  // Gán giá trị mặc định nếu null
+        }
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            stmt.setString(1, user.getFirstName());
+            stmt.setString(2, user.getLastName());
+            stmt.setString(3, user.getEmail());
+            stmt.setString(4, user.getPassword());
+            stmt.setString(5, user.getPhone());
+            stmt.setString(6, user.getAddress());
+            stmt.setInt(7, user.getRoleId());  // Giả sử bạn gán roleId mặc định là 4 (Parent)
+            stmt.setTimestamp(8, Timestamp.valueOf(user.getCreatedAt()));  // Gán createdAt (mới được thiết lập)
+
+            int affectedRows = stmt.executeUpdate();
+
+            if (affectedRows > 0) {
+                try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        user.setId(generatedKeys.getInt(1));  // Set generated ID
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return user;
     }
 
 }

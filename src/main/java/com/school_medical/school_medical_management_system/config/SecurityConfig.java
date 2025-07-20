@@ -77,7 +77,7 @@ public class SecurityConfig {
                                 "/api/reports/**",
                                 "/api/orders/**",
                                 "/api/dashboard/**",
-                                "/api/me",
+                                "/api/**",
                                 "/api/classes/**",
                                 "/api/notifications/send"
                         ).permitAll()  // Permit all the above public endpoints
