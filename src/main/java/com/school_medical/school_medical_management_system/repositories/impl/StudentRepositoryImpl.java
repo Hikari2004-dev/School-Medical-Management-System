@@ -1,6 +1,7 @@
 package com.school_medical.school_medical_management_system.repositories.impl;
 
 import com.school_medical.school_medical_management_system.repositories.IStudentRepository;
+import com.school_medical.school_medical_management_system.repositories.entites.Appuser;
 import com.school_medical.school_medical_management_system.repositories.entites.Healthinfo;
 import com.school_medical.school_medical_management_system.repositories.entites.Student;
 import com.school_medical.school_medical_management_system.repositories.entites.VaccinationParentDeclaration;
@@ -8,6 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class StudentRepositoryImpl implements IStudentRepository {
@@ -160,4 +162,29 @@ public class StudentRepositoryImpl implements IStudentRepository {
         });
     }
 
+    @Override
+    public Optional<Appuser> findParentEmailByStudentName(String studentName) {
+        String sql = """
+        SELECT a.email
+        FROM appuser a
+        JOIN parentstudent ps ON a.user_id = ps.parent_user_id
+        JOIN student s ON s.student_id = ps.student_id
+        WHERE s.name = ?
+    """;
+
+        // Sử dụng query thay vì queryForObject
+        List<Appuser> parents = jdbcTemplate.query(sql, new Object[]{studentName}, (rs, rowNum) -> {
+            Appuser parent = new Appuser();
+            parent.setEmail(rs.getString("email"));
+            return parent;
+        });
+
+        // Nếu có ít nhất một kết quả, trả về Optional chứa giá trị đầu tiên
+        if (!parents.isEmpty()) {
+            return Optional.of(parents.get(0));
+        }
+
+        // Nếu không có kết quả nào, trả về Optional.empty()
+        return Optional.empty();
+    }
 }

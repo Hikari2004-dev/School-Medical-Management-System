@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/students")
@@ -144,5 +145,20 @@ public class StudentController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse<>(false, "Lỗi hệ thống: " + e.getMessage(), null));
         }
+    }
+
+
+    @GetMapping("/parent-email")
+    public ResponseEntity<String> getParentEmailByStudentName(@RequestParam String name) {
+        // Gọi dịch vụ để lấy email của phụ huynh
+        Optional<Appuser> parentEmail = studentService.getParentEmailByStudentName(name);
+
+        // Nếu tìm thấy email phụ huynh, trả về email
+        if (parentEmail.isPresent()) {
+            return ResponseEntity.ok(parentEmail.get().getEmail());
+        }
+
+        // Nếu không tìm thấy, trả về thông báo lỗi
+        return ResponseEntity.status(404).body("Parent not found for student: " + name);
     }
 }
