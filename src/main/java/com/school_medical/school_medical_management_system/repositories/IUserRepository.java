@@ -5,12 +5,13 @@ import java.util.Optional;
 
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.school_medical.school_medical_management_system.repositories.entites.Appuser; 
+import com.school_medical.school_medical_management_system.repositories.entites.Appuser;
 
 public interface IUserRepository {
     UserDetails findUserByEmail(String email);
     Optional<Appuser> findByAccountNumber(String accountNumber);
     Appuser getUserByEmail(String username);
     List<Appuser> getAllNurses();
-    public List<String> getAllUserEmails();
+    List<String> getAllUserEmails();
+    List<Appuser> getAllUsers();
 }

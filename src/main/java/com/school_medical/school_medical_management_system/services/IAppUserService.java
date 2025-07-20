@@ -6,5 +6,6 @@ import java.util.List;
 public interface IAppUserService {
     Appuser getUserByEmail(String email);
     List<Appuser> getAllNurses();
+    List<Appuser> getAllUsers();
 }
 

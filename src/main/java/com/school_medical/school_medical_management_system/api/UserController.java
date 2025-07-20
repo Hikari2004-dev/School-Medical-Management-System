@@ -1,10 +1,12 @@
 package com.school_medical.school_medical_management_system.api;
 
+import com.school_medical.school_medical_management_system.models.ApiResponse;
 import com.school_medical.school_medical_management_system.models.UserProfileResponse;
 import com.school_medical.school_medical_management_system.repositories.entites.Appuser;
 import com.school_medical.school_medical_management_system.services.IAppUserService;
 import com.school_medical.school_medical_management_system.utils.AuthUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,5 +38,15 @@ public class UserController {
     @GetMapping("/nurses")
     public List<Appuser> getAllNurses() {
         return appUserService.getAllNurses();
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<ApiResponse<List<Appuser>>> getAllUsers() {
+        try {
+            List<Appuser> users = appUserService.getAllUsers();
+            return ResponseEntity.ok(new ApiResponse<>(true, "Lấy tất cả người dùng thành công", users));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(new ApiResponse<>(false, "Lỗi hệ thống: " + e.getMessage(), null));
+        }
     }
 }
