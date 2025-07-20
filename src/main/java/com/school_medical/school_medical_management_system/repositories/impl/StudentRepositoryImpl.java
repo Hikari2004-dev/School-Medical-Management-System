@@ -131,4 +131,33 @@ public class StudentRepositoryImpl implements IStudentRepository {
         });
     }
 
+    @Override
+    public List<Student> getStudentsByParentUserId(int parentUserId) {
+        String sql = """
+        SELECT 
+            s.student_id,
+            s.name,
+            s.date_of_birth,
+            s.gender,
+            s.grade,
+            s.class_id,
+            ps.relationship AS rel
+        FROM parentstudent ps
+        JOIN student s ON ps.student_id = s.student_id
+        WHERE ps.parent_user_id = ?
+    """;
+
+        return jdbcTemplate.query(sql, new Object[]{parentUserId}, (rs, rowNum) -> {
+            Student student = new Student();
+            student.setId(rs.getInt("student_id"));
+            student.setName(rs.getString("name"));
+            student.setDateOfBirth(rs.getDate("date_of_birth").toLocalDate());
+            student.setGender(rs.getString("gender"));
+            student.setGrade(rs.getString("grade"));
+            student.setClassId(rs.getInt("class_id"));
+            student.setRelationship(rs.getString("rel")); // ✅ đúng tên alias!
+            return student;
+        });
+    }
+
 }

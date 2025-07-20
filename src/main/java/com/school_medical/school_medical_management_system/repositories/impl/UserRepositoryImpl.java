@@ -2,6 +2,7 @@ package com.school_medical.school_medical_management_system.repositories.impl;
 
 import com.school_medical.school_medical_management_system.repositories.IUserRepository;
 import com.school_medical.school_medical_management_system.repositories.entites.Appuser;
+import com.school_medical.school_medical_management_system.repositories.entites.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.userdetails.User;
@@ -172,4 +173,5 @@ public class UserRepositoryImpl implements IUserRepository {
         }
         return users;
     }
+
 }
