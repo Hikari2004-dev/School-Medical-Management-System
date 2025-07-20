@@ -1,0 +1,146 @@
+School Medical Management System - Technical Guide
+
+I. General Information
+● Guide Title: Instructions for installing School Medical Management System
+● Last Updated: 20/07/2025
+● Purpose: To guide the setup and development for the School Medical Health Web System
+
+II. System Requirements
+● Operating System: Windows 10/11
+● Required Software:
+  ○ Node.js v22.x.x
+  ○ Java JDK 17+
+  ○ Maven 3.9+
+  ○ MySQL 2019 or later
+  ○ Visual Studio Code v1.102.1 (User Setup)
+● Required Libraries:
+🔹 Frontend (Node.js / React)
+  ● react, react-dom, react-router-dom
+  ● axios, firebase, react-hook-form
+  ● yup, @hookform/resolvers
+  ● react-bootstrap, bootstrap
+  ● react-toastify, date-fns, sass
+  ● recharts, react-icons, lucide-react
+🔹 Backend (Java Spring Boot)
+  ● spring-boot-starter-data-jpa
+  ● spring-boot-starter-security
+  ● spring-boot-starter-web
+  ● spring-boot-starter-validation
+  ● spring-boot-starter-mail
+  ● jjwt, lombok, mysql-connector-java
+
+III. Configuration
+
+Backend
+1. Clone repository hoặc tải source code về máy.
+2. Mở file: src/main/resources/application.properties
+   Ví dụ:
+   spring.datasource.url=jdbc:mysql://localhost:3306/medical_db
+   spring.datasource.username=root
+   spring.datasource.password=yourpassword
+   server.port=8080
+3. Build project: mvn clean install
+4. Run backend: mvn spring-boot:run hoặc chạy Application.java
+
+Frontend
+1. Mở Visual Studio Code và mở thư mục my-app
+2. Mở terminal và chạy: npm install
+3. Chạy ứng dụng: npm start
+
+IV. Notes
+● Default admin account: admin@gmail.com / 12345
+● Nếu lỗi kết nối, kiểm tra lại cấu hình DB trong application.properties
+● Nếu backend không phản hồi, kiểm tra CORS settings
+● Lỗi frontend, mở F12 → Console để xem chi tiết
+● Lỗi backend, kiểm tra output console của IDE
+
+V. Technical Details & Development Process
+
+1. Backend (Java Spring Boot)
+1.1. Cấu trúc thư mục backend
+  - Application.java: Entry point, khởi động Spring Boot.
+  - api/: Chứa các controller REST API (ví dụ: quản lý học sinh, thuốc, sự kiện).
+  - model/: Định nghĩa các entity (Student, Drug, Event...).
+  - repository/: Interface truy xuất dữ liệu, kế thừa JpaRepository.
+  - service/: Xử lý logic nghiệp vụ, ví dụ: StudentService, DrugService.
+  - exception/: Custom exception, xử lý lỗi.
+  - security/: Cấu hình bảo mật, xác thực JWT (nếu có).
+
+1.2. Quy trình phát triển một API mới
+  - Tạo entity: Định nghĩa các trường dữ liệu, ví dụ Student.java
+  - Tạo repository: Interface kế thừa JpaRepository để thao tác DB
+  - Tạo service: Xử lý logic nghiệp vụ, gọi repository
+  - Tạo controller: Định nghĩa các endpoint RESTful
+
+1.3. Cấu hình hệ thống
+  - application.properties: Cấu hình DB, port, email, JWT, ví dụ:
+    spring.datasource.url=jdbc:mysql://localhost:3306/medical_db
+    spring.datasource.username=root
+    spring.datasource.password=yourpassword
+    server.port=8080
+
+1.4. Bảo mật
+  - Sử dụng Spring Security, JWT cho xác thực.
+  - Áp dụng annotation như @PreAuthorize("hasRole('ADMIN')") cho các endpoint cần phân quyền.
+
+1.5. Build & Run
+  - Build: mvn clean install
+  - Run: mvn spring-boot:run hoặc chạy trực tiếp Application.java
+
+2. Frontend (ReactJS)
+2.1. Cấu trúc thư mục frontend
+  - my-app/
+    - public/: File tĩnh (favicon, manifest, index.html).
+    - src/:
+      - auth/: Đăng nhập, đăng ký, quên mật khẩu, xác thực OTP.
+      - components/: Header, Footer, ChatBot, ApiStatus, các UI component dùng chung.
+      - Manager/: Quản lý lớp, học sinh, thuốc, sự kiện, thông báo.
+      - pages/: HomePage, News, Member, ReportPage, Service...
+      - Payment/: Xử lý thanh toán, các bước xác nhận.
+      - hooks/: Custom hooks cho UI, quản lý state.
+      - data/: Dữ liệu mẫu, mock data cho phát triển UI.
+      - image/: Hình ảnh, icon.
+
+2.2. Quy trình phát triển UI
+  - Thiết kế giao diện từng page: Ví dụ HomePage.jsx import các component con.
+  - Tách component dùng chung: Ví dụ Header.jsx, Footer.jsx, ApiStatus.jsx.
+  - Sử dụng hooks: Quản lý state, hiệu ứng, ví dụ useInView.js.
+  - Kết nối API backend: Sử dụng axios hoặc fetch để lấy dữ liệu từ backend.
+  - Xử lý lỗi, loading: Hiển thị thông báo, spinner khi đang tải dữ liệu.
+
+2.3. Quản lý style
+  - Sử dụng Tailwind CSS cho UI hiện đại, responsive.
+  - Tùy chỉnh theme qua tailwind.config.js.
+
+2.4. Build & Run
+  - Cài đặt: npm install
+  - Chạy dev: npm start
+  - Build production: npm run build
+
+3. Quy trình tích hợp & vận hành
+3.1. Build & Run đồng thời
+  - Backend: mvn spring-boot:run
+  - Frontend: npm start
+  - Sử dụng script .bat để khởi động nhanh nhiều server.
+
+3.2. Kết nối hệ thống
+  - Frontend gọi API backend qua các endpoint HTTP.
+  - Sử dụng JWT hoặc session để xác thực người dùng.
+  - Quản lý trạng thái đăng nhập, phân quyền trên frontend.
+
+3.3. Kiểm thử & triển khai
+  - Kiểm thử API bằng Postman.
+  - Kiểm thử UI bằng Jest, React Testing Library.
+  - Đảm bảo các chức năng chính hoạt động ổn định trước khi deploy.
+
+4. Best Practices & Lưu ý
+  - Tách biệt rõ ràng giữa logic nghiệp vụ (service), truy xuất dữ liệu (repository), và giao tiếp API (controller).
+  - Sử dụng environment variables cho thông tin nhạy cảm (DB, secret key).
+  - Viết comment, document cho các function/phần quan trọng.
+  - Đảm bảo UI thân thiện, dễ sử dụng, hỗ trợ đa thiết bị.
+  - Quản lý version dependencies cẩn thận, cập nhật định kỳ.
+
+5. Tài liệu & Hướng dẫn bổ sung
+  - Đọc file README.md để nắm tổng quan dự án.
+  - Tham khảo API_FULL_CONTENT_GUIDE.md để biết chi tiết các endpoint API.
+  - Sử dụng các file hướng dẫn trong từng module để hiểu rõ quy trình phát triển và tích hợp.

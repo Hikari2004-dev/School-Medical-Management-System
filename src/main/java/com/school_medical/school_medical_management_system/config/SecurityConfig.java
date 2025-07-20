@@ -32,7 +32,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+            throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
@@ -47,31 +48,34 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .cors()  // Enable CORS if required (make sure you have a CORS configuration)
+                .cors() // Enable CORS if required (make sure you have a CORS configuration)
                 .and()
-                .csrf(csrf -> csrf.disable())  // Disable CSRF for stateless APIs
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))  // Statless session management
+                .csrf(csrf -> csrf.disable()) // Disable CSRF for stateless APIs
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Statless
+                                                                                                              // session
+                                                                                                              // management
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/login",  // Public login endpoint
-                                "/api/auth/**",  // Public auth API
-                                "/api/medication-submissions/**",  // Medication submissions
-                                "/api/medical-checkups/**",  // Medical checkups
-                                "/login/checkemail",  // Email check
-                                "/api/healthinfo/**",  // Health information
-                                "/api/medical-events/**",  // Medical events
-                                "/api/event-batches/**",  // Event batches
-                                "/api/vaccinations/**",  // Vaccinations
-                                "/my-children",  // Parent's children info
-                                "/api/notifications/send-batch/**",  // Notifications batch sending
-                                "/api/notifications/consent/**",  // Notifications consent
-                                "/api/notifications/parent",  // Parent notifications
-                                "/api/event-supplies/**",  // Event supplies
-                                "/api/medicalsupply/**",  // Medical supplies
-                                "/api/appointments/**",  // Appointments
-                                "/api/payment/**",  // Payment
-                                "/api/vaccination-history",  // Vaccination history
-                                "/generate-otp",  // OTP generation
+                                "/",
+                                "/login", // Public login endpoint
+                                "/api/auth/**", // Public auth API
+                                "/api/medication-submissions/**", // Medication submissions
+                                "/api/medical-checkups/**", // Medical checkups
+                                "/login/checkemail", // Email check
+                                "/api/healthinfo/**", // Health information
+                                "/api/medical-events/**", // Medical events
+                                "/api/event-batches/**", // Event batches
+                                "/api/vaccinations/**", // Vaccinations
+                                "/my-children", // Parent's children info
+                                "/api/notifications/send-batch/**", // Notifications batch sending
+                                "/api/notifications/consent/**", // Notifications consent
+                                "/api/notifications/parent", // Parent notifications
+                                "/api/event-supplies/**", // Event supplies
+                                "/api/medicalsupply/**", // Medical supplies
+                                "/api/appointments/**", // Appointments
+                                "/api/payment/**", // Payment
+                                "/api/vaccination-history", // Vaccination history
+                                "/generate-otp", // OTP generation
                                 "/api/otp/**",
                                 "/api/students/**",
                                 "/api/reports/**",
@@ -79,23 +83,25 @@ public class SecurityConfig {
                                 "/api/dashboard/**",
                                 "/api/**",
                                 "/api/classes/**",
-                                "/api/notifications/send"
-                        ).permitAll()  // Permit all the above public endpoints
+                                "/api/notifications/send")
+                        .permitAll() // Permit all the above public endpoints
 
-                        .requestMatchers("/api/parent-info/**").authenticated()  // Require authentication for parent-info
-                        .anyRequest().authenticated()  // Any other request needs to be authenticated
+                        .requestMatchers("/api/parent-info/**").authenticated() // Require authentication for
+                                                                                // parent-info
+                        .anyRequest().authenticated() // Any other request needs to be authenticated
                 )
-                .authenticationProvider(authenticationProvider())  // Custom Authentication Provider
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)  // Add JWT filter before UsernamePasswordAuthenticationFilter
+                .authenticationProvider(authenticationProvider()) // Custom Authentication Provider
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class) // Add JWT filter before
+                                                                                        // UsernamePasswordAuthenticationFilter
                 .logout(logout -> logout
-                        .logoutUrl("/logout")  // Logout URL
-                        .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler())  // Return status 200 instead of redirecting
-                        .invalidateHttpSession(true)  // Invalidate session on logout
-                        .deleteCookies("JSESSIONID")  // Clear session cookies
+                        .logoutUrl("/logout") // Logout URL
+                        .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler()) // Return status 200
+                                                                                             // instead of redirecting
+                        .invalidateHttpSession(true) // Invalidate session on logout
+                        .deleteCookies("JSESSIONID") // Clear session cookies
                 );
         return http.build();
     }
-
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -109,7 +115,7 @@ public class SecurityConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:3000")
+                        .allowedOrigins("*")
                         .allowedMethods("*")
                         .allowedHeaders("*")
                         .allowCredentials(false); // BẮT BUỘC nếu gửi token từ frontend
