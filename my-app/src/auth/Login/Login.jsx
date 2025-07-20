@@ -1,3 +1,4 @@
+// src/auth/Login/Login.jsx
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
@@ -12,7 +13,37 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  // Đăng nhập bằng email/password
+  // Đăng nhập bằng Google
+  const handleGoogleLogin = async (credentialResponse) => {
+    try {
+      const token = credentialResponse.credential;
+      const decoded = jwtDecode(token);
+      console.log("🌐 Google user decoded:", decoded);
+
+      // Gửi token Google về backend để xác thực
+      const res = await fetch("http://localhost:8080/auth/google", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token }),
+      });
+      if (!res.ok) throw new Error("Google login thất bại");
+      const data = await res.json();
+
+      // Lưu token và thông tin user
+      localStorage.setItem("token", data.jwt);
+      localStorage.setItem("userName", data.name);
+      localStorage.setItem("role", data.role);
+      localStorage.setItem("userId", data.userId);
+
+      // Điều hướng theo vai trò
+      redirectByRole(data.role);
+    } catch (err) {
+      console.error("❌ Google login error:", err);
+      alert(err.message || "Đăng nhập Google thất bại!");
+    }
+  };
+
+  // Đăng nhập bằng email & mật khẩu
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -21,36 +52,29 @@ export default function Login() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-
-      if (!res.ok) {
-        alert("Đăng nhập thất bại!");
-        return;
-      }
-
+      if (!res.ok) throw new Error("Đăng nhập thất bại");
       const data = await res.json();
-      console.log("🔐 Login response:", data);
 
-      if (!data.userId) {
-        alert("Không lấy được userId. Vui lòng kiểm tra backend.");
-        return;
-      }
-
+      // Lưu token và thông tin user
       localStorage.setItem("token", data.jwt);
       localStorage.setItem("userName", data.name);
       localStorage.setItem("role", data.role);
       localStorage.setItem("userId", data.userId);
 
+      // Điều hướng theo vai trò
       redirectByRole(data.role);
-    } catch (err) {
-      console.error("❌ Login error:", err);
-      alert(err.message || "Có lỗi xảy ra, thử lại sau!");
+    } catch (error) {
+      console.error("❌ Login error:", error);
+      alert(error.message || "Đăng nhập thất bại!");
     }
   };
 
-  // Chuyển trang theo vai trò
+  // Điều hướng theo role
   const redirectByRole = (role) => {
-    if (role === "Admin" || role === "SchoolNurse") {
+    if (role === "Admin") {
       navigate("/admin");
+    } else if (role === "SchoolNurse") {
+      navigate("/nurse");
     } else if (role === "Parent") {
       navigate("/");
     } else {
@@ -58,52 +82,18 @@ export default function Login() {
     }
   };
 
-  // Đăng nhập bằng Google
-  const handleGoogleLogin = async (credentialResponse) => {
-    try {
-      const decoded = jwtDecode(credentialResponse.credential);
-      console.log("🌐 Google user decoded:", decoded);
-
-      const res = await fetch("http://localhost:8080/auth/google", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token: credentialResponse.credential }),
-      });
-
-      if (!res.ok) throw new Error("Google login thất bại");
-
-      const data = await res.json();
-      console.log("🔐 Google login response:", data);
-
-      if (!data.userId) {
-        alert("Không lấy được userId từ Google login.");
-        return;
-      }
-
-      localStorage.setItem("token", data.jwt);
-      localStorage.setItem("userName", data.name);
-      localStorage.setItem("role", data.role);
-      localStorage.setItem("userId", data.userId);
-
-      redirectByRole(data.role);
-    } catch (err) {
-      console.error("❌ Google login error:", err);
-      alert(err.message || "Đăng nhập Google thất bại!");
-    }
-  };
-
   return (
     <GoogleOAuthProvider clientId="493912650211-kqoj7t293bdhfgepv1q7kh7vik3o0852.apps.googleusercontent.com">
       <div
         className="login-wrapper"
-        style={{ backgroundImage: `url(${Background})` }}
+        style={{ backgroundImage: `url(${Background})` }}  // Fix template string
       >
         <div className="login-box">
           <img src={LogoImg} alt="Logo" className="login-logo" />
           <h2 className="login-title">Đăng nhập</h2>
 
           <form className="login-form" onSubmit={handleSubmit}>
-            <div>
+            <div className="form-group">
               <label className="login-label">Email</label>
               <input
                 type="email"
@@ -115,7 +105,7 @@ export default function Login() {
               />
             </div>
 
-            <div>
+            <div className="form-group">
               <label className="login-label">Mật khẩu</label>
               <input
                 type="password"
@@ -142,6 +132,8 @@ export default function Login() {
               Tiếp tục
             </button>
           </form>
+
+          <div className="divider">OR</div>
 
           <div className="google-login-container">
             <GoogleLogin
