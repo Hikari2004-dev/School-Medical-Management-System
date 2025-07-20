@@ -7,7 +7,7 @@ function StudentList() {
   useEffect(() => {
     fetch("http://localhost:8080/api/students/all")
       .then((res) => res.json())
-      .then((data) => setStudents(data))
+      .then((result) => setStudents(Array.isArray(result.data) ? result.data : []))
       .catch((err) => console.error("Lỗi khi tải danh sách học sinh:", err));
   }, []);
 
