@@ -1,193 +1,5 @@
-// import React, { useState, useEffect } from "react";
-// import { useNavigate, useLocation } from "react-router-dom";
-// import "./vaccination.css";
-// import AvatarImg from "../../../image/hinhanh/avatar.png";
-// import LogoImg from "../../../image/hinhanh/logoproject.png";
-
-// const Vaccination = () => {
-//   const navigate = useNavigate();
-//   const location = useLocation();
-
-//   const [vaccines, setVaccines] = useState([]);
-
-//   // Fetch vaccine data on mount
-//   useEffect(() => {
-//     fetchVaccines();
-//   }, []);
-
-//   const fetchVaccines = () => {
-//     const token = localStorage.getItem("token");
-//     if (!token) return;
-
-//     fetch("http://localhost:8080/api/vaccination-history/my-children", {
-//       headers: { Authorization: `Bearer ${token}` },
-//     })
-//       .then((res) => {
-//         if (!res.ok) throw new Error("Không thể tải danh sách vaccine");
-//         return res.json();
-//       })
-//       .then((data) => setVaccines(data))
-//       .catch((err) => console.error("❌ Lỗi fetch:", err));
-//   };
-
-//   const handleDelete = (id) => {
-//     const token = localStorage.getItem("token");
-//     if (!token) return;
-
-//     if (window.confirm("Bạn có chắc chắn muốn xoá bản ghi này?")) {
-//       fetch(`http://localhost:8080/api/vaccination-history/${id}`, {
-//         method: "DELETE",
-//         headers: { Authorization: `Bearer ${token}` },
-//       })
-//         .then((res) => {
-//           if (!res.ok) throw new Error("Xoá thất bại");
-//           setVaccines((prev) => prev.filter((v) => v.id !== id));
-//         })
-//         .catch((err) => alert("❌ Xoá thất bại: " + err.message));
-//     }
-//   };
-
-//   const tabRoutes = {
-//     "/patient-search": "Thông tin cá nhân",
-//     "/medications": "Đơn thuốc",
-//     "/vaccinations": "Lịch sử tiêm chủng",
-//     "/health-record": "Hồ sơ sức khỏe",
-//   };
-
-//   const activeTab = tabRoutes[location.pathname] || "Lịch sử tiêm chủng";
-
-//   const handleTabClick = (label) => {
-//     const path = Object.keys(tabRoutes).find((key) => tabRoutes[key] === label);
-//     if (path && location.pathname !== path) {
-//       navigate(path);
-//     }
-//   };
-
-//   return (
-//     <div className="student-profile-page">
-//       {/* Sidebar */}
-//       <aside className="sidebar">
-//         <div className="brand-box">
-//           <img src={LogoImg} alt="Logo" className="brand-icon" />
-//           <div className="brand-text">
-//             <h1>SchoMed</h1>
-//             <p>School Medical</p>
-//           </div>
-//         </div>
-
-//         <nav className="sidebar-nav">
-//           <button
-//             onClick={() => navigate("/patient-search")}
-//             className={location.pathname === "/patient-search" ? "active" : ""}
-//           >
-//             🏠 Trang chủ
-//           </button>
-//           <button
-//             onClick={() => navigate("/medications")}
-//             className={location.pathname === "/medications" ? "active" : ""}
-//           >
-//             💊 Đơn thuốc
-//           </button>
-//           <button
-//             onClick={() => navigate("/vaccinations")}
-//             className={location.pathname === "/vaccinations" ? "active" : ""}
-//           >
-//             💉 Sổ vaccine
-//           </button>
-//           <button
-//             onClick={() => navigate("/health-record")}
-//             className={location.pathname === "/health-record" ? "active" : ""}
-//           >
-//             📁 Hồ sơ sức khỏe
-//           </button>
-//         </nav>
-//       </aside>
-
-//       {/* Main content */}
-//       <main className="profile-main">
-//         <button className="home-button" onClick={() => navigate("/")}>
-//           ⬅ Quay về trang chính
-//         </button>
-
-//         <div className="profile-card">
-//           {/* Header */}
-//           <div className="profile-overview">
-//             <img src={AvatarImg} alt="avatar" className="avatar" />
-//             <div className="info-text">
-//               <h2>Nguyễn Đoàn Duy Khánh</h2>
-//               <p>Lớp 12A1 | GVCN: Lâm Phương Thúy</p>
-//               <p>Chiều cao: 170cm | Cân nặng: 60 kg</p>
-//               <p>Giới tính: Nam/Nữ</p>
-//             </div>
-//           </div>
-
-//           {/* Tabs */}
-//           <div className="profile-tabs">
-//             {Object.values(tabRoutes).map((label) => (
-//               <span
-//                 key={label}
-//                 className={`tab ${activeTab === label ? "active" : ""}`}
-//                 onClick={() => handleTabClick(label)}
-//               >
-//                 {label}
-//               </span>
-//             ))}
-//           </div>
-
-//           {/* Vaccine Table */}
-//           <div className="profile-detail">
-//             <table className="medications-table">
-//               <thead>
-//                 <tr>
-//                   <th>Học sinh</th>
-//                   <th>Tên vaccine</th>
-//                   <th>Mũi tiêm</th>
-//                   <th>Ngày khai báo</th>
-//                   <th>Ghi chú</th>
-//                   <th>Trạng thái</th>
-//                   <th>Lô vaccine</th>
-//                   <th>Hành động</th>
-//                 </tr>
-//               </thead>
-//               <tbody>
-//                 {vaccines.map((v) => (
-//                   <tr key={v.id}>
-//                     <td>{v.studentName}</td>
-//                     <td>{v.vaccineName}</td>
-//                     <td>{v.doseNumber}</td>
-//                     <td>{v.declaredDate}</td>
-//                     <td>{v.notes}</td>
-//                     <td>{v.status}</td>
-//                     <td>{v.vaccineLot}</td>
-//                     <td>
-//                       <button
-//                         className="delete-button"
-//                         onClick={() => handleDelete(v.id)}
-//                       >
-//                         🗑 Xoá
-//                       </button>
-//                     </td>
-//                   </tr>
-//                 ))}
-//               </tbody>
-//             </table>
-
-//             {vaccines.length === 0 && (
-//               <p style={{ padding: "12px", color: "gray" }}>
-//                 Không có dữ liệu tiêm chủng.
-//               </p>
-//             )}
-//           </div>
-//         </div>
-//       </main>
-//     </div>
-//   );
-// };
-
-// export default Vaccination;
-// src/pages/lookup/vaccinehistory/Vaccination.jsx
 import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation, useParams } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./vaccination.css";
 import AvatarImg from "../../../image/hinhanh/avatar.png";
 import LogoImg from "../../../image/hinhanh/logoproject.png";
@@ -195,62 +7,62 @@ import LogoImg from "../../../image/hinhanh/logoproject.png";
 const Vaccination = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { studentId: paramId } = useParams();
 
-  const [studentInfo, setStudentInfo] = useState({
-    studentName: "",
-    grade: "",
-    gender: "",
-    height: "",
-    weight: "",
-  });
+  const [children, setChildren] = useState([]);
+  const [selectedStudentId, setSelectedStudentId] = useState(null);
+  const [studentInfo, setStudentInfo] = useState({});
   const [vaccines, setVaccines] = useState([]);
+  const [showForm, setShowForm] = useState(false);
+  const [editId, setEditId] = useState(null);
+  const [formData, setFormData] = useState({
+    vaccineName: "",
+    doseNumber: "",
+    declaredDate: "",
+    notes: "",
+    status: "",
+    vaccineLot: "",
+  });
 
-  // 1) Lấy thông tin học sinh
+  const token = localStorage.getItem("token");
+
   useEffect(() => {
-    const id = paramId || localStorage.getItem("studentId");
-    const token = localStorage.getItem("token");
-    if (!id || !token) return;
-
-    fetch(`http://localhost:8080/api/students/${id}`, {
+    if (!token) return;
+    fetch("http://localhost:8080/api/students/my-children", {
       headers: { Authorization: `Bearer ${token}` },
     })
+      .then(res => res.json())
       .then(res => {
-        if (!res.ok) throw new Error("Không lấy được thông tin học sinh");
-        return res.json();
+        if (res.success && Array.isArray(res.data)) {
+          setChildren(res.data);
+          if (res.data.length > 0) {
+            setSelectedStudentId(res.data[0].id);
+          }
+        }
       })
-      .then(data => {
-        setStudentInfo({
-          studentName: data.studentName,
-          grade: data.grade,
-          gender: data.gender,
-          height: data.height,
-          weight: data.weight,
-        });
-      })
-      .catch(err => console.error("❌ Lỗi fetch học sinh:", err));
-  }, [paramId]);
+      .catch(err => console.error("❌ Lỗi lấy học sinh:", err));
+  }, [token]);
 
-  // 2) Lấy lịch sử tiêm của con
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
+    if (!selectedStudentId || children.length === 0) return;
+    const info = children.find(c => c.id === Number(selectedStudentId));
+    if (info) setStudentInfo(info);
+  }, [selectedStudentId, children]);
 
+  useEffect(() => {
+    if (!token || !selectedStudentId) return;
     fetch("http://localhost:8080/api/vaccination-history/my-children", {
       headers: { Authorization: `Bearer ${token}` },
     })
-      .then(res => {
-        if (!res.ok) throw new Error("Không thể tải danh sách vaccine");
-        return res.json();
+      .then(res => res.json())
+      .then(data => {
+        const filtered = data.filter(v => v.studentId === Number(selectedStudentId));
+        setVaccines(filtered);
       })
-      .then(data => setVaccines(data))
-      .catch(err => console.error("❌ Lỗi fetch:", err));
-  }, []);
+      .catch(err => console.error("❌ Lỗi fetch vaccine:", err));
+  }, [token, selectedStudentId]);
 
   const handleDelete = id => {
-    const token = localStorage.getItem("token");
     if (!token) return;
-
     if (window.confirm("Bạn có chắc chắn muốn xoá bản ghi này?")) {
       fetch(`http://localhost:8080/api/vaccination-history/${id}`, {
         method: "DELETE",
@@ -258,20 +70,78 @@ const Vaccination = () => {
       })
         .then(res => {
           if (!res.ok) throw new Error("Xoá thất bại");
-          // reload lại danh sách sau khi xoá
           setVaccines(prev => prev.filter(v => v.id !== id));
         })
         .catch(err => alert("❌ Xoá thất bại: " + err.message));
     }
   };
 
-  // các tab định hướng
+  const handleAdd = () => {
+    setEditId(null);
+    setFormData({
+      vaccineName: "",
+      doseNumber: "",
+      declaredDate: "",
+      notes: "",
+      status: "",
+      vaccineLot: "",
+    });
+    setShowForm(true);
+  };
+
+  const handleEdit = vaccine => {
+    setEditId(vaccine.id);
+    setFormData({ ...vaccine });
+    setShowForm(true);
+  };
+
+  const handleSubmit = () => {
+    const method = editId ? "PUT" : "POST";
+    const url = editId
+      ? `http://localhost:8080/api/vaccination-history/${editId}`
+      : `http://localhost:8080/api/vaccination-history`;
+
+    const payload = {
+      ...formData,
+      studentId: Number(selectedStudentId),
+    };
+
+    fetch(url, {
+      method,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    })
+      .then(async res => {
+        if (!res.ok) {
+          const errorText = await res.text();
+          throw new Error(errorText || "Lỗi khi lưu");
+        }
+        return res.json().catch(() => null); // in case no response body
+      })
+      .then(() => {
+        setShowForm(false);
+        return fetch("http://localhost:8080/api/vaccination-history/my-children", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+      })
+      .then(res => res.json())
+      .then(data => {
+        const filtered = data.filter(v => v.studentId === Number(selectedStudentId));
+        setVaccines(filtered);
+      })
+      .catch(err => alert("❌ Không thể lưu: " + err.message));
+  };
+
   const tabRoutes = {
     "/patient-search": "Thông tin cá nhân",
     "/medications": "Đơn thuốc",
     "/vaccinations": "Lịch sử tiêm chủng",
     "/health-record": "Hồ sơ sức khỏe",
   };
+
   const activeTab = tabRoutes[location.pathname] || "Lịch sử tiêm chủng";
   const handleTabClick = label => {
     const path = Object.keys(tabRoutes).find(k => tabRoutes[k] === label);
@@ -280,7 +150,6 @@ const Vaccination = () => {
 
   return (
     <div className="student-profile-page">
-      {/* Sidebar */}
       <aside className="sidebar">
         <div className="brand-box">
           <img src={LogoImg} alt="Logo" className="brand-icon" />
@@ -289,6 +158,7 @@ const Vaccination = () => {
             <p>School Medical</p>
           </div>
         </div>
+
         <nav className="sidebar-nav">
           {Object.entries(tabRoutes).map(([path, label]) => (
             <button
@@ -302,22 +172,28 @@ const Vaccination = () => {
         </nav>
       </aside>
 
-      {/* Main content */}
       <main className="profile-main">
         <button className="home-button" onClick={() => navigate("/")}>
           ⬅ Quay về trang chính
         </button>
 
         <div className="profile-card">
-          {/* Header: thông tin học sinh */}
+          {/* Header */}
           <div className="profile-overview">
             <img src={AvatarImg} alt="avatar" className="avatar" />
             <div className="info-text">
-              <h2>{studentInfo.studentName || "—"}</h2>
-              <p>Lớp {studentInfo.grade || "—"} | Giới tính: {studentInfo.gender || "—"}</p>
-              <p>
-                Chiều cao: {studentInfo.height ?? "—"} cm | Cân nặng: {studentInfo.weight ?? "—"} kg
-              </p>
+              <h2>Lịch sử tiêm chủng học sinh</h2>
+              <label>Chọn học sinh:</label>
+              <select
+                value={selectedStudentId || ""}
+                onChange={e => setSelectedStudentId(e.target.value)}
+              >
+                {children.map(child => (
+                  <option key={child.id} value={child.id}>
+                    {child.name} ({child.grade})
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
 
@@ -334,8 +210,12 @@ const Vaccination = () => {
             ))}
           </div>
 
-          {/* Bảng vaccine */}
+          {/* Vaccine table */}
           <div className="profile-detail">
+            <div style={{ textAlign: "right", marginBottom: "12px" }}>
+              <button className="add-button" onClick={handleAdd}>➕ Thêm mới</button>
+            </div>
+
             {vaccines.length > 0 ? (
               <table className="medications-table">
                 <thead>
@@ -359,12 +239,8 @@ const Vaccination = () => {
                       <td>{v.status}</td>
                       <td>{v.vaccineLot}</td>
                       <td>
-                        <button
-                          className="delete-button"
-                          onClick={() => handleDelete(v.id)}
-                        >
-                          🗑 Xoá
-                        </button>
+                        <button onClick={() => handleEdit(v)}>✏️ Sửa</button>
+                        <button className="delete-button" onClick={() => handleDelete(v.id)}>🗑 Xoá</button>
                       </td>
                     </tr>
                   ))}
@@ -376,6 +252,23 @@ const Vaccination = () => {
               </p>
             )}
           </div>
+
+          {/* Popup form */}
+          {showForm && (
+            <div className="popup-form">
+              <h3>{editId ? "Sửa vaccine" : "Thêm vaccine"}</h3>
+              <input type="text" placeholder="Tên vaccine" value={formData.vaccineName} onChange={e => setFormData({ ...formData, vaccineName: e.target.value })} />
+              <input type="text" placeholder="Mũi tiêm" value={formData.doseNumber} onChange={e => setFormData({ ...formData, doseNumber: e.target.value })} />
+              <input type="date" value={formData.declaredDate} onChange={e => setFormData({ ...formData, declaredDate: e.target.value })} />
+              <input type="text" placeholder="Ghi chú" value={formData.notes} onChange={e => setFormData({ ...formData, notes: e.target.value })} />
+              <input type="text" placeholder="Trạng thái" value={formData.status} onChange={e => setFormData({ ...formData, status: e.target.value })} />
+              <input type="text" placeholder="Lô vaccine" value={formData.vaccineLot} onChange={e => setFormData({ ...formData, vaccineLot: e.target.value })} />
+              <div style={{ marginTop: "10px" }}>
+                <button onClick={handleSubmit}>💾 Lưu</button>
+                <button onClick={() => setShowForm(false)} style={{ marginLeft: "8px" }}>❌ Huỷ</button>
+              </div>
+            </div>
+          )}
         </div>
       </main>
     </div>

@@ -9,10 +9,14 @@ import Background from "../../image/hinhanh/backgroundauth.png";
 function Register() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
     email: "",
-    name: "",
     password: "",
     repeatPassword: "",
+    phone: "",
+    address: "",
+    gender: "",
   });
 
   const handleChange = (e) => {
@@ -23,13 +27,41 @@ function Register() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // TODO: Validate form & call backend API
-    // For now, just go to Login page
-    console.log("Form data:", formData);
-    navigate("/login");
+    if (formData.password !== formData.repeatPassword) {
+      alert("❌ Mật khẩu không khớp.");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:8080/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          password: formData.password,
+          phone: formData.phone,
+          address: formData.address,
+          gender: formData.gender,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText || "Đăng ký thất bại");
+      }
+
+      alert("✅ Đăng ký thành công!");
+      navigate("/login");
+    } catch (error) {
+      alert("❌ Lỗi: " + error.message);
+    }
   };
 
   return (
@@ -41,6 +73,32 @@ function Register() {
         </div>
 
         <form className="form" onSubmit={handleSubmit}>
+          <div>
+            <label className="label">First Name</label>
+            <input
+              type="text"
+              name="firstName"
+              placeholder="First Name"
+              className="inputCustom"
+              value={formData.firstName}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div>
+            <label className="label">Last Name</label>
+            <input
+              type="text"
+              name="lastName"
+              placeholder="Last Name"
+              className="inputCustom"
+              value={formData.lastName}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
           <div>
             <label className="label">Email</label>
             <input
@@ -55,16 +113,44 @@ function Register() {
           </div>
 
           <div>
-            <label className="label">Name</label>
+            <label className="label">Phone</label>
             <input
-              type="text"
-              name="name"
-              placeholder="Name"
+              type="tel"
+              name="phone"
+              placeholder="Phone Number"
               className="inputCustom"
-              value={formData.name}
+              value={formData.phone}
               onChange={handleChange}
               required
             />
+          </div>
+
+          <div>
+            <label className="label">Address</label>
+            <input
+              type="text"
+              name="address"
+              placeholder="Address"
+              className="inputCustom"
+              value={formData.address}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div>
+            <label className="label">Gender</label>
+            <select
+              name="gender"
+              className="inputCustom"
+              value={formData.gender}
+              onChange={handleChange}
+              required
+            >
+              <option value="">-- Select --</option>
+              <option value="Nam">Nam</option>
+              <option value="Nữ">Nữ</option>
+            </select>
           </div>
 
           <div>
