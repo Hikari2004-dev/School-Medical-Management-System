@@ -8,4 +8,5 @@ public interface IVaccinationParentDeclarationRepository {
     List<VaccinationParentDeclarationDTO> getAllByStudentId(int studentId);
     void save(VaccinationParentDeclarationDTO dto);
     void deleteById(int id);
+    void update(VaccinationParentDeclarationDTO dto);
 }

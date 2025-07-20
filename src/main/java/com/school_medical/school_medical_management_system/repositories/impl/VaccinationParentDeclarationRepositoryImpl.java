@@ -104,5 +104,32 @@ public void deleteById(int id) {
     }
 }
 
+    @Override
+    public void update(VaccinationParentDeclarationDTO dto) {
+        String sql = """
+        UPDATE vaccinationparentdeclaration
+        SET vaccine_name = ?, declared_date = ?, notes = ?, status = ?, dose_number = ?, vaccine_lot = ?, consent_verified = ?
+        WHERE id = ?
+    """;
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, dto.getVaccineName());
+            ps.setDate(2, dto.getDeclaredDate());
+            ps.setString(3, dto.getNotes());
+            ps.setString(4, dto.getStatus() != null ? dto.getStatus() : "PENDING");
+            ps.setInt(5, dto.getDoseNumber());
+            ps.setString(6, dto.getVaccineLot());
+            ps.setBoolean(7, dto.isConsentVerified());
+            ps.setInt(8, dto.getId());
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error updating vaccination declaration", e);
+        }
+    }
+
+
 
 }
