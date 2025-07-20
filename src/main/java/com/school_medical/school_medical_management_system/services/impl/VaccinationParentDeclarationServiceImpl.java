@@ -50,4 +50,15 @@ public void deleteById(int id) {
     repository.deleteById(id);
 }
 
+    @Override
+    public void update(VaccinationParentDeclarationDTO dto) {
+        try {
+            // Cập nhật thông tin vaccine
+            repository.update(dto);
+        } catch (Exception e) {
+            throw new RuntimeException("Error updating vaccination declaration: " + e.getMessage(), e);
+        }
+    }
+
+
 }

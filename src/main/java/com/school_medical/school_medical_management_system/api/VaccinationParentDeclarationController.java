@@ -8,13 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.school_medical.school_medical_management_system.models.VaccinationParentDeclarationDTO;
 import com.school_medical.school_medical_management_system.repositories.entites.Appuser;
@@ -102,5 +96,31 @@ public ResponseEntity<?> deleteDeclaration(
     return ResponseEntity.ok("Vaccination declaration deleted successfully.");
 }
 
+    // ✅ Cập nhật thông tin khai báo vaccine
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateVaccinationHistory(
+            @AuthenticationPrincipal User user,
+            @PathVariable int id,
+            @RequestBody VaccinationParentDeclarationDTO dto) {
+
+        String email = user.getUsername();
+        Appuser parent = appUserService.getUserByEmail(email);
+        if (parent == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid parent user");
+        }
+
+        // Kiểm tra quyền cập nhật
+        if (!parentStudentService.isStudentBelongsToParent(parent.getId(), dto.getStudentId())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not authorized to update for this student.");
+        }
+
+        // Gán parentId vào DTO trước khi lưu
+        dto.setParentId(parent.getId());
+        dto.setId(id);  // Đảm bảo ID được gán đúng
+
+        // Cập nhật thông tin khai báo vaccine
+        service.update(dto);
+        return ResponseEntity.ok("Vaccination history updated successfully.");
+    }
 
 }
