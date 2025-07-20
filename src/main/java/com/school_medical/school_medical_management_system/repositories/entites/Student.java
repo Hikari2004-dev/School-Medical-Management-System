@@ -1,11 +1,6 @@
 package com.school_medical.school_medical_management_system.repositories.entites;
 
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.time.LocalDate;
-
 
 public class Student {
     private Integer id;
@@ -13,16 +8,23 @@ public class Student {
     private LocalDate dateOfBirth;
     private String gender;
     private String grade;
-    private Integer classId;  // Thêm classId vào lớp Student
+    private Integer classId;
+    private String relationship;
 
-    
-
-    public Integer getClassId() {
-        return classId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setClassId(Integer classId) {
-        this.classId = classId;
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public LocalDate getDateOfBirth() {
@@ -49,19 +51,19 @@ public class Student {
         this.grade = grade;
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getClassId() {
+        return classId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setClassId(Integer classId) {
+        this.classId = classId;
     }
 
-    public String getName() {
-        return name;
+    public String getRelationship() {
+        return relationship;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setRelationship(String relationship) {
+        this.relationship = relationship;
     }
 }

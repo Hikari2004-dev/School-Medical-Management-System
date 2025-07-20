@@ -63,4 +63,9 @@ public class StudentServiceImpl implements IStudentService {
         return studentRepository.getVaccinationInfoByUserId(userId);
     }
 
+    @Override
+    public List<Student> getStudentsByParentUserId(int parentUserId) {
+        return studentRepository.getStudentsByParentUserId(parentUserId);
+    }
+
 }

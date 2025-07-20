@@ -13,4 +13,5 @@ public interface IStudentService {
     List<Student> getStudentsByParentId(int parentUserId);
     List<Healthinfo> getHealthInfoByUserId(int userId);
     List<VaccinationParentDeclaration> getVaccinationInfoByUserId(int userId);
+    List<Student> getStudentsByParentUserId(int parentUserId);
 }

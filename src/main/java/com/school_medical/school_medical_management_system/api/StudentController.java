@@ -124,4 +124,25 @@ public class StudentController {
         return ResponseEntity.ok(vaccinationInfos);
     }
 
+    @GetMapping("/my-children")
+    public ResponseEntity<ApiResponse<List<Student>>> getMyChildren() {
+        try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            String email = auth.getName();
+
+            Appuser parent = userRepository.getUserByEmail(email);
+            if (parent == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new ApiResponse<>(false, "Không tìm thấy phụ huynh với email: " + email, null));
+            }
+
+            // ✅ GỌI ĐÚNG SERVICE
+            List<Student> students = studentService.getStudentsByParentUserId(parent.getId());
+
+            return ResponseEntity.ok(new ApiResponse<>(true, "Lấy danh sách học sinh thành công", students));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse<>(false, "Lỗi hệ thống: " + e.getMessage(), null));
+        }
+    }
 }
