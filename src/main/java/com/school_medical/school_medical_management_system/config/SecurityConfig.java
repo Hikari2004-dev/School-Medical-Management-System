@@ -83,6 +83,7 @@ public class SecurityConfig {
                                 "/api/dashboard/**",
                                 "/api/**",
                                 "/api/classes/**",
+                                "/error",
                                 "/api/notifications/send")
                         .permitAll() // Permit all the above public endpoints
 
