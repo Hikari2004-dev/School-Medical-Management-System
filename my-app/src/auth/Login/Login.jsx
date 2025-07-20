@@ -1,8 +1,7 @@
-// src/auth/Login/Login.jsx
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
-import { jwtDecode } from 'jwt-decode';  // Import jwtDecode
+import { jwtDecode } from "jwt-decode";
 
 import "./Login.css";
 import LogoImg from "../../image/hinhanh/logoproject.png";
@@ -13,33 +12,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  // ✅ Đăng nhập bằng Google
-  const handleGoogleLogin = async (credentialResponse) => {
-    try {
-      const { credential } = credentialResponse;
-      const decoded = jwtDecode(credential);
-      // Gửi thông tin Google đến backend để xác thực và lấy role
-      const res = await fetch("http://localhost:8080/login/google", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: decoded.email,
-          name: decoded.name,
-          googleId: decoded.sub,
-        }),
-      });
-      if (!res.ok) throw new Error("Đăng nhập Google thất bại");
-      const data = await res.json();
-      localStorage.setItem("token", data.jwt);
-      localStorage.setItem("userName", data.name);
-      localStorage.setItem("role", data.role);
-      localStorage.setItem("userId", data.userId);
-      redirectByRole(data.role);
-    } catch (error) {
-      alert("Đăng nhập Google thất bại!");
-    }
-  };
-  // ✅ Đăng nhập bằng email/mật khẩu
+  // ✅ Đăng nhập email/mật khẩu
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -48,7 +21,9 @@ export default function Login() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
+
       if (!res.ok) throw new Error("Đăng nhập thất bại");
+
       const data = await res.json();
 
       localStorage.setItem("token", data.jwt);
@@ -56,21 +31,40 @@ export default function Login() {
       localStorage.setItem("role", data.role);
       localStorage.setItem("userId", data.userId);
 
-      if (data.role === "Admin") {
-        navigate("/admin");
-      } else if (data.role === "Parent") {
-        navigate("/");
-      } else if (data.role === "SchoolNurse") {
-        navigate("/nurse");
-      } else {
-        alert("Vai trò không được hỗ trợ!");
-      }
-    } catch (error) {
+      redirectByRole(data.role);
+    } catch (err) {
       alert("Đăng nhập thất bại!");
     }
   };
 
-  // ✅ Xử lý điều hướng theo role
+  // ✅ Đăng nhập bằng Google
+  const handleGoogleLogin = async (credentialResponse) => {
+    try {
+      const tokenId = credentialResponse.credential;
+
+      const res = await fetch("http://localhost:8080/api/auth/google", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: tokenId }),
+      });
+
+      if (!res.ok) throw new Error("Xác thực Google thất bại");
+
+      const data = await res.json();
+
+      localStorage.setItem("token", data.jwt);
+      localStorage.setItem("userName", data.name);
+      localStorage.setItem("role", data.role);
+      localStorage.setItem("userId", data.userId);
+
+      redirectByRole(data.role);
+    } catch (err) {
+      console.error("❌ Đăng nhập Google thất bại:", err);
+      alert("Đăng nhập Google thất bại!");
+    }
+  };
+
+  // ✅ Điều hướng theo vai trò
   const redirectByRole = (role) => {
     if (role === "Admin") {
       navigate("/admin");
@@ -125,10 +119,11 @@ export default function Login() {
                 <Link to="/forget-password">Quên mật khẩu</Link>
               </div>
             </div>
+
             <button type="submit" className="btn-submit">Tiếp tục</button>
           </form>
 
-          {/* Google Login Button */}
+          {/* Google Login */}
           <div className="google-login-container">
             <GoogleLogin
               onSuccess={handleGoogleLogin}
