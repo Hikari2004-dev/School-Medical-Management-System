@@ -112,7 +112,7 @@ public class SecurityConfig {
                         .allowedOrigins("http://localhost:3000")
                         .allowedMethods("*")
                         .allowedHeaders("*")
-                        .allowCredentials(true); // BẮT BUỘC nếu gửi token từ frontend
+                        .allowCredentials(false); // BẮT BUỘC nếu gửi token từ frontend
             }
         };
     }
