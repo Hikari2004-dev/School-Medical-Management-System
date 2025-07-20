@@ -1,5 +1,6 @@
 package com.school_medical.school_medical_management_system.services.impl;
 
+import com.school_medical.school_medical_management_system.repositories.entites.MedicalAppointment;
 import com.school_medical.school_medical_management_system.repositories.entites.Notification;
 import com.school_medical.school_medical_management_system.repositories.impl.NotificationRepository;
 import com.school_medical.school_medical_management_system.services.IAppUserService;
@@ -13,6 +14,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -70,4 +72,27 @@ public class NotificationService implements INotificationService {
     public List<Notification> getAllNotifications() {
         return notificationRepository.getAllNotifications();
     }
+
+//    @Override
+//    public void createNotificationOnAppointmentApproval(Long appointmentId) {
+//        String sql = "SELECT * FROM medicalappointment WHERE appointment_id = ?";
+//        MedicalAppointment appointment = jdbcTemplate.queryForObject(sql, new Object[]{appointmentId}, new BeanPropertyRowMapper<>(MedicalAppointment.class));
+//
+//        // Check if the appointment is approved
+//        if (appointment != null && "Approved".equalsIgnoreCase(appointment.getStatus())) {
+//            // Create a notification
+//            Notification notification = new Notification();
+//            notification.setContent("Your medical appointment has been approved.");
+//            notification.setDateSent(new Timestamp(System.currentTimeMillis()));
+//            notification.setConfirmed(false); // Assuming false initially
+//            notification.setType("Medical Appointment");
+//            notification.setStudentId(appointment.getStudentId());
+//            notification.setParentUserId(appointment.);
+//            notification.setConsentStatus(false); // Assuming consent status is false initially
+//
+//            // Save the notification
+//            notificationRepository.saveNotification(notification);
+//        }
+//    }
+//    }
 }
