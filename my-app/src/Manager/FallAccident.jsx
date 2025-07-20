@@ -84,6 +84,25 @@ const FallAccident = () => {
       if (!response.ok) {
         throw new Error("Gửi dữ liệu thất bại!");
       }
+
+      // Gửi thông báo về cho phụ huynh qua API
+      const student = studentList.find(s => s.id === Number(incident.student_id));
+      const parentEmail = student?.parentEmail || "";
+      const notificationPayload = {
+        to: parentEmail,
+        subject: `Thông báo sự cố tại trường cho học sinh ${student?.name || ""}`,
+        message: `Xin chào phụ huynh,\n\nHọc sinh ${student?.name || ""} đã gặp sự cố: ${incident.event_type} vào ngày ${incident.event_date}.\nMô tả: ${incident.description}\n\nY tá phụ trách: ${nurseName}`
+      };
+      if (parentEmail) {
+        await fetch("http://localhost:8080/api/notifications/sendone", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(notificationPayload),
+        });
+      }
+
       alert(isEditMode ? "Đã cập nhật sự cố thành công!" : "Đã lưu sự cố thành công!");
       setIsEditMode(false);
       setEditId(null);

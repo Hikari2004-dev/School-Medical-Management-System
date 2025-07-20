@@ -7,5 +7,6 @@ public interface IAppUserService {
     Appuser getUserByEmail(String email);
     List<Appuser> getAllNurses();
     List<Appuser> getAllUsers();
+    Appuser registerUser(Appuser user);
 }
 

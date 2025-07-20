@@ -1,6 +1,7 @@
 package com.school_medical.school_medical_management_system.services.impl;
 
 import com.school_medical.school_medical_management_system.repositories.IStudentRepository;
+import com.school_medical.school_medical_management_system.repositories.entites.Appuser;
 import com.school_medical.school_medical_management_system.repositories.entites.Healthinfo;
 import com.school_medical.school_medical_management_system.repositories.entites.Student;
 import com.school_medical.school_medical_management_system.repositories.entites.VaccinationParentDeclaration;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StudentServiceImpl implements IStudentService {
@@ -68,4 +70,8 @@ public class StudentServiceImpl implements IStudentService {
         return studentRepository.getStudentsByParentUserId(parentUserId);
     }
 
+    @Override
+    public Optional<Appuser> getParentEmailByStudentId(int studentId) {
+        return studentRepository.findParentEmailByStudentId(studentId);
+    }
 }

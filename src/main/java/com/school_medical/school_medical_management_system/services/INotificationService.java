@@ -10,4 +10,5 @@ public interface INotificationService {
     List<Notification> getNotificationsByParentId();
     List<String> getEmailsByBatchId(int batchId);
     List<Notification> getAllNotifications();
+//    void createNotificationOnAppointmentApproval(Long appointmentId);
 }
