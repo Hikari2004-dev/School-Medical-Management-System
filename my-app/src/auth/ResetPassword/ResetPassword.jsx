@@ -1,35 +1,57 @@
 import React, { useState } from 'react';
 import './ResetPassword.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 import LogoImg from '../../image/hinhanh/logoproject.png';
 import Background from '../../image/hinhanh/backgroundauth.png';
 
 function ResetPassword() {
   const navigate = useNavigate();
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const location = useLocation();
+  const email    = location.state?.email || '';
+  const otp      = location.state?.otp   || '';
 
-  const handleSubmit = (e) => {
+  // ★ Định nghĩa maskEmail ngay đây
+  const maskEmail = (e) => {
+    const [user, domain] = e.split('@');
+    if (!user || !domain) return e;
+    const keep = 2; // giữ 2 ký tự cuối
+    const stars = '*'.repeat(Math.max(0, user.length - keep));
+    return stars + user.slice(-keep) + '@' + domain;
+  };
+
+  const [password, setPassword]       = useState('');
+  const [confirmPassword, setConfirm] = useState('');
+  const [loading, setLoading]         = useState(false);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Kiểm tra độ dài tối thiểu
     if (password.length < 6) {
-      alert('Mật khẩu phải có ít nhất 6 ký tự!');
-      return;
+      return alert('Mật khẩu phải có ít nhất 6 ký tự!');
     }
-
-    // Kiểm tra khớp mật khẩu
     if (password !== confirmPassword) {
-      alert('Mật khẩu không khớp!');
-      return;
+      return alert('Mật khẩu không khớp!');
     }
 
-    // TODO: Gửi API đặt lại mật khẩu tại đây
-    console.log('Mật khẩu mới:', password);
+    setLoading(true);
+    try {
+      const url = new URL('http://localhost:8080/api/otp/change-password');
+      url.searchParams.set('email', email);
+      url.searchParams.set('otp', otp);
+      url.searchParams.set('newPassword', password);
 
-    // Sau khi đổi thành công
-    navigate('/login');
+      const res  = await fetch(url.toString(), { method: 'POST' });
+      const text = await res.text();
+      if (!res.ok) throw new Error(text || 'Đổi mật khẩu thất bại');
+
+      alert('Đổi mật khẩu thành công! Vui lòng đăng nhập lại.');
+      navigate('/login');
+    } catch (err) {
+      console.error(err);
+      alert(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -41,7 +63,8 @@ function ResetPassword() {
         <img src={LogoImg} alt="Logo" className="logo-image" />
         <h2 className="title">Tạo mật khẩu mới</h2>
         <p className="subtitle">
-          Nhập mật khẩu mới cho tài khoản của bạn để đăng nhập.
+          Email: <strong>{maskEmail(email)}</strong><br/>
+          Nhập mật khẩu mới cho tài khoản của bạn.
         </p>
 
         <form onSubmit={handleSubmit}>
@@ -52,23 +75,27 @@ function ResetPassword() {
             placeholder="Nhập mật khẩu mới"
             className="input-field"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={e => setPassword(e.target.value)}
             required
           />
 
-          <label className="label" htmlFor="confirmPassword">Nhập lại mật khẩu</label>
+          <label className="label" htmlFor="confirm">Nhập lại mật khẩu</label>
           <input
             type="password"
-            id="confirmPassword"
+            id="confirm"
             placeholder="Nhập lại mật khẩu"
             className="input-field"
             value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            onChange={e => setConfirm(e.target.value)}
             required
           />
 
-          <button type="submit" className="btn-submit">
-            Đặt lại mật khẩu
+          <button
+            type="submit"
+            className="btn-submit"
+            disabled={loading}
+          >
+            {loading ? 'Đang xử lý...' : 'Đặt lại mật khẩu'}
           </button>
         </form>
       </div>
