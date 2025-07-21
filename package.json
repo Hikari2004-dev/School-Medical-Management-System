@@ -6,3 +6,10 @@
     "tailwindcss": "^4.1.11"
   }
 }
+
+
+{
+  "scripts": {
+    "build": "react-scripts build"
+  }
+}
