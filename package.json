@@ -13,3 +13,10 @@
     "build": "react-scripts build"
   }
 }
+
+
+{
+  "engines": {
+    "node": "14.x"
+  }
+}
