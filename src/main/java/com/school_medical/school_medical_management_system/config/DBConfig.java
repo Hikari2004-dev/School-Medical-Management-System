@@ -12,9 +12,9 @@ public class DBConfig {
     public DataSource getDataSource() {
         DriverManagerDataSource ds = new DriverManagerDataSource();
         ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        ds.setUrl("jdbc:mysql://localhost:3306/mesch");
-        ds.setUsername("root");
-        ds.setPassword("12345");
+        ds.setUrl("jdbc:mysql://localhost:3306/schoolmed_db");
+        ds.setUsername("truntruntramcam");
+        ds.setPassword("TrunTrun_TramCam3004");
         return ds;
     }
 }
