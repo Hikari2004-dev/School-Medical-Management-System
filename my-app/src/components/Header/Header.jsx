@@ -46,15 +46,15 @@ export default function Header() {
         <div className="info-content">
           <span className="info-item">
             <i className="fas fa-map-marker-alt"></i>
-            <span>Địa chỉ</span>
+            <span>Địa chỉ: 236/29/18 Điện Biên Phủ - Phường 17 - Quận Bình Thạnh - TPHCM.</span>
           </span>
           <span className="info-item">
             <i className="fas fa-phone"></i>
-            <span>Phone number</span>
+            <span>Điện thoại: (028) 710 78098</span>
           </span>
           <span className="info-item">
             <i className="fas fa-envelope"></i>
-            <span>Gmail</span>
+            <span>Gmail: contact@schomed.com</span>
           </span>
         </div>
 

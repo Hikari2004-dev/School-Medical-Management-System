@@ -7,17 +7,44 @@ import ChatBox from "../../components/chat/ChatBot";
 import { useNavigate, Link } from "react-router-dom";
 import { newsData } from "../../data/newsData";
 import { HeartPulse, ShieldCheck, Stethoscope } from "lucide-react";
+
 // ThreeCardsSection component
 function ThreeCardsSection() {
-  const barColors = ["#34D399", "#2563EB", "#D946EF"];
+  const cards = [
+    {
+      color: "#34D399",
+      icon: <Stethoscope size={28} className="card-icon" />,
+      title: "Chăm sóc sức khỏe định kỳ",
+      desc: "Theo dõi BMI, thị lực, tiêm chủng và khám sức khỏe hàng năm cho toàn bộ học sinh.",
+    },
+    {
+      color: "#2563EB",
+      icon: <ShieldCheck size={28} className="card-icon" />,
+      title: "Phòng ngừa & can thiệp sớm",
+      desc: "Giáo dục y tế, tư vấn dinh dưỡng, phòng chống dịch bệnh & sơ cứu kịp thời tại trường.",
+    },
+    {
+      color: "#D946EF",
+      icon: <HeartPulse size={28} className="card-icon" />,
+      title: "Kết nối phụ huynh – nhà trường",
+      desc: "Thông báo y tế, gửi đơn thuốc, đặt lịch khám và theo dõi sức khỏe con bạn ngay trên app.",
+    },
+  ];
 
   return (
     <section className="three-cards-section">
       <div className="three-cards-container">
-        {barColors.map((color, idx) => (
+        {cards.map((card, idx) => (
           <div key={idx} className="card-item">
-            <div className="card-bar" style={{ backgroundColor: color }} />
-            <div className="card-content" />
+            <div
+              className="card-bar"
+              style={{ backgroundColor: card.color }}
+            />
+            <div className="card-content">
+              {card.icon}
+              <h3 className="card-title">{card.title}</h3>
+              <p className="card-desc">{card.desc}</p>
+            </div>
           </div>
         ))}
       </div>
@@ -55,10 +82,6 @@ function NewsSection() {
     } catch (error) {
       console.log("API not available, using mock data");
     }
-  };
-
-  const handleNewsClick = (newsId) => {
-    navigate(`/news/${newsId}`);
   };
 
   if (loading) {
@@ -120,29 +143,28 @@ function Event() {
       <div className="event-container">
         {events.map((event, idx) => {
           const color = colors[idx % colors.length];
-
           return (
-            <div key={event.batchId} className="event-card relative rounded-lg overflow-hidden w-full max-w-sm h-48 text-white">
-              {/* Màu nền chính */}
+            <div
+              key={event.batchId}
+              className="event-card relative rounded-lg overflow-hidden w-full max-w-sm h-48 text-white"
+            >
               <div className={`${color.bgColor} absolute inset-0`} />
-
-              {/* Ngày diễn ra */}
               <div className="absolute top-4 left-4 bg-black/40 px-4 py-2 rounded text-lg font-bold shadow-md">
                 {event.eventDate}
               </div>
-
-              {/* Mô tả nội dung */}
               <div className="relative z-10 h-full flex items-end p-5">
-                <p className="text-xl font-bold drop-shadow-md leading-snug">{event.description}</p>
+                <p className="text-xl font-bold drop-shadow-md leading-snug">
+                  {event.description}
+                </p>
               </div>
             </div>
-
           );
         })}
       </div>
     </section>
   );
 }
+
 // Reason component
 function Reason() {
   const reasons = [
@@ -228,9 +250,7 @@ function See() {
 export default function HomePage() {
   return (
     <div className="homepage">
-      {/* ✅ Di chuyển nút login vào header thay vì để bên ngoài */}
       <Header />
-
       <ThreeCardsSection />
       <NewsSection />
       <Event />
