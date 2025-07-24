@@ -63,6 +63,8 @@ const DrugManagement = () => {
             <h2 className="text-sm font-semibold mb-1">Số lượng</h2>
             <input
               type="number"
+              min="0"
+              step="1"
               placeholder="Số lượng"
               value={form.quantity}
               onChange={(e) => handleChange("quantity", e.target.value)}
