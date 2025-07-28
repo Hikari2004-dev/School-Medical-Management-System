@@ -1,4 +1,3 @@
-// src/App.js
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 
@@ -92,8 +91,15 @@ function AppRoutes() {
 
 function App() {
   const location = useLocation();
-  // Đường dẫn bắt đầu với /admin hoặc /nurse thì không hiển thị ChatBot
+
+  // Ẩn ChatBot ở các trang xác thực, quản trị viên và y tá
   const hideChatBot =
+    location.pathname.startsWith('/login') ||
+    location.pathname.startsWith('/otp-success') ||
+    location.pathname.startsWith('/forget-password') ||
+    location.pathname.startsWith('/otp-verification') ||
+    location.pathname.startsWith('/register') ||
+    location.pathname.startsWith('/reset-password') ||
     location.pathname.startsWith('/admin') ||
     location.pathname.startsWith('/nurse');
 

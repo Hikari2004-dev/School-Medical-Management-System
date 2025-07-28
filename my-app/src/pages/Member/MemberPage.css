@@ -6,57 +6,81 @@ body {
   padding: 0;
 }
 
-/* ===== Hero Section Styles ===== */
+/* ===== Hero Section Styles giống ảnh ===== */
+body {
+  background: #6d7eea;
+  font-family: 'Times New Roman', serif;
+  margin: 0;
+  padding: 0;
+}
+
 .hero-section {
-  position: relative;
-  background-color: #6279EF;
-  color: #fff;
-  overflow: hidden;
+  background: #6d7eea;
+  border-radius: 0;
   margin-bottom: 0;
-  padding-bottom: 0;
-  border-bottom: none;
+  color: #fff;
+  overflow: visible;
+  position: relative;
+  min-height: 340px;
+  box-shadow: none;
+  padding: 0;
 }
 
 .hero-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 4rem 1rem 1rem;
+  padding: 2.5rem 2rem 0 2rem;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-direction: row;
+  align-items: flex-start;
+  min-height: 340px;
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  position: relative;
 }
-@media (min-width: 768px) {
-  .hero-container {
-    flex-direction: row;
-    padding-bottom: 1rem;
-  }
+
+/* Blob nền đậm phía sau bác sĩ */
+.hero-section::after {
+  content: "";
+  position: absolute;
+  right: 2.5rem;
+  top: 1.5rem;
+  width: 380px;
+  height: 260px;
+  background: #6d7eea;
+  border-radius: 50% 40% 60% 40%/50% 60% 40% 60%;
+  z-index: 1;
+  opacity: 1;
+  pointer-events: none;
 }
 
 .hero-content {
-  width: 100%;
+  width: 60%;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  text-align: center;
+  justify-content: flex-start;
+  gap: 1.2rem;
+  text-align: left;
+  z-index: 2;
 }
-@media (min-width: 768px) {
-  .hero-content {
-    width: 50%;
-    text-align: left;
-  }
-}
+
+/* ...giữ nguyên các phần còn lại... */
 
 /* — Center the breadcrumb pill — */
 .breadcrumb {
   display: inline-block;
-  background-color: #ffffff;
-  color: #6279EF;
-  padding: 0.5rem 1rem;
+  background: #6d7eea;
+  color: #fff;
+  padding: 0.35rem 1.2rem;
   border-radius: 9999px;
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-weight: 600;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-  margin: 0 auto 0.75rem;  /* centered horizontally */
+  margin-bottom: 1.2rem;
+  border: none;
+  box-shadow: none;
+  letter-spacing: 0.5px;
+  position: static;
 }
 .breadcrumb-link {
   color: inherit;
@@ -67,11 +91,13 @@ body {
 }
 
 .hero-title {
-  font-size: 2.5rem;
-  font-family: serif;
-  line-height: 1.2;
+  font-size: 2.7rem;
+  font-family: 'Times New Roman', serif;
+  font-weight: 700;
+  line-height: 1.15;
+  margin: 0 0 0.5rem 0;
   color: #fff;
-  margin: 0;
+  letter-spacing: 0.5px;
 }
 @media (min-width: 768px) {
   .hero-title {
@@ -80,23 +106,23 @@ body {
 }
 
 .hero-subtitle {
-  font-size: 1.125rem;
-  color: #f0f4ff;
-}
-@media (min-width: 768px) {
-  .hero-subtitle {
-    font-size: 1.25rem;
-  }
+  font-size: 1.25rem;
+  color: #e0e7ff;
+  font-family: 'Times New Roman', serif;
+  font-weight: 400;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.2px;
 }
 
 /* — Make image container transparent, drop shadows & rounding — */
 .hero-image-container {
-  width: 100%;
-  margin-top: 2rem;
+  width: 40%;
   display: flex;
-  justify-content: center;
-  background: transparent !important;
-  box-shadow: none !important;
+  justify-content: flex-end;
+  align-items: flex-end;
+  position: relative;
+  z-index: 2;
+  height: 100%;
 }
 @media (min-width: 768px) {
   .hero-image-container {
@@ -106,14 +132,39 @@ body {
 }
 
 .hero-image {
-  width: 20rem;
+  width: 220px;
   height: auto;
-  border-radius: 0 !important;
-  box-shadow: none !important;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+  margin-bottom: 0;
+  margin-top: 0.5rem;
+  display: block;
+  position: relative;
+  z-index: 2;
 }
 @media (min-width: 768px) {
   .hero-image {
     width: 25rem;
+  }
+}
+@media (max-width: 900px) {
+  .hero-container {
+    flex-direction: column;
+    padding: 2rem 1rem 1rem;
+    min-height: unset;
+    height: unset;
+  }
+  .hero-content, .hero-image-container {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    height: unset;
+  }
+  .hero-image {
+    margin-top: 2rem;
+    width: 180px;
   }
 }
 
