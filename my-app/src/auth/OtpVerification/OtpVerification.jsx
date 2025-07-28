@@ -88,8 +88,8 @@ function OtpVerification() {
       if (!res.ok || text.includes('Invalid OTP')) {
         throw new Error('OTP không đúng hoặc đã hết hạn!');
       }
-      // Nếu thành công, chuyển sang trang reset password
-      navigate('/reset-password', { state: { email, otp } });
+      // Nếu thành công, chuyển sang trang OtpSuccess
+      navigate('/otp-success', { state: { email, otp } });
     } catch (err) {
       alert(err.message);
     }

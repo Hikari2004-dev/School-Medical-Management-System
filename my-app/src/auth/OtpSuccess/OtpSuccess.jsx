@@ -1,13 +1,17 @@
 // src/auth/OtpSuccess/OtpSuccess.jsx
 import React from 'react';
 import './OtpSuccess.css';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import LogoImg from '../../image/hinhanh/logoproject.png';
 import SuccessIcon from '../../image/icon/tick.png';
 import Background from '../../image/hinhanh/backgroundauth.png';
 
 function OtpSuccess() {
+  const location = useLocation();
+  const email = location.state?.email;
+  const otp = location.state?.otp;
+
   return (
     <div
       className="otp-success-wrapper"
@@ -22,7 +26,11 @@ function OtpSuccess() {
           Bạn đã xác thực mã OTP thành công. Bây giờ bạn có thể đặt lại mật khẩu.
         </p>
 
-        <Link to="/reset-password" className="btn-continue">
+        <Link
+          to="/reset-password"
+          state={{ email, otp }}
+          className="btn-continue"
+        >
           Đặt lại mật khẩu
         </Link>
       </div>
