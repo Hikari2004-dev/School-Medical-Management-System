@@ -8,6 +8,7 @@ const DrugManagement = () => {
     lastCheckedDate: new Date().toISOString().split("T")[0],
     expirationDate: "",
   });
+  const [message, setMessage] = useState({ text: "", type: "" }); // type: 'success' | 'error'
 
   const handleChange = (field, value) => {
     setForm({ ...form, [field]: value });
@@ -15,6 +16,20 @@ const DrugManagement = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setMessage({ text: "", type: "" });
+    const today = new Date().toISOString().split("T")[0];
+    if (form.lastCheckedDate < today) {
+      setMessage({ text: "Ngày kiểm tra không được nhỏ hơn ngày hôm nay!", type: "error" });
+      return;
+    }
+    if (form.expirationDate < today) {
+      setMessage({ text: "Ngày hết hạn không được nhỏ hơn ngày hôm nay!", type: "error" });
+      return;
+    }
+    if (form.expirationDate < form.lastCheckedDate) {
+      setMessage({ text: "Ngày hết hạn phải lớn hơn hoặc bằng ngày kiểm tra!", type: "error" });
+      return;
+    }
     try {
       const response = await fetch("http://localhost:8080/api/medicalsupply/create", {
         method: "POST",
@@ -25,7 +40,7 @@ const DrugManagement = () => {
         body: JSON.stringify(form),
       });
       if (!response.ok) throw new Error("Thêm vật tư thất bại");
-      alert("Thêm vật tư thành công!");
+      setMessage({ text: "Thêm vật tư thành công!", type: "success" });
       setForm({
         name: "",
         quantity: "",
@@ -34,7 +49,7 @@ const DrugManagement = () => {
         expirationDate: "",
       });
     } catch (error) {
-      alert("Thêm vật tư thất bại!");
+      setMessage({ text: "Thêm vật tư thất bại!", type: "error" });
     }
   };
 
@@ -45,6 +60,19 @@ const DrugManagement = () => {
           <span className="mr-2 text-2xl">🧪</span>
           Quản lý vật tư y tế
         </h2>
+
+        {/* Hiển thị thông báo */}
+        {message.text && (
+          <div
+            className={`mb-4 p-3 rounded ${
+              message.type === "success"
+                ? "bg-green-100 text-green-800"
+                : "bg-red-100 text-red-800"
+            }`}
+          >
+            {message.text}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>

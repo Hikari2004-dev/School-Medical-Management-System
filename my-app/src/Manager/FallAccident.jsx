@@ -175,6 +175,7 @@ const FallAccident = () => {
               onChange={(e) => handleChange("event_date", e.target.value)}
               className="border border-gray-300 p-3 rounded-lg"
               required
+              min={new Date().toISOString().slice(0, 10)} // chỉ chọn từ hôm nay trở đi
             />
             <input
               type="text"

@@ -60,23 +60,25 @@ export default function MainPage() {
         <StatCard title="Thông báo mới" value={loading ? "..." : stats?.newCustomers} icon={<FaBell />} />
       </section>
 
-      {/* Content Blocks */}
+      {/* Banner giới thiệu và quote */}
       <section className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
-        <InfoCard title="📅 Lịch hẹn hôm nay">
-          <p className="text-gray-500 text-sm">Chức năng đang phát triển...</p>
-        </InfoCard>
-        <InfoCard title="🔔 Thông báo gần đây">
-          <p className="text-gray-500 text-sm">Chức năng đang phát triển...</p>
-        </InfoCard>
-      </section>
-
-      {/* Quick Actions */}
-      <section>
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">⚡ Hành động nhanh</h3>
-        <div className="flex flex-wrap gap-4">
-          <QuickAction label="Tạo thông báo" icon={<FaBell />} />
-          <QuickAction label="Thêm lịch hẹn" icon={<FaCalendarAlt />} />
-          <QuickAction label="Ghi nhận y tế" icon={<FaNotesMedical />} />
+        <div className="lg:col-span-2 bg-gradient-to-r from-blue-100 to-blue-50 rounded-xl p-8 flex flex-col justify-center items-center shadow">
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/3209/3209265.png"
+            alt="School Medical"
+            className="w-32 h-32 mb-4"
+          />
+          <h2 className="text-2xl font-bold text-blue-700 mb-2">Hệ thống quản lý y tế học đường</h2>
+          <p className="text-gray-600 text-center max-w-xl">
+            Nâng cao sức khỏe học sinh, hỗ trợ y tế kịp thời, quản lý thông tin hiệu quả và bảo vệ thế hệ tương lai.
+          </p>
+        </div>
+        <div className="flex flex-col justify-center items-center bg-white rounded-xl shadow p-8">
+          <span className="text-4xl mb-4">💡</span>
+          <blockquote className="italic text-blue-700 text-center">
+            "Sức khỏe là tài sản quý giá nhất của mỗi con người."
+          </blockquote>
+          <span className="mt-2 text-gray-400 text-sm">— Khuyết danh</span>
         </div>
       </section>
     </div>
@@ -101,14 +103,5 @@ function InfoCard({ title, children }) {
       <h4 className="text-base font-semibold text-gray-800 mb-3">{title}</h4>
       {children}
     </div>
-  );
-}
-
-function QuickAction({ label, icon }) {
-  return (
-    <button className="flex items-center gap-2 px-4 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium transition-all shadow-sm">
-      <span className="text-lg">{icon}</span>
-      {label}
-    </button>
   );
 }

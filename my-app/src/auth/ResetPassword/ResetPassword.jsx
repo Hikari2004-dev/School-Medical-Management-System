@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './ResetPassword.css';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -23,14 +23,25 @@ function ResetPassword() {
   const [password, setPassword]       = useState('');
   const [confirmPassword, setConfirm] = useState('');
   const [loading, setLoading]         = useState(false);
+  const [toast, setToast]             = useState({ text: "", type: "" });
+
+  // Tự động ẩn toast sau 6s
+  useEffect(() => {
+    if (toast.text) {
+      const timer = setTimeout(() => setToast({ text: "", type: "" }), 6000);
+      return () => clearTimeout(timer);
+    }
+  }, [toast]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (password.length < 6) {
-      return alert('Mật khẩu phải có ít nhất 6 ký tự!');
+      setToast({ text: 'Mật khẩu phải có ít nhất 6 ký tự!', type: 'error' });
+      return;
     }
     if (password !== confirmPassword) {
-      return alert('Mật khẩu không khớp!');
+      setToast({ text: 'Mật khẩu không khớp!', type: 'error' });
+      return;
     }
 
     setLoading(true);
@@ -44,11 +55,11 @@ function ResetPassword() {
       const text = await res.text();
       if (!res.ok) throw new Error(text || 'Đổi mật khẩu thất bại');
 
-      alert('Đổi mật khẩu thành công! Vui lòng đăng nhập lại.');
-      navigate('/login');
+      setToast({ text: 'Đổi mật khẩu thành công! Vui lòng đăng nhập lại.', type: 'success' });
+      setTimeout(() => navigate('/login'), 1500); // Chờ 1.5s cho toast hiện rồi chuyển trang
     } catch (err) {
       console.error(err);
-      alert(err.message);
+      setToast({ text: err.message, type: 'error' });
     } finally {
       setLoading(false);
     }
@@ -99,6 +110,46 @@ function ResetPassword() {
           </button>
         </form>
       </div>
+
+      {/* Toast thông báo góc phải */}
+      {toast.text && (
+        <div
+          style={{
+            position: "fixed",
+            top: 24,
+            right: 24,
+            zIndex: 9999,
+            minWidth: 240,
+            boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 12,
+          }}
+          className={`p-4 rounded transition-all ${
+            toast.type === "success"
+              ? "bg-green-100 text-green-800"
+              : "bg-red-100 text-red-800"
+          }`}
+        >
+          <span>{toast.text}</span>
+          <button
+            onClick={() => setToast({ text: "", type: "" })}
+            style={{
+              background: "transparent",
+              border: "none",
+              fontSize: 18,
+              fontWeight: "bold",
+              cursor: "pointer",
+              marginLeft: 8,
+              color: "inherit",
+            }}
+            aria-label="Đóng thông báo"
+          >
+            ×
+          </button>
+        </div>
+      )}
     </div>
   );
 }
