@@ -70,14 +70,29 @@ function OtpVerification() {
   };
 
   // Khi nhấn Continue
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const otp = otpRefs.current.map(i => i.value).join('');
     if (otp.length !== 6) {
       alert('Vui lòng nhập đủ 6 chữ số OTP');
       return;
     }
-    navigate('/reset-password', { state: { email, otp } });
+    try {
+      const url = new URL('http://localhost:8080/api/otp/change-password');
+      url.searchParams.set('email', email);
+      url.searchParams.set('otp', otp);
+      url.searchParams.set('newPassword', 'dummy'); // chỉ kiểm tra OTP
+
+      const res = await fetch(url.toString(), { method: 'POST' });
+      const text = await res.text();
+      if (!res.ok || text.includes('Invalid OTP')) {
+        throw new Error('OTP không đúng hoặc đã hết hạn!');
+      }
+      // Nếu thành công, chuyển sang trang reset password
+      navigate('/reset-password', { state: { email, otp } });
+    } catch (err) {
+      alert(err.message);
+    }
   };
 
   return (
