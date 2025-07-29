@@ -15,6 +15,7 @@ function OtpVerification() {
   const email = location.state?.email || '';
 
   const [sending, setSending] = useState(false);
+  const [toast, setToast] = useState({ text: "", type: "" });
   const otpRefs = useRef([]);
 
   // Che email, giữ 2 ký tự cuối phần user
@@ -29,7 +30,7 @@ function OtpVerification() {
   // Gửi OTP (dùng cho cả initial và manual)
   const sendOtp = async () => {
     if (!email) {
-      alert('Email không hợp lệ');
+      setToast({ text: 'Email không hợp lệ', type: 'error' });
       return;
     }
     setSending(true);
@@ -44,10 +45,10 @@ function OtpVerification() {
       );
       const text = await res.text();
       if (!res.ok) throw new Error(text || 'Lỗi gửi OTP');
-      alert('OTP đã gửi tới email của bạn');
+      setToast({ text: 'OTP đã gửi tới email của bạn', type: 'success' });
     } catch (err) {
       console.error(err);
-      alert(err.message);
+      setToast({ text: err.message, type: 'error' });
     } finally {
       setSending(false);
     }
@@ -61,6 +62,14 @@ function OtpVerification() {
     }
   }, []);
 
+  // Tự động ẩn toast sau 6s
+  useEffect(() => {
+    if (toast.text) {
+      const timer = setTimeout(() => setToast({ text: "", type: "" }), 6000);
+      return () => clearTimeout(timer);
+    }
+  }, [toast]);
+
   // Handle focus next/prev
   const handleChange = (e, idx) => {
     const v = e.target.value.replace(/[^0-9]/g, '');
@@ -70,14 +79,29 @@ function OtpVerification() {
   };
 
   // Khi nhấn Continue
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const otp = otpRefs.current.map(i => i.value).join('');
     if (otp.length !== 6) {
-      alert('Vui lòng nhập đủ 6 chữ số OTP');
+      setToast({ text: 'Vui lòng nhập đủ 6 chữ số OTP', type: 'error' });
       return;
     }
-    navigate('/reset-password', { state: { email, otp } });
+    try {
+      const url = new URL('http://localhost:8080/api/otp/change-password');
+      url.searchParams.set('email', email);
+      url.searchParams.set('otp', otp);
+      url.searchParams.set('newPassword', 'dummy'); // chỉ kiểm tra OTP
+
+      const res = await fetch(url.toString(), { method: 'POST' });
+      const text = await res.text();
+      if (!res.ok || text.includes('Invalid OTP')) {
+        throw new Error('OTP không đúng hoặc đã hết hạn!');
+      }
+      // Nếu thành công, chuyển sang trang OtpSuccess
+      navigate('/otp-success', { state: { email, otp } });
+    } catch (err) {
+      setToast({ text: err.message, type: 'error' });
+    }
   };
 
   return (
@@ -117,6 +141,46 @@ function OtpVerification() {
           </button>
         </form>
       </div>
+
+      {/* Toast thông báo góc phải */}
+      {toast.text && (
+        <div
+          style={{
+            position: "fixed",
+            top: 24,
+            right: 24,
+            zIndex: 9999,
+            minWidth: 240,
+            boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 12,
+          }}
+          className={`p-4 rounded transition-all ${
+            toast.type === "success"
+              ? "bg-green-100 text-green-800"
+              : "bg-red-100 text-red-800"
+          }`}
+        >
+          <span>{toast.text}</span>
+          <button
+            onClick={() => setToast({ text: "", type: "" })}
+            style={{
+              background: "transparent",
+              border: "none",
+              fontSize: 18,
+              fontWeight: "bold",
+              cursor: "pointer",
+              marginLeft: 8,
+              color: "inherit",
+            }}
+            aria-label="Đóng thông báo"
+          >
+            ×
+          </button>
+        </div>
+      )}
     </div>
   );
 }

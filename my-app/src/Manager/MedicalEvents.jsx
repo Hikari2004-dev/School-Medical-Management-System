@@ -18,6 +18,7 @@ export default function MedicalEvents() {
     status: 'Pending', // Thêm trường status mặc định
     createdBy: username // Tự động gán tên người tạo
   });
+  const [toast, setToast] = useState({ text: '', type: '' }); // Thêm state cho toast
 
   useEffect(() => {
     fetch('http://localhost:8080/api/event-batches')
@@ -60,7 +61,7 @@ export default function MedicalEvents() {
 
   const handleCreateEvent = async (e) => {
     e.preventDefault();
-    const eventToSend = { ...newEvent, createdBy: localStorage.getItem('userId') || '' }; // Sửa thành userId
+    const eventToSend = { ...newEvent, createdBy: localStorage.getItem('userId') || '' };
     const token = localStorage.getItem('token');
     try {
       const res = await fetch('http://localhost:8080/api/event-batches', {
@@ -78,71 +79,73 @@ export default function MedicalEvents() {
       setNewEvent({
         title: '',
         eventDate: '',
-        endDate: '', // Đặt lại trường endDate
+        endDate: '',
         description: '',
         batchType: '',
-        status: 'Pending', // Đặt lại trạng thái mặc định
+        status: 'Pending',
         createdBy: localStorage.getItem('userId') || ''
       });
-      alert('Tạo sự kiện thành công!');
+      setToast({ text: "Tạo sự kiện thành công!", type: "success" });
     } catch (err) {
-      alert('Tạo sự kiện thất bại!');
+      setToast({ text: "Tạo sự kiện thất bại!", type: "error" });
       console.error(err);
     }
   };
 
   const handleApprove = async (batchId) => {
+    const token = localStorage.getItem('token');
     try {
       const res = await fetch(`http://localhost:8080/api/event-batches/${batchId}/approve`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
       });
       if (!res.ok) throw new Error('Approve failed');
       setEvents(events.map(evt =>
         evt.batchId === batchId ? { ...evt, status: 'Approved' } : evt
       ));
-      alert('Đã duyệt thành công!');
+      setToast({ text: "Đã duyệt thành công!", type: "success" });
     } catch (err) {
-      alert('Duyệt thất bại!');
+      setToast({ text: "Duyệt thất bại!", type: "error" });
       console.error(err);
     }
   };
 
   const handleUnapprove = async (batchId) => {
+    const token = localStorage.getItem('token');
     try {
-      const res = await fetch(`http://localhost:8080/api/event-batches/${batchId}/resend `, {
+      const res = await fetch(`http://localhost:8080/api/event-batches/${batchId}/resend`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
       });
       if (!res.ok) throw new Error('Unapprove failed');
       setEvents(events.map(evt =>
         evt.batchId === batchId ? { ...evt, status: 'Pending' } : evt
       ));
-      alert('Chuyển về trạng thái đợi duyệt thành công!');
+      setToast({ text: "Chuyển về trạng thái đợi duyệt thành công!", type: "success" });
     } catch (err) {
-      alert('Chuyển trạng thái thất bại!');
+      setToast({ text: "Chuyển trạng thái thất bại!", type: "error" });
       console.error(err);
     }
   };
 
-  const handleReject = async (batchId) => {
-    const token = (localStorage.getItem('token') || '').trim();
-    try {
-      const res = await fetch(`http://localhost:8080/api/event-batches/${batchId}/delete`, {
-        method: 'PUT', // Đổi thành PUT
-        headers: {
-          'Content-Type': 'application/json', // Sửa lại đúng định dạng
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      if (!res.ok) throw new Error('Từ chối sự kiện thất bại');
-      setEvents(events.filter(evt => evt.batchId !== batchId));
-      alert('Đã từ chối và xóa sự kiện!');
-    } catch (err) {
-      alert('Từ chối sự kiện thất bại!');
-      console.error(err);
-    }
+  const handleReject = (batchId) => {
+    setToast({ text: "Đã từ chối sự kiện!", type: "success" });
+    // Không xóa sự kiện khỏi danh sách
   };
+
+  // Tự động ẩn toast sau 5s
+  useEffect(() => {
+    if (toast.text) {
+      const timer = setTimeout(() => setToast({ text: "", type: "" }), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [toast]);
 
   if (loading) return <div className="p-8 text-gray-500">Đang tải sự kiện…</div>;
   if (error) return <div className="p-8 text-red-500">{error}</div>;
@@ -192,6 +195,7 @@ export default function MedicalEvents() {
             value={newEvent.eventDate}
             onChange={handleInputChange}
             required
+            min={new Date().toISOString().split("T")[0]} // chỉ chọn từ hôm nay trở đi
           />
           <label className="block font-semibold mb-1" htmlFor="endDate">
             Ngày kết thúc
@@ -204,6 +208,7 @@ export default function MedicalEvents() {
             value={newEvent.endDate}
             onChange={handleInputChange}
             required
+            min={newEvent.eventDate || new Date().toISOString().split("T")[0]} // chỉ chọn từ ngày bắt đầu trở đi
           />
           <label className="block font-semibold mb-1" htmlFor="batchType">
             Loại sự kiện
@@ -324,6 +329,37 @@ export default function MedicalEvents() {
           </div>
         ))}
       </div>
+      {toast.text && (
+        <div
+          className={`fixed bottom-4 right-4 mb-4 mr-4 p-4 rounded-lg shadow-lg transition-all duration-300
+            ${toast.type === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}
+          style={{
+            minWidth: 240,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 12,
+            zIndex: 9999,
+          }}
+        >
+          <span>{toast.text}</span>
+          <button
+            onClick={() => setToast({ text: "", type: "" })}
+            style={{
+              background: "transparent",
+              border: "none",
+              fontSize: 18,
+              fontWeight: "bold",
+              cursor: "pointer",
+              marginLeft: 8,
+              color: "inherit",
+            }}
+            aria-label="Đóng thông báo"
+          >
+            ×
+          </button>
+        </div>
+      )}
     </div>
   );
 }

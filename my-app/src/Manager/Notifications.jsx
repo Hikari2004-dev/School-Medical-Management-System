@@ -112,12 +112,14 @@ export default function Notifications() {
                     Đánh dấu đã đọc
                   </button>
                 )}
-                <button
-                  onClick={() => del(n.id)}
-                  className="px-3 py-1 border border-red-500 text-red-500 rounded hover:bg-red-50 text-sm inline-flex items-center"
-                >
-                  <FaTrash className="mr-1" /> Xóa
-                </button>
+                {n.read && (
+                  <button
+                    onClick={() => del(n.id)}
+                    className="px-3 py-1 border border-red-500 text-red-500 rounded hover:bg-red-50 text-sm inline-flex items-center"
+                  >
+                    <FaTrash className="mr-1" /> Xóa
+                  </button>
+                )}
               </div>
             </div>
           ))

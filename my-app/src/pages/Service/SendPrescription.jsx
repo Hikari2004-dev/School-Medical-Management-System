@@ -203,7 +203,15 @@ export default function SendPrescription() {
       <Header />
       <div className="breadcrumb-container">
         <nav className="breadcrumb">
-          <Link to="/">Trang chủ</Link> › <Link to="/services">Dịch vụ</Link> › Gửi đơn thuốc
+          <Link to="/" className="breadcrumb-link">
+            Trang chủ
+          </Link>
+          <span className="breadcrumb-sep">›</span>
+          <Link to="/services" className="breadcrumb-link">
+            Dịch vụ
+          </Link>
+          <span className="breadcrumb-sep">›</span>
+          <span className="breadcrumb-current">Gửi đơn thuốc</span>
         </nav>
       </div>
       <div className="send-prescription-page">
@@ -319,7 +327,9 @@ export default function SendPrescription() {
                 <p className="dose">Liều lượng (mg): {it.dosage}</p>
                 <p className="note">Số lần uống: {it.frequency}</p>
                 <p className="sender">Người gửi: {it.parentName}</p>
-                <p className="meta">{it.startDate} → {it.endDate}</p>
+                <p className="meta">
+                  {it.startDate} → {it.endDate}
+                </p>
               </div>
             ))}
 
@@ -332,10 +342,12 @@ export default function SendPrescription() {
             {/* Thông báo kết quả */}
             {statusMessage && (
               <div
-                className={`status-alert ${statusMessage.startsWith("Error") || statusMessage.startsWith("❌")
-                  ? "error"
-                  : "success"
-                  }`}
+                className={`status-alert ${
+                  statusMessage.startsWith("Error") ||
+                  statusMessage.startsWith("❌")
+                    ? "error"
+                    : "success"
+                }`}
               >
                 {statusMessage}
               </div>

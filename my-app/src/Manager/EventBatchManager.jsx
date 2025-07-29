@@ -75,7 +75,7 @@ export default function EventBatchManager() {
       });
       const result = await safeJson(res);
       if (res.ok && result.success) {
-        showToast("Tạo batch thành công!", "success");
+        showToast("Tạo sự kiện thành công!", "success");
         fetchBatches();
         // reset form
         setTitle("");
@@ -83,10 +83,10 @@ export default function EventBatchManager() {
         setEventDate("");
         setBatchType("Vaccination");
       } else {
-        showToast(result.message || "Tạo batch thất bại.", "error");
+        showToast(result.message || "Tạo sự kiện thất bại.", "error");
       }
     } catch (err) {
-      showToast("Tạo batch thất bại: " + err.message, "error");
+      showToast("Tạo sự kiện thất bại: " + err.message, "error");
     }
   };
 
@@ -155,7 +155,7 @@ export default function EventBatchManager() {
       )}
 
       <div className="max-w-screen-lg mx-auto bg-white shadow rounded-lg p-6">
-        <h2 className="text-2xl font-bold mb-6">Quản lý Batch sự kiện</h2>
+        <h2 className="text-2xl font-bold mb-6">Quản lý sự kiện</h2>
 
         {/* Form tạo batch */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
@@ -193,7 +193,7 @@ export default function EventBatchManager() {
           onClick={handleCreate}
           className="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded transition mb-8"
         >
-          Tạo batch mới
+          Tạo sự kiện mới
         </button>
 
         {/* Bảng danh sách batch */}
@@ -258,7 +258,7 @@ export default function EventBatchManager() {
                     colSpan="7"
                     className="py-6 text-center text-gray-500 align-middle"
                   >
-                    Chưa có batch nào được tạo.
+                    Chưa có sự kiện nào được tạo.
                   </td>
                 </tr>
               )}
