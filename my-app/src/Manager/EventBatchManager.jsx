@@ -134,6 +134,37 @@ export default function EventBatchManager() {
     }
   };
 
+  // State cho form gửi thông báo batch
+  const [showNotifyForm, setShowNotifyForm] = useState(false);
+  const [notifyData, setNotifyData] = useState({
+    content: "Khám sức khoẻ định kì",
+    type: "Checkup",
+    consentType: "ParentConsent",
+  });
+
+  const handleNotifyChange = (e) => {
+    setNotifyData({ ...notifyData, [e.target.name]: e.target.value });
+  };
+
+  const handleSendNotify = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch(
+        "http://localhost:8080/api/notifications/send-batch/2",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(notifyData),
+        }
+      );
+      if (!res.ok) throw new Error("Gửi thông báo thất bại");
+      showToast("Gửi thông báo thành công!", "success");
+      setShowNotifyForm(false);
+    } catch (err) {
+      showToast("Gửi thông báo thất bại!", "error");
+    }
+  };
+
   return (
     <div className="bg-gray-100 min-h-screen py-8 relative">
       {/* Toast */}
@@ -156,6 +187,74 @@ export default function EventBatchManager() {
 
       <div className="max-w-screen-lg mx-auto bg-white shadow rounded-lg p-6">
         <h2 className="text-2xl font-bold mb-6">Quản lý sự kiện</h2>
+
+        {/* Nút mở form gửi thông báo */}
+        <button
+          onClick={() => setShowNotifyForm(true)}
+          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded transition mb-4 mr-4"
+        >
+          Gửi thông báo
+        </button>
+
+        {/* Form gửi thông báo batch */}
+        {showNotifyForm && (
+          <form
+            className="max-w-xl mx-auto bg-white p-6 rounded-xl shadow space-y-4 mb-8"
+            onSubmit={handleSendNotify}
+          >
+            <h3 className="text-xl font-bold mb-4 text-blue-700 text-center">
+              Gửi thông báo sự kiện batch
+            </h3>
+            <label className="block font-semibold mb-1" htmlFor="content">
+              Nội dung
+            </label>
+            <input
+              id="content"
+              name="content"
+              className="w-full border p-2 rounded mb-2"
+              value={notifyData.content}
+              onChange={handleNotifyChange}
+              required
+            />
+            <label className="block font-semibold mb-1" htmlFor="type">
+              Loại
+            </label>
+            <input
+              id="type"
+              name="type"
+              className="w-full border p-2 rounded mb-2"
+              value={notifyData.type}
+              onChange={handleNotifyChange}
+              required
+            />
+            <label className="block font-semibold mb-1" htmlFor="consentType">
+              Loại đồng thuận
+            </label>
+            <input
+              id="consentType"
+              name="consentType"
+              className="w-full border p-2 rounded mb-2"
+              value={notifyData.consentType}
+              onChange={handleNotifyChange}
+              required
+            />
+            <div className="flex space-x-4">
+              <button
+                type="submit"
+                className="flex-1 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+              >
+                Gửi thông báo
+              </button>
+              <button
+                type="button"
+                className="flex-1 py-2 border border-gray-400 text-gray-600 rounded-lg hover:bg-gray-100 transition"
+                onClick={() => setShowNotifyForm(false)}
+              >
+                Hủy
+              </button>
+            </div>
+          </form>
+        )}
 
         {/* Form tạo batch */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
@@ -246,7 +345,7 @@ export default function EventBatchManager() {
                         onClick={() => handleResend(batch.batchId)}
                         className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-xs"
                       >
-                        Từ chối 
+                        Từ chối
                       </button>
                     </div>
                   </td>
