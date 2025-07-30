@@ -20,6 +20,14 @@ export default function MedicalEvents() {
   });
   const [toast, setToast] = useState({ text: '', type: '' }); // Thêm state cho toast
 
+  // Thêm state cho form gửi thông báo batch
+  const [showNotifyForm, setShowNotifyForm] = useState(false);
+  const [notifyData, setNotifyData] = useState({
+    content: "Khám sức khoẻ định kì",
+    type: "Checkup",
+    consentType: "ParentConsent"
+  });
+
   useEffect(() => {
     fetch('http://localhost:8080/api/event-batches')
       .then((r) => {
@@ -47,6 +55,10 @@ export default function MedicalEvents() {
 
   const handleInputChange = (e) => {
     setNewEvent({ ...newEvent, [e.target.name]: e.target.value });
+  };
+
+  const handleNotifyChange = (e) => {
+    setNotifyData({ ...notifyData, [e.target.name]: e.target.value });
   };
 
   // Khi mở form, cập nhật lại createdBy từ localStorage
@@ -89,6 +101,22 @@ export default function MedicalEvents() {
     } catch (err) {
       setToast({ text: "Tạo sự kiện thất bại!", type: "error" });
       console.error(err);
+    }
+  };
+
+  const handleSendNotify = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch("http://localhost:8080/api/notifications/send-batch/2", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(notifyData)
+      });
+      if (!res.ok) throw new Error("Gửi thông báo thất bại");
+      setToast({ text: "Gửi thông báo thành công!", type: "success" });
+      setShowNotifyForm(false);
+    } catch (err) {
+      setToast({ text: "Gửi thông báo thất bại!", type: "error" });
     }
   };
 
@@ -163,7 +191,74 @@ export default function MedicalEvents() {
         >
           <span className="whitespace-nowrap">Thêm sự kiện</span>
         </button>
+        <button
+          className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center justify-center"
+          style={{ height: "48px" }}
+          onClick={() => setShowNotifyForm(true)}
+        >
+          <span className="whitespace-nowrap">Gửi thông báo</span>
+        </button>
       </div>
+
+      {showNotifyForm && (
+        <form
+          className="max-w-xl mx-auto bg-white p-6 rounded-xl shadow space-y-4 mb-8"
+          onSubmit={handleSendNotify}
+        >
+          <h3 className="text-xl font-bold mb-4 text-blue-700 text-center">
+            Gửi thông báo sự kiện batch
+          </h3>
+          <label className="block font-semibold mb-1" htmlFor="content">
+            Nội dung
+          </label>
+          <input
+            id="content"
+            name="content"
+            className="w-full border p-2 rounded mb-2"
+            value={notifyData.content}
+            onChange={handleNotifyChange}
+            required
+          />
+          <label className="block font-semibold mb-1" htmlFor="type">
+            Loại
+          </label>
+          <input
+            id="type"
+            name="type"
+            className="w-full border p-2 rounded mb-2"
+            value={notifyData.type}
+            onChange={handleNotifyChange}
+            required
+          />
+          <label className="block font-semibold mb-1" htmlFor="consentType">
+            Loại đồng thuận
+          </label>
+          <input
+            id="consentType"
+            name="consentType"
+            className="w-full border p-2 rounded mb-2"
+            value={notifyData.consentType}
+            onChange={handleNotifyChange}
+            required
+          />
+          <div className="flex space-x-4">
+            <button
+              type="submit"
+              className="flex-1 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+            >
+              Gửi thông báo
+            </button>
+            <button
+              type="button"
+              className="flex-1 py-2 border border-gray-400 text-gray-600 rounded-lg hover:bg-gray-100 transition"
+              onClick={() => setShowNotifyForm(false)}
+            >
+              Hủy
+            </button>
+          </div>
+        </form>
+      )}
+
       {showForm && (
         <form
           className="max-w-xl mx-auto bg-white p-6 rounded-xl shadow space-y-4 mb-8"
