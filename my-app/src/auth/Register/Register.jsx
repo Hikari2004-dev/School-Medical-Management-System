@@ -30,7 +30,14 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (formData.password !== formData.repeatPassword) {
+    // Kiểm tra các trường bắt buộc
+    const { firstName, lastName, email, phone, address, gender, password, repeatPassword } = formData;
+    if (!firstName || !lastName || !email || !phone || !address || !gender || !password || !repeatPassword) {
+      alert("❌ Vui lòng nhập đầy đủ thông tin!");
+      return;
+    }
+
+    if (password !== repeatPassword) {
       alert("❌ Mật khẩu không khớp.");
       return;
     }
@@ -42,13 +49,13 @@ function Register() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          email: formData.email,
-          password: formData.password,
-          phone: formData.phone,
-          address: formData.address,
-          gender: formData.gender,
+          firstName,
+          lastName,
+          email,
+          password,
+          phone,
+          address,
+          gender,
         }),
       });
 
