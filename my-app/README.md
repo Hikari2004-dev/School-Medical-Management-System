@@ -1,43 +1,190 @@
-# Getting Started with Create React App
+# 🏥 School Medical Management System
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Hệ thống quản lý y tế trường học với tính năng tin tức động và đầy đủ.
 
-## Available Scripts
+## 🚀 Bắt đầu nhanh
 
-In the project directory, you can run:
+### 1. Cài đặt dependencies
+```bash
+npm install
+```
+
+### 2. Chạy cả frontend và backend
+```bash
+# Sử dụng script tự động (Windows)
+start-servers.bat
+
+# Hoặc chạy từng cái riêng biệt
+node src/server/ServerNew.js  # Terminal 1
+npm start                     # Terminal 2
+```
+
+### 3. Truy cập ứng dụng
+- Frontend: [http://localhost:3000](http://localhost:3000)
+- Backend API: [http://localhost:5000](http://localhost:5000)
+- Health Check: [http://localhost:5000/api/health](http://localhost:5000/api/health)
+
+## 📖 Tài liệu hướng dẫn
+
+- 📰 [NEWS_GUIDE.md](NEWS_GUIDE.md) - Hướng dẫn sử dụng hệ thống tin tức
+- 🔧 [API_FULL_CONTENT_GUIDE.md](API_FULL_CONTENT_GUIDE.md) - Hướng dẫn API đầy đủ
+- 🧪 [TESTING_GUIDE.md](TESTING_GUIDE.md) - Hướng dẫn test hệ thống
+- 📋 [PROJECT_SUMMARY.md](PROJECT_SUMMARY.md) - Tổng kết dự án
+- 🐛 [DEBUG_GUIDE.md](DEBUG_GUIDE.md) - Hướng dẫn debug
+- ⚠️ [ERROR_HANDLING_GUIDE.md](ERROR_HANDLING_GUIDE.md) - Xử lý lỗi
+
+## 🎯 Tính năng chính
+
+### 📰 Hệ thống tin tức
+- ✅ Hiển thị tin tức động từ API
+- ✅ Fallback data khi API offline
+- ✅ Infinite scroll và phân trang
+- ✅ Tìm kiếm và lọc tin tức
+- ✅ Chi tiết bài viết với sidebar
+- ✅ Tin tức liên quan
+- ✅ Responsive design
+
+### 🏠 Trang chủ
+- ✅ Hiển thị tin tức nổi bật
+- ✅ Layout đẹp và responsive
+- ✅ Navigation mượt mà
+- ✅ Loading states
+
+### 🔄 API System
+- ✅ RESTful API với Express.js
+- ✅ Mock data đầy đủ
+- ✅ Error handling
+- ✅ CORS support
+- ✅ Fallback ID handling
+
+## 🛠️ Cấu trúc dự án
+
+```
+my-app/
+├── src/
+│   ├── components/          # Shared components
+│   │   ├── Header/
+│   │   ├── Footer/
+│   │   └── ApiStatus/
+│   ├── pages/              # Page components
+│   │   ├── HomePage/
+│   │   ├── News/
+│   │   └── NewsDetail/
+│   ├── data/               # Mock data
+│   │   └── newsData.js
+│   ├── server/             # Backend server
+│   │   └── ServerNew.js
+│   └── App.js              # Main app
+├── public/                 # Static assets
+├── docs/                   # Documentation
+└── start-servers.bat       # Auto-start script
+```
+
+## 📝 Available Scripts
 
 ### `npm start`
+Chạy ứng dụng React ở chế độ development.
+- Mở [http://localhost:3000](http://localhost:3000)
+- Hot reload khi có thay đổi
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### `node src/server/ServerNew.js`
+Chạy backend server.
+- API server tại [http://localhost:5000](http://localhost:5000)
+- Auto-reload với nodemon
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### `node test-fallback.js`
+Test các API endpoints để đảm bảo hoạt động đúng.
 
 ### `npm run build`
+Build ứng dụng cho production.
+- Tối ưu hóa performance
+- Minify code
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 🔧 Xử lý lỗi thường gặp
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### ❌ "Failed to fetch" hoặc Network Error
+```bash
+# Kiểm tra server có chạy không
+curl http://localhost:5000/api/health
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+# Khởi động server
+node src/server/ServerNew.js
+```
 
-### `npm run eject`
+### ❌ Fallback ID không hoạt động
+- Đảm bảo format ID đúng: `fallback-{round}-{index}`
+- Kiểm tra logic trong NewsDetail.jsx và ServerNew.js
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### ❌ Component không render
+- Kiểm tra import paths
+- Xem browser console logs
+- Kiểm tra routing trong App.js
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+**Xem thêm:** [ERROR_HANDLING_GUIDE.md](ERROR_HANDLING_GUIDE.md)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 🎨 Customization
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Thay đổi theme colors
+```css
+/* Trong các file CSS */
+:root {
+  --primary-color: #4285f4;
+  --secondary-color: #34a853;
+  --accent-color: #ea4335;
+}
+```
+
+### Thêm tin tức mới
+```javascript
+// Trong src/data/newsData.js
+export const newsData = [
+  {
+    id: 'new-id',
+    title: 'Tiêu đề mới',
+    // ... other properties
+  }
+];
+```
+
+### Thêm API endpoint mới
+```javascript
+// Trong src/server/ServerNew.js
+app.get('/api/new-endpoint', (req, res) => {
+  // Logic xử lý
+});
+```
+
+## 📊 Monitoring
+
+### Health Check
+```bash
+curl http://localhost:5000/api/health
+```
+
+### Performance Monitoring
+- Chrome DevTools
+- React DevTools
+- Network tab
+
+## 🤝 Đóng góp
+
+1. Fork repository
+2. Tạo feature branch
+3. Commit changes
+4. Push to branch
+5. Create Pull Request
+
+## 📞 Hỗ trợ
+
+Nếu gặp vấn đề:
+1. Kiểm tra [ERROR_HANDLING_GUIDE.md](ERROR_HANDLING_GUIDE.md)
+2. Xem browser console
+3. Kiểm tra server logs
+4. Thử restart server
+
+---
+
+*Cập nhật lần cuối: ${new Date().toLocaleDateString('vi-VN')}*
 
 ## Learn More
 

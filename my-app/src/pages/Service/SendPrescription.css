@@ -1,0 +1,289 @@
+/* src/pages/Service/SendPrescription.css */
+
+/* ===== IMPORT FONTS & VARS ===== */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;600;700&display=swap');
+
+:root {
+  --font-base: 'Inter', sans-serif;
+  --font-heading: 'Poppins', sans-serif;
+
+  --bg-page: #f5f7fa;
+  --bg-panel: #ffffff;
+  --border: #d1d5db;
+  --text-default: #374151;
+  --text-light: #4a5568;
+  --primary: #2563eb;
+  --primary-dark: #1e40af;
+  --accent: #facc15;
+  --success-bg: #e6ffed;
+  --success-border: #a3e4a3;
+  --error-bg: #ffe6e6;
+  --error-border: #e4a3a3;
+
+  --radius: 0.75rem;
+  --transition: 0.3s ease;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-base);
+  color: var(--text-default);
+  background: var(--bg-page);
+}
+
+/* === Breadcrumb === */
+.breadcrumb-container {
+  background: var(--bg-panel);
+  padding: 1rem 1.5rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  font-size: 0.875rem;
+}
+.breadcrumb a {
+  color: var(--text-light);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+.breadcrumb a:hover {
+  color: var(--text-default);
+  text-decoration: underline;
+}
+.breadcrumb-sep {
+  margin: 0 0.5rem;
+  color: #a0aec0;
+}
+
+/* === Page layout === */
+.send-prescription-page {
+  margin-top: 1rem;
+  padding: 1.5rem;
+  background: var(--bg-page);
+  min-height: calc(100vh - 200px);
+}
+.send-prescription-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+@media (min-width: 768px) {
+  .send-prescription-content {
+    flex-direction: row;
+  }
+}
+
+/* === Form column === */
+.form-column {
+  background: var(--bg-panel);
+  padding: 2rem;
+  border-radius: var(--radius);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  flex: 1;
+}
+.field {
+  margin-bottom: 1.25rem;
+}
+.field label {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-light);
+}
+.field input,
+.field select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: #fff;
+  transition: border-color var(--transition);
+}
+.field input:focus,
+.field select:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+/* Two fields side by side */
+.two-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+@media (max-width: 767px) {
+  .two-fields {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Add/update button */
+.btn-add {
+  width: 100%;
+  padding: 0.75rem;
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--primary);
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background var(--transition), transform 0.2s;
+}
+.btn-add:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+}
+
+/* === Items column === */
+.items-column {
+  background: var(--bg-panel);
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  flex: 1;
+  max-height: 500px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.items-column h3 {
+  font-family: var(--font-heading);
+  margin-bottom: 1rem;
+  color: var(--text-default);
+}
+
+/* Prescription item */
+.prescription-item {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: #fff;
+  cursor: pointer;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+.prescription-item:hover {
+  border-color: var(--primary);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+}
+.remove-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: none;
+  border: none;
+  color: var(--text-light);
+  cursor: pointer;
+  transition: color var(--transition);
+}
+.remove-btn:hover {
+  color: var(--error-border);
+}
+.prescription-item h4 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+.prescription-item p {
+  margin: 0.25rem 0;
+  font-size: 0.875rem;
+  color: var(--text-light);
+}
+.prescription-item .meta {
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  color: #a0aec0;
+  font-style: italic;
+}
+
+/* Confirm button */
+.btn-confirm {
+  width: 100%;
+  max-width: 420px;
+  padding: 0.75rem;
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1a202c;
+  background: var(--accent);
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background var(--transition), transform 0.2s;
+  margin-top: auto;
+}
+.btn-confirm:hover {
+  background: #eab308;
+  transform: translateY(-2px);
+}
+
+/* Status messages */
+.status-alert {
+  width: 100%;
+  max-width: 420px;
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  text-align: center;
+}
+.status-alert.success {
+  background: var(--success-bg);
+  border: 1px solid var(--success-border);
+  color: #2d662d;
+}
+.status-alert.error {
+  background: var(--error-bg);
+  border: 1px solid var(--error-border);
+  color: #992d2d;
+}
+
+/* Custom scrollbar */
+.items-column::-webkit-scrollbar {
+  width: 8px;
+}
+.items-column::-webkit-scrollbar-track {
+  background: #edf2f7;
+  border-radius: 4px;
+}
+.items-column::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+.items-column::-webkit-scrollbar-thumb:hover {
+  background: #a0aec0;
+}
+/* Cuối file SendPrescription.css */
+
+/* Hiện thị mục hiện tại (Gửi đơn thuốc) luôn màu đen, font hơi đậm */
+.breadcrumb-current {
+  color: #000 !important;
+  font-weight: 600;
+}
+/* Cuối file SendPrescription.css */
+
+/* Đảm bảo breadcrumb luôn nằm trên banner */
+.breadcrumb-container {
+  position: relative; 
+  z-index: 1001; /* cao hơn banner nếu cần */
+}
+
+/* Chọn chính xác phần text hiện tại */
+.breadcrumb-container .breadcrumb-current {
+  color: #000 !important;
+  font-weight: 600;
+}

@@ -1,0 +1,75 @@
+/* API Status Component - HIDDEN */
+.api-status {
+    display: none;
+    /* Ẩn hoàn toàn component ApiStatus */
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: white;
+    border-radius: 8px;
+    padding: 12px 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-left: 4px solid #dc3545;
+    font-size: 0.85rem;
+    z-index: 1000;
+    min-width: 200px;
+}
+
+.api-status.online {
+    border-left-color: #28a745;
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background: #dc3545;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+.api-status.online .status-dot {
+    background: #28a745;
+}
+
+.status-text {
+    font-weight: 500;
+    color: #333;
+}
+
+.last-check {
+    color: #666;
+    font-size: 0.75rem;
+    font-style: italic;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Hide on mobile */
+@media (max-width: 768px) {
+    .api-status {
+        bottom: 10px;
+        right: 10px;
+        font-size: 0.75rem;
+        padding: 8px 12px;
+        min-width: 150px;
+    }
+}

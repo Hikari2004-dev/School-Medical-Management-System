@@ -1,0 +1,227 @@
+/* Reset + Layout chung */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.student-profile-page {
+  display: flex;
+  height: 100vh;
+  background: #f0f2f5;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 240px;
+  background-color: #5e50e6;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 24px;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.brand-box {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background-color: #2f2f9d;
+  padding: 16px 20px;
+  border-radius: 20px;
+  margin-bottom: 32px;
+  width: 90%;
+}
+
+.brand-icon {
+  width: 60px;
+}
+
+.brand-text h1 {
+  font-size: 20px;
+  font-weight: 600;
+  color: white;
+}
+
+.brand-text p {
+  font-size: 14px;
+  color: #ddd;
+}
+
+/* Sidebar buttons */
+.sidebar-nav {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 16px;
+}
+
+.sidebar-nav button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 16px;
+  padding: 12px 20px;
+  text-align: left;
+  width: 100%;
+  border-left: 4px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.sidebar-nav button.active {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-left: 4px solid white;
+  font-weight: bold;
+}
+
+.sidebar-nav button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Main Content */
+.profile-main {
+  flex: 1;
+  padding: 40px;
+  overflow-y: auto;
+}
+
+/* Back Button */
+.home-button {
+  background-color: #5e50e6;
+  color: white;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.home-button:hover {
+  background-color: #493cd2;
+}
+
+/* Card Container */
+.profile-card {
+  background: white;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+/* Avatar + Info */
+.profile-overview {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+}
+
+.avatar {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  border: 4px solid #5e50e6;
+  object-fit: cover;
+}
+
+.info-text h2 {
+  font-size: 22px;
+  margin-bottom: 6px;
+}
+
+.info-text p {
+  font-size: 15px;
+  color: #555;
+  margin-bottom: 4px;
+}
+
+/* Tabs */
+.profile-tabs {
+  display: flex;
+  margin-top: 24px;
+  border-bottom: 1px solid #ccc;
+  gap: 24px;
+}
+
+.tab {
+  padding-bottom: 10px;
+  cursor: pointer;
+  color: #888;
+  font-size: 15px;
+}
+
+.tab.active {
+  color: #5e50e6;
+  font-weight: 600;
+  border-bottom: 3px solid #5e50e6;
+}
+
+/* Add button */
+.add-button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin: 24px 0 12px;
+}
+
+.add-button {
+  background-color: #5e50e6;
+  color: white;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.add-button:hover {
+  background-color: #493cd2;
+}
+
+/* Table */
+.medications-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+
+.medications-table thead tr {
+  background-color: #ddd;
+}
+
+.medications-table th,
+.medications-table td {
+  padding: 12px 14px;
+  border: 1px solid #aaa;
+  text-align: left;
+}
+
+.medications-table tbody tr:hover {
+  background-color: #f9f9f9;
+}
+
+/* Delete button */
+.delete-button {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  font-size: 13px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.delete-button:hover {
+  background-color: #d93636;
+}
